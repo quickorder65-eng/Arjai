@@ -496,3 +496,11 @@ dialog.enroll::backdrop { background: rgba(10, 8, 7, .72); }
 }
 .intro h2 { max-width: 16ch; }
 .intro h2 { font-size: clamp(40px, 4.8vw, 66px); }
+@media (max-width: 960px) {
+  .key { flex: 0 0 auto; }
+  .black:nth-of-type(1) { top: calc(100% / 7 * 1); }
+  .black:nth-of-type(2) { top: calc(100% / 7 * 2); }
+  .black:nth-of-type(3) { top: calc(100% / 7 * 4); }
+  .black:nth-of-type(4) { top: calc(100% / 7 * 5); }
+  .black:nth-of-type(5) { top: calc(100% / 7 * 6); }
+}

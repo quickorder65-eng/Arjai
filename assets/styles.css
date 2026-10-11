@@ -515,3 +515,4 @@ dialog.enroll::backdrop { background: rgba(10, 8, 7, .72); }
   .stage-title { grid-template-columns: 1fr; gap: 18px; padding: 40px 18px 32px; }
   .doors { height: auto; }
 }
+.door-body, .offer-body, .tile-body { text-shadow: 0 1px 14px rgba(0,0,0,.55); }

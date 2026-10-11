@@ -479,3 +479,20 @@ dialog.enroll::backdrop { background: rgba(10, 8, 7, .72); }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { transition: none !important; animation: none !important; }
 }
+
+/* ---------- правки после просмотра: заголовок поверх «дверей» ---------- */
+.stage { position: relative; padding-top: 0; }
+.stage-title { position: absolute; top: 0; left: 0; right: 0; z-index: 2; padding: 56px 20px 0; pointer-events: none; }
+.stage-title h1 { font-size: clamp(40px, 5.4vw, 82px); max-width: 18ch; text-shadow: 0 2px 30px rgba(0,0,0,.35); }
+.stage-title p { color: #ddd4cb; text-shadow: 0 1px 16px rgba(0,0,0,.5); }
+.doors { height: calc(100svh - 72px); min-height: 660px; max-height: 1000px; }
+.door::after { background: linear-gradient(180deg, rgba(20,17,16,.9) 0%, rgba(20,17,16,.55) 24%, rgba(20,17,16,.08) 44%, rgba(20,17,16,.5) 66%, rgba(20,17,16,.95) 100%); }
+@media (max-width: 899px) {
+  .stage-title { position: static; padding: 44px 18px 36px; pointer-events: auto; }
+  .stage-title h1 { font-size: clamp(38px, 10vw, 56px); }
+  .doors { height: auto; min-height: 0; max-height: none; }
+  .door { min-height: 70vh; }
+  .door::after { background: linear-gradient(180deg, rgba(20,17,16,.1) 0%, rgba(20,17,16,0) 40%, rgba(20,17,16,.6) 68%, rgba(20,17,16,.95) 100%); }
+}
+.intro h2 { max-width: 16ch; }
+.intro h2 { font-size: clamp(40px, 4.8vw, 66px); }

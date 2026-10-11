@@ -614,3 +614,30 @@ dialog.quiz-dlg::backdrop { background: rgba(23,18,15,.7); }
   .paths-inline { margin-top: 16px; }
   .hero-photo { min-height: 380px; height: calc(100svh - 74px - 40px); }
 }
+
+/* ---------- фото студии и признание ---------- */
+.people { display: grid; grid-template-columns: 1.45fr 1fr; gap: 16px; margin-bottom: 20px; }
+.people figure { margin: 0; }
+.people img { width: 100%; border-radius: var(--r-lg); object-fit: cover; background: var(--soft-2); }
+.people-main img { aspect-ratio: 909 / 614; height: auto; }
+.people-side { background: #fff; border-radius: var(--r-lg); padding: 12px 12px 26px; display: flex; flex-direction: column; }
+.people-side img { aspect-ratio: 548 / 310; border-radius: var(--r-md); }
+.people figcaption { font-size: 14px; color: var(--muted); margin-top: 10px; padding: 0 4px; }
+.people-side figcaption { font-weight: 600; color: var(--ink); font-size: 18px; margin: 18px 12px 6px; padding: 0; }
+.people-side p { margin: 0 12px; color: var(--ink-2); font-size: 16px; }
+@media (max-width: 860px) { .people { grid-template-columns: 1fr; } }
+
+.awards { margin-top: 80px; }
+.awards-title { font-size: clamp(26px, 2.6vw, 34px); font-weight: 700; letter-spacing: -0.03em; margin-bottom: 22px; }
+.awards-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.award { display: grid; grid-template-columns: 170px 1fr; gap: 22px; align-items: center; background: #fff; border-radius: var(--r-lg); padding: 16px 26px 16px 16px; text-decoration: none; transition: box-shadow .25s var(--ease), transform .25s var(--ease); }
+.award:hover { transform: translateY(-3px); box-shadow: 0 24px 50px -28px rgba(23,18,15,.4); }
+.award .doc { display: block; border-radius: var(--r-sm); overflow: hidden; background: var(--soft); box-shadow: 0 0 0 1px var(--line); aspect-ratio: 3 / 4; }
+.award .doc img { width: 100%; height: 100%; object-fit: cover; object-position: top; }
+.award .doc.wide img { object-position: center; object-fit: contain; background: #fff; }
+.award-body { display: grid; gap: 6px; }
+.award-body .year { font-size: 13px; font-weight: 600; color: var(--red); }
+.award-body b { font-size: 18px; line-height: 1.3; letter-spacing: -0.01em; }
+.award-body span:last-child { font-size: 15px; color: var(--ink-2); line-height: 1.5; }
+@media (max-width: 960px) { .awards-grid { grid-template-columns: 1fr; } }
+@media (max-width: 520px) { .award { grid-template-columns: 1fr; padding: 14px 14px 22px; } .award .doc { aspect-ratio: 4 / 3; } .award-body { padding: 0 6px; } }

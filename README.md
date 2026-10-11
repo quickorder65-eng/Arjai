@@ -13,6 +13,10 @@ https://quickorder65-eng.github.io/Arjai/
 | `shkolam.html` | B2B: внедрение ДоСи в музыкальные школы и студии |
 | `404.html` | Страница «не найдено» |
 
+## Анкета — главный элемент
+
+Кнопка «Пройти анкету» на первом экране (и плитки направлений, чипы, баннер, плавающая кнопка на телефоне) открывает полноэкранную анкету из 5 вопросов. В конце — персональная рекомендация и кнопка, которая отправляет ответы в WhatsApp. Ссылка `index.html#quiz` открывает анкету сразу, `#quiz-teacher` / `#quiz-school` — сразу с выбранным направлением. Тексты вопросов — в `assets/script.js` (DIRECTIONS и STEPS).
+
 ## Как работают заявки
 
 Бэкенда нет. Все кнопки («Записаться на занятие», «Пройти диагностику», «Получить программу ДоСи», «Консультация для школы», «Задать вопрос») и форма в контактах открывают WhatsApp с уже готовым текстом. Анкета прикладывает ответы к сообщению.
@@ -44,6 +48,6 @@ https://quickorder65-eng.github.io/Arjai/
 
 ## Технически
 
-- Шрифты Cormorant Garamond и Onest (SIL Open Font License) лежат в `assets/fonts` — сайт не зависит от Google Fonts.
+- Шрифт Onest (SIL Open Font License) лежат в `assets/fonts` — сайт не зависит от Google Fonts.
 - SEO: title/description на каждой странице, Open Graph и Twitter-карточка (`assets/og-image.png`), favicon, schema.org `EducationalOrganization` на главной и `Course` на странице курса, `sitemap.xml`, `robots.txt`.
 - Без scroll-анимаций, счётчиков и пульсирующих элементов — по просьбе заказчика.

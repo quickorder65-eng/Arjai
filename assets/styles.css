@@ -573,3 +573,44 @@ dialog.quiz-dlg::backdrop { background: rgba(23,18,15,.7); }
   *, *::before, *::after { transition: none !important; animation: none !important; }
 }
 @media (min-width: 901px) { .qz-result .pic { position: sticky; top: 0; } }
+
+/* ---------- первый экран целиком в одном экране ---------- */
+.hero { min-height: calc(100svh - 74px); display: flex; align-items: center; padding: 28px 0 32px; }
+.hero > .wrap { width: 100%; }
+.hero-grid { grid-template-columns: 1.15fr .85fr; gap: 48px; }
+.hero .tag { margin-bottom: 16px; }
+.hero h1 { font-size: clamp(36px, min(5vw, 8.6vh), 80px); max-width: 15ch; margin-bottom: 16px; }
+.hero .lead { margin-bottom: 26px; font-size: 18px; }
+.cta-meta { margin-top: 14px; }
+.paths-inline { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 10px; margin-top: 24px; font-size: 15px; color: var(--muted); }
+.paths-inline a { display: inline-flex; align-items: center; gap: 8px; padding: 5px 14px 5px 5px; border: 1px solid var(--line); border-radius: 999px; text-decoration: none; color: var(--ink-2); transition: border-color .2s; }
+.paths-inline a:hover { border-color: var(--ink); }
+.paths-inline img { width: 30px; height: 30px; border-radius: 50%; object-fit: cover; }
+.paths-inline b { color: var(--ink); }
+.hero-photo { aspect-ratio: auto; height: min(calc(100svh - 74px - 60px), 680px); min-height: 420px; max-height: none; }
+.peek { left: -40px; bottom: 28px; padding: 18px 20px; }
+.peek h3 { font-size: 19px; margin-bottom: 12px; }
+.chip { padding: 8px 13px; font-size: 14.5px; }
+.facts-band { padding: 0 0 24px; }
+@media (max-width: 980px) {
+  .hero { min-height: 0; display: block; padding: 28px 0 40px; }
+  .hero-grid { grid-template-columns: 1fr; gap: 32px; }
+  .hero h1 { font-size: clamp(36px, 9vw, 60px); }
+  .hero-photo { height: auto; aspect-ratio: 4 / 3.4; min-height: 0; }
+  .peek { left: 16px; right: 16px; }
+}
+@media (max-width: 560px) {
+  .hero-photo { aspect-ratio: 4 / 4.2; }
+  .peek { left: 0; right: 0; }
+}
+@media (min-width: 981px) and (max-height: 760px) {
+  .hero { padding: 18px 0 20px; }
+  .hero .tag { margin-bottom: 12px; padding: 5px 12px; font-size: 13px; }
+  .hero h1 { font-size: clamp(34px, min(4.6vw, 8.2vh), 64px); margin-bottom: 12px; }
+  .hero .lead { font-size: 16.5px; margin-bottom: 18px; }
+  .quiz-cta { min-height: 66px; font-size: 19px; padding-left: 28px; }
+  .quiz-cta .arrow { width: 48px; height: 48px; }
+  .cta-meta { margin-top: 10px; font-size: 14px; }
+  .paths-inline { margin-top: 16px; }
+  .hero-photo { min-height: 380px; height: calc(100svh - 74px - 40px); }
+}

@@ -266,7 +266,7 @@
       DIRECTIONS.forEach(function (d, i) {
         var b = h("button", "qz-opt" + (d.wide ? " wide" : "") + (state.dir === d ? " sel" : ""));
         b.type = "button";
-        b.innerHTML = '<img src="' + IMG(d.img, 700) + '" alt="" loading="lazy"><span class="key-hint"><span>' + (i + 1) + '</span></span><span class="lbl"><b>' + esc(d.label) + '</b><small>' + esc(d.note) + "</small></span>";
+        b.innerHTML = '<img src="' + IMG(d.img, 700) + '" alt=""><span class="key-hint"><span>' + (i + 1) + '</span></span><span class="lbl"><b>' + esc(d.label) + '</b><small>' + esc(d.note) + "</small></span>";
         b.addEventListener("click", function () {
           choose(b, function () { if (state.dir !== d) state.answers = {}; state.dir = d; state.step = 1; });
         });

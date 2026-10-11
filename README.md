@@ -21,9 +21,12 @@ https://quickorder65-eng.github.io/Arjai/
 
 ## Черновые пометки
 
-Пока данные не согласованы, на сайте видны жёлтые пометки «Уточнить: …» и полоса «Черновик» сверху.
-- Посмотреть сайт без пометок: добавить к адресу `?draft=0`.
-- Убрать пометки при запуске: удалить `class="draft"` у тега `<html>` в `index.html`, `repetitor.html`, `shkolam.html`.
+Обычный вид сайта — чистый, без пометок. Чтобы показать заказчику, что ещё нужно уточнить, откройте сайт с `?draft=1` в адресе — появятся жёлтые пометки «Уточнить: …».
+
+## Фото и видео
+
+- Фото инструментов — Unsplash (бесплатная лицензия), подгружаются с images.unsplash.com. При появлении своих фото студии — заменить ссылки в HTML.
+- Видео концертов и отзывов — с YouTube-канала студии (@arjai5068), загружаются только по нажатию.
 
 ## Открытые вопросы к заказчику
 
@@ -41,6 +44,6 @@ https://quickorder65-eng.github.io/Arjai/
 
 ## Технически
 
-- Шрифты Golos Text и Source Serif 4 (SIL Open Font License) лежат в `assets/fonts` — сайт не зависит от Google Fonts.
+- Шрифты Cormorant Garamond и Onest (SIL Open Font License) лежат в `assets/fonts` — сайт не зависит от Google Fonts.
 - SEO: title/description на каждой странице, Open Graph и Twitter-карточка (`assets/og-image.png`), favicon, schema.org `EducationalOrganization` на главной и `Course` на странице курса, `sitemap.xml`, `robots.txt`.
 - Без scroll-анимаций, счётчиков и пульсирующих элементов — по просьбе заказчика.

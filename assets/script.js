@@ -23,12 +23,54 @@
     return "https://wa.me/" + WA_PHONE + "?text=" + encodeURIComponent(text);
   }
 
-  /* Черновые пометки: видны по умолчанию, пока сайт не запущен.
-     Посмотреть «чистую» версию: добавить к адресу ?draft=0 */
+  /* Черновые пометки для согласования с заказчиком: видны только по адресу с ?draft=1 */
   try {
     var params = new URLSearchParams(window.location.search);
-    if (params.get("draft") === "0") document.documentElement.classList.remove("draft");
-  } catch (e) { /* старые браузеры — оставляем как есть */ }
+    if (params.get("draft") === "1") document.documentElement.classList.add("draft");
+  } catch (e) { /* старые браузеры */ }
+
+  /* Клавиатура ДО–СИ: клавиша подсвечивается и звучит нота (только по нажатию) */
+  var NOTES = [261.63, 293.66, 329.63, 349.23, 392.0, 440.0, 493.88];
+  var audioCtx = null;
+  function playNote(freq) {
+    try {
+      audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)();
+      var now = audioCtx.currentTime;
+      var gain = audioCtx.createGain();
+      gain.gain.setValueAtTime(0.0001, now);
+      gain.gain.exponentialRampToValueAtTime(0.22, now + 0.01);
+      gain.gain.exponentialRampToValueAtTime(0.0001, now + 1.6);
+      gain.connect(audioCtx.destination);
+      [[1, "triangle", 1], [2, "sine", 0.35], [3, "sine", 0.12]].forEach(function (h) {
+        var o = audioCtx.createOscillator(); var g = audioCtx.createGain();
+        o.type = h[1]; o.frequency.value = freq * h[0]; g.gain.value = h[2];
+        o.connect(g); g.connect(gain); o.start(now); o.stop(now + 1.7);
+      });
+    } catch (e) { /* без звука */ }
+  }
+  document.querySelectorAll(".key").forEach(function (key, i) {
+    key.addEventListener("click", function () {
+      playNote(NOTES[i]);
+      key.classList.add("is-down");
+      setTimeout(function () { key.classList.remove("is-down"); }, 180);
+    });
+  });
+
+  /* Видео YouTube грузится только по нажатию — страница остаётся лёгкой */
+  document.querySelectorAll(".video .play").forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      var frame = btn.closest(".frame");
+      var id = btn.getAttribute("data-yt");
+      var title = btn.getAttribute("aria-label") || "Видео";
+      var iframe = document.createElement("iframe");
+      iframe.src = "https://www.youtube-nocookie.com/embed/" + id + "?autoplay=1&rel=0";
+      iframe.title = title;
+      iframe.allow = "autoplay; encrypted-media; picture-in-picture; fullscreen";
+      iframe.allowFullscreen = true;
+      frame.innerHTML = "";
+      frame.appendChild(iframe);
+    });
+  });
 
   /* Кнопки с data-wa ведут в WhatsApp с готовым текстом */
   document.querySelectorAll("[data-wa]").forEach(function (a) {
@@ -251,7 +293,7 @@
     var label, title, points = [], primary, secondary;
 
     if (p === "learn") {
-      label = "Рекомендация · ArJai";
+      label = "Рекомендуем в ArJai";
       var stage = (a.goal === "Конкурс или поступление" || a.goal === "Выступать на сцене" || a.level === "Уже выступаю, нужен следующий уровень");
       title = "Диагностика, затем индивидуальные занятия: " + state.dir.label.toLowerCase();
       points.push("Начинаем с диагностики: определяем уровень, цель и подходящий формат.");
@@ -263,7 +305,7 @@
       primary = { text: "Пройти диагностику", msg: "Здравствуйте! Прошёл(ла) анкету на сайте и хочу пройти диагностику." };
       secondary = { text: "Сразу записаться на занятие", msg: "Здравствуйте! Прошёл(ла) анкету на сайте и хочу записаться на занятие." };
     } else if (p === "teach") {
-      label = "Рекомендация · ДоСи";
+      label = "Рекомендуем в ДоСи";
       var business = (a.goal === "Больше учеников и дохода");
       title = business ? "Курс «Успешный репетитор ДоСи»" : "Программа ДоСи для педагогов";
       points.push("Четыре модуля: диагностика ученика, система обучения, методика, профессиональный репетитор.");
@@ -273,7 +315,7 @@
       primary = { text: "Получить программу ДоСи", msg: "Здравствуйте! Прошёл(ла) анкету на сайте. Хочу получить программу ДоСи." };
       secondary = business ? { text: "Подробнее о курсе", href: "repetitor.html" } : { text: "Задать вопрос", msg: "Здравствуйте! У меня вопрос по программе ДоСи." };
     } else {
-      label = "Рекомендация · ДоСи для школ";
+      label = "Рекомендуем для вашей школы";
       title = "Внедрение системы ДоСи в вашу школу";
       points.push("Путь: диагностика → обучение педагогов → внедрение → контроль → оценка результата.");
       points.push("Главная задача, которую вы отметили: " + a.goal.toLowerCase() + ".");
@@ -283,7 +325,7 @@
 
     var summary = summaryText();
     var box = el("div", { class: "result" });
-    box.appendChild(el("p", { class: "rec-label", text: label }));
+    box.appendChild(el("p", { class: "rec", text: label }));
     box.appendChild(el("h3", { text: title }));
     var ul = el("ul");
     points.forEach(function (t) { ul.appendChild(el("li", { text: t })); });
@@ -292,9 +334,9 @@
 
     var row = el("div", { class: "btn-row" });
     var full = primary.msg + "\n" + summary.join("\n");
-    row.appendChild(el("a", { class: "btn btn--primary", href: waLink(full), target: "_blank", rel: "noopener", text: primary.text }));
-    if (secondary.href) row.appendChild(el("a", { class: "btn btn--secondary", href: secondary.href, text: secondary.text }));
-    else row.appendChild(el("a", { class: "btn btn--secondary", href: waLink(secondary.msg + "\n" + summary.join("\n")), target: "_blank", rel: "noopener", text: secondary.text }));
+    row.appendChild(el("a", { class: "btn btn-red", href: waLink(full), target: "_blank", rel: "noopener", text: primary.text }));
+    if (secondary.href) row.appendChild(el("a", { class: "btn btn-line", href: secondary.href, text: secondary.text }));
+    else row.appendChild(el("a", { class: "btn btn-line", href: waLink(secondary.msg + "\n" + summary.join("\n")), target: "_blank", rel: "noopener", text: secondary.text }));
     box.appendChild(row);
 
     var again = el("div", { class: "quiz-nav" });

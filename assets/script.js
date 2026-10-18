@@ -1,6 +1,7 @@
 /* ArJai · ДоСи — поведение сайта: анкета, WhatsApp-заявки, меню, клавиатура ДО–СИ, видео. */
 (function () {
   "use strict";
+  var SCRIPT_URL = document.currentScript ? document.currentScript.src : null;
 
   /* ===== НАСТРОЙКИ =====
      Номер WhatsApp для всех заявок. Какой номер основной — ещё не подтверждено
@@ -151,27 +152,54 @@
     });
   });
 
-  /* Клавиатура ДО–СИ: звучит нота по нажатию */
+  /* Клавиатура ДО–СИ: настоящий рояль (Salamander Grand Piano, CC BY 3.0, Alexander Holm).
+     Ноты лежат в assets/audio и подгружаются, только когда посетитель подводит курсор к клавишам. */
+  var NOTE_FILES = ["do", "re", "mi", "fa", "sol", "la", "si"];
   var NOTES = [261.63, 293.66, 329.63, 349.23, 392.0, 440.0, 493.88];
-  var audioCtx = null;
-  function playNote(freq) {
-    try {
-      audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)();
-      var now = audioCtx.currentTime, gain = audioCtx.createGain();
-      gain.gain.setValueAtTime(0.0001, now);
-      gain.gain.exponentialRampToValueAtTime(0.22, now + 0.01);
-      gain.gain.exponentialRampToValueAtTime(0.0001, now + 1.6);
-      gain.connect(audioCtx.destination);
-      [[1, "triangle", 1], [2, "sine", 0.35], [3, "sine", 0.12]].forEach(function (h) {
-        var o = audioCtx.createOscillator(), g = audioCtx.createGain();
-        o.type = h[1]; o.frequency.value = freq * h[0]; g.gain.value = h[2];
-        o.connect(g); g.connect(gain); o.start(now); o.stop(now + 1.7);
-      });
-    } catch (e) { /* без звука */ }
+  var audioCtx = null, buffers = [], loading = null;
+  function ctx() {
+    if (!audioCtx) { var AC = window.AudioContext || window.webkitAudioContext; if (AC) audioCtx = new AC(); }
+    return audioCtx;
   }
+  function loadNotes() {
+    if (loading || !ctx() || !window.fetch || !SCRIPT_URL) return loading;
+    loading = Promise.all(NOTE_FILES.map(function (n, i) {
+      return fetch(new URL("audio/" + n + ".mp3", SCRIPT_URL).href)
+        .then(function (r) { return r.arrayBuffer(); })
+        .then(function (data) { return new Promise(function (res, rej) { audioCtx.decodeAudioData(data, res, rej); }); })
+        .then(function (buf) { buffers[i] = buf; })
+        .catch(function () { /* без этой ноты — сработает запасной звук */ });
+    }));
+    return loading;
+  }
+  function synth(freq) {
+    var c = ctx(); if (!c) return;
+    var now = c.currentTime, gain = c.createGain();
+    gain.gain.setValueAtTime(0.0001, now);
+    gain.gain.exponentialRampToValueAtTime(0.2, now + 0.01);
+    gain.gain.exponentialRampToValueAtTime(0.0001, now + 1.4);
+    gain.connect(c.destination);
+    var o = c.createOscillator(); o.type = "triangle"; o.frequency.value = freq; o.connect(gain); o.start(now); o.stop(now + 1.5);
+  }
+  function playNote(i) {
+    var c = ctx(); if (!c) return;
+    if (c.state === "suspended") c.resume();
+    if (!buffers[i]) {
+      var p = loadNotes();
+      if (p) p.then(function () { if (buffers[i]) playNote(i); else synth(NOTES[i]); }); else synth(NOTES[i]);
+      return;
+    }
+    var src = c.createBufferSource(), g = c.createGain(), now = c.currentTime;
+    src.buffer = buffers[i];
+    g.gain.setValueAtTime(0.9, now);
+    src.connect(g); g.connect(c.destination);
+    src.start(now);
+  }
+  var keysBox = document.querySelector(".keys");
+  if (keysBox) ["pointerenter", "touchstart", "focusin"].forEach(function (ev) { keysBox.addEventListener(ev, loadNotes, { once: true, passive: true }); });
   document.querySelectorAll(".key").forEach(function (key, i) {
     key.addEventListener("click", function () {
-      playNote(NOTES[i]);
+      playNote(i);
       key.classList.add("is-down");
       setTimeout(function () { key.classList.remove("is-down"); }, 180);
     });

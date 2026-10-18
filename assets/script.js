@@ -176,7 +176,7 @@
     var c = ctx(); if (!c) return;
     var now = c.currentTime, gain = c.createGain();
     gain.gain.setValueAtTime(0.0001, now);
-    gain.gain.exponentialRampToValueAtTime(0.2, now + 0.01);
+    gain.gain.exponentialRampToValueAtTime(0.07, now + 0.01);
     gain.gain.exponentialRampToValueAtTime(0.0001, now + 1.4);
     gain.connect(c.destination);
     var o = c.createOscillator(); o.type = "triangle"; o.frequency.value = freq; o.connect(gain); o.start(now); o.stop(now + 1.5);
@@ -191,7 +191,7 @@
     }
     var src = c.createBufferSource(), g = c.createGain(), now = c.currentTime;
     src.buffer = buffers[i];
-    g.gain.setValueAtTime(0.9, now);
+    g.gain.setValueAtTime(0.28, now);
     src.connect(g); g.connect(c.destination);
     src.start(now);
   }

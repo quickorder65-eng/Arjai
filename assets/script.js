@@ -471,7 +471,7 @@
       var biz = a.goal.k === "biz";
       title = biz ? T.titleBiz : T.title;
       points.push(T.modules);
-      points.push(T.materials);
+      // points.push(T.materials); // скрыто: ждём ответа Сауле, что входит в стоимость
       points.push(a.level.k === "new" ? T.newbie : T.pro);
       if (biz) points.push(T.biz);
       points.push(T.fmt[a.format.k] || T.fmt.unk);

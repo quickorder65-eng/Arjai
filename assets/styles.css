@@ -809,3 +809,6 @@ dialog.lang-dlg::backdrop { background: rgba(23,18,15,.72); backdrop-filter: blu
   .header-inner { gap: 10px; }
 }
 @media (max-width: 900px) { .case-text { order: -1; } .case-main { margin-top: 4px; } }
+/* отступ под фото-карточкой на страницах курса и школ */
+.page-hero { padding-bottom: 56px; }
+@media (max-width: 640px) { .page-hero { padding-bottom: 32px; } }

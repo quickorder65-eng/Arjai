@@ -17,7 +17,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 SRC = ROOT / "tools" / "pages"
 BASE = "https://quickorder65-eng.github.io/Arjai/"
-VER = "20261022a"
+VER = "20261022b"
 
 ICON_ARROW = '<svg viewBox="0 0 24 24" fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>'
 
@@ -151,8 +151,8 @@ def head(page, body):
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="{BASE}assets/og-image.png">
-<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
 <link rel="icon" href="assets/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="icon" href="assets/favicon-192.png" sizes="192x192" type="image/png">
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 {pre}<link rel="stylesheet" href="assets/styles.css?v={VER}">
 {ld(page, body)}</head>
@@ -169,7 +169,7 @@ def header(page):
 <header class="site-header">
   <div class="wrap header-inner">
     <a class="brand" href="{home or '#top'}" aria-label="ArJai и ДоСи — на главную">
-      <span class="brand-item"><span class="logo"><span class="ar">Ar</span><span class="jai">Jai</span></span><span class="brand-cap">студия, где учатся</span></span>
+      <span class="brand-item"><img class="arjai-logo" src="assets/img/arjai-logo.png" alt="ArJai" width="74" height="48"><span class="brand-cap">студия, где учатся</span></span>
       <span class="brand-item brand-dosi"><img class="dosi-mark" src="assets/img/dosi-znak.png" alt="" width="40" height="40"><img class="dosi-word" src="assets/img/dosi-slovo.png" alt="ДоСи" width="73" height="22"><span class="brand-cap">система обучения</span></span>
     </a>
     <nav class="nav" id="nav" aria-label="Основное меню">
@@ -245,7 +245,7 @@ def footer(page):
 <footer class="site-footer">
   <div class="wrap footer-inner">
     <div class="footer-brand">
-      <span class="logo"><span class="ar">Ar</span><span class="jai">Jai</span></span>
+      <img class="arjai-logo" src="assets/img/arjai-logo.png" alt="ArJai" width="74" height="48">
       <span>© 2014–2026, Алматы. Преподаём с 90-х.</span>
     </div>
     <div class="footer-links">
@@ -266,7 +266,7 @@ def footer(page):
 <dialog class="quiz-dlg" id="quiz" aria-label="Анкета">
   <div class="qz">
     <div class="qz-top">
-      <span class="logo"><span class="ar">Ar</span><span class="jai">Jai</span></span>
+      <img class="arjai-logo" src="assets/img/arjai-logo.png" alt="ArJai" width="74" height="48">
       <div class="qz-progress" aria-hidden="true"></div>
       <button class="close-btn qz-close" type="button" aria-label="Закрыть анкету">×</button>
     </div>

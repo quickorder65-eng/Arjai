@@ -1148,3 +1148,14 @@ h1 { font-weight: 500; }
 .rc-pic { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; background: var(--soft-2); margin-bottom: 12px; }
 /* клавиши ДО–СИ на светлом фоне, перед историей Бахытжана */
 #podarok.soft .octave-head p, #podarok.soft .keys-hint { color: var(--ink-2); }
+/* новый логотип ArJai (картинка) */
+.arjai-logo { display: block; height: 48px; width: auto; }
+.brand-item .arjai-logo { height: 50px; margin: -4px 0; }
+.choice-card .cc-top .arjai-logo { height: 34px; background: #fff; border-radius: 10px; padding: 2px 6px; box-sizing: content-box; }
+.pg-head .arjai-logo { height: 40px; margin-right: 4px; }
+.footer-brand .arjai-logo { height: 44px; background: #fff; border-radius: 12px; padding: 4px 8px; box-sizing: content-box; }
+.qz-top .arjai-logo { height: 40px; }
+.lang-inner .arjai-logo { height: 72px; margin: 0 auto 18px; }
+@media (max-width: 760px) { .brand-item .arjai-logo { height: 42px; } }
+.brand-item .arjai-logo { height: 62px; margin: -8px 0; }
+@media (max-width: 760px) { .brand-item .arjai-logo { height: 52px; margin: -4px 0; } }

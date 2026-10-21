@@ -76,7 +76,7 @@
     d.setAttribute("aria-labelledby", "lang-title");
     d.innerHTML =
       '<div class="lang-inner">' +
-      '<span class="logo"><span class="ar">Ar</span><span class="jai">Jai</span></span>' +
+      '<img class="arjai-logo" src="' + (SCRIPT_URL ? new URL("img/arjai-logo.png", SCRIPT_URL).href : "assets/img/arjai-logo.png") + '" alt="ArJai" width="111" height="72">' +
       '<h2 id="lang-title">Тілді таңдаңыз<br>Выберите язык</h2>' +
       '<p>Сайт қазақ және орыс тілдерінде · Сайт на казахском и русском</p>' +
       '<div class="lang-choices">' +

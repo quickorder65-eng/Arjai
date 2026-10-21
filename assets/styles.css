@@ -1146,3 +1146,5 @@ h1 { font-weight: 500; }
 .route-card { padding: 0 0 22px; overflow: hidden; }
 .route-card > b, .route-card > span:last-child { padding: 0 22px; }
 .rc-pic { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; background: var(--soft-2); margin-bottom: 12px; }
+/* клавиши ДО–СИ на светлом фоне, перед историей Бахытжана */
+#podarok.soft .octave-head p, #podarok.soft .keys-hint { color: var(--ink-2); }

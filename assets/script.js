@@ -446,15 +446,15 @@
   }[LANG];
 
   var ROUTES = {
-    kids: { group: "arjai", path: "learn", ic: "👧", img: "photo-1758525865228-7ead2d650b60", steps: ["dir", "ageKid", "needKid", "format"] },
-    adult: { group: "arjai", path: "learn", ic: "🎤", img: "photo-1595422656857-ced3a4a0ce25", steps: ["dir", "level", "needAdult", "format"] },
-    stage: { group: "arjai", path: "learn", ic: "🏆", img: "photo-1770871821282-6a732ab87664", steps: ["dir", "event", "age", "format"] },
-    workshop: { group: "arjai", path: "workshop", ic: "🎸", img: "img/masterskaya-foto.jpg", steps: ["instrument", "repair"] },
-    recording: { group: "arjai", path: "recording", ic: "🎧", img: "photo-1531651008558-ed1740375b39", steps: ["recWhat", "recStudent"] },
-    staff: { group: "dosi", path: "teach", ic: "🏫", img: "photo-1612016410921-264f6afed556", steps: ["exp", "whom", "needTeacher", "fmtTeach"] },
-    teacher: { group: "dosi", path: "teach", ic: "🎹", img: "photo-1696522732406-065ef560da8c", steps: ["exp", "whom", "needTeacher", "fmtTeach"] },
-    owner: { group: "dosi", path: "school", ic: "🗝️", img: "photo-1684784176798-aae206e325e7", steps: ["size", "whom", "needOwner", "fmtSchool"] },
-    other: { group: "other", path: "other", ic: "✍️", img: "img/uchenitsa-vokal-sm.jpg", steps: ["otherOnly"] }
+    kids: { group: "arjai", path: "learn", img: "photo-1758525865228-7ead2d650b60", steps: ["dir", "ageKid", "needKid", "format"] },
+    adult: { group: "arjai", path: "learn", img: "photo-1595422656857-ced3a4a0ce25", steps: ["dir", "level", "needAdult", "format"] },
+    stage: { group: "arjai", path: "learn", img: "photo-1770871821282-6a732ab87664", steps: ["dir", "event", "age", "format"] },
+    workshop: { group: "arjai", path: "workshop", img: "img/masterskaya-foto.jpg", steps: ["instrument", "repair"] },
+    recording: { group: "arjai", path: "recording", img: "photo-1531651008558-ed1740375b39", steps: ["recWhat", "recStudent"] },
+    staff: { group: "dosi", path: "teach", img: "photo-1612016410921-264f6afed556", steps: ["exp", "whom", "needTeacher", "fmtTeach"] },
+    teacher: { group: "dosi", path: "teach", img: "photo-1696522732406-065ef560da8c", steps: ["exp", "whom", "needTeacher", "fmtTeach"] },
+    owner: { group: "dosi", path: "school", img: "photo-1684784176798-aae206e325e7", steps: ["size", "whom", "needOwner", "fmtSchool"] },
+    other: { group: "other", path: "other", img: "img/uchenitsa-vokal-sm.jpg", steps: ["otherOnly"] }
   };
   var ROUTE_ORDER = ["kids", "adult", "stage", "workshop", "recording", "staff", "teacher", "owner"];
   var DIR_IMG = { vocal: "photo-1595422656857-ced3a4a0ce25", piano: "photo-1452724931113-5ab6340ce080", guitar: "photo-1536594527669-2f555de54e95", theory: "photo-1717699841805-e80424b1be43", conduct: "photo-1568057609581-8556cf900d3c", help: "photo-1770871821282-6a732ab87664" };
@@ -552,38 +552,30 @@
       wrap.appendChild(h("p", "qz-count", T.count(1, total())));
       wrap.appendChild(h("h2", null, esc(T.start.title)));
       wrap.appendChild(h("p", "qz-sub", esc(T.start.sub)));
-      var n = 0;
-      var groups = [["arjai", T.start.arjai], ["dosi", T.start.dosi]].filter(function (g) {
-        if (state.filter === "learn") return g[0] === "arjai";
-        return !state.filter || state.filter === g[0];
-      });
-      groups.forEach(function (g) {
-        if (groups.length > 1) wrap.appendChild(h("p", "qz-group", esc(g[1])));
-        var grid = h("div", "qz-grid routes");
-        ROUTE_ORDER.forEach(function (id) {
-          var r = ROUTES[id];
-          if (r.group !== g[0]) return;
-          if (state.filter === "learn" && r.path !== "learn") return;
-          n += 1;
-          var b = h("button", "qz-opt route-opt" + (state.route === id ? " sel" : ""));
-          b.type = "button";
-          b.innerHTML = '<span class="key-hint"><span>' + n + '</span></span><span class="ro-ic" aria-hidden="true">' + r.ic + "</span><b>" + esc(T.routes[id][0]) + "</b><small>" + esc(T.routes[id][1]) + "</small>";
-          b.addEventListener("click", function () {
-            choose(b, function () {
-              if (state.route !== id) state.answers = {};
-              state.route = id; state.step = 1;
-              if (state.preset) state.answers.dir = { k: state.preset, t: T.steps.dir[3].filter(function (o) { return o[0] === state.preset; })[0][1] };
-            });
+      var grid = h("div", "qz-grid photos"), n = 0;
+      ROUTE_ORDER.forEach(function (id) {
+        var r = ROUTES[id];
+        if (state.filter === "learn" && r.path !== "learn") return;
+        if ((state.filter === "arjai" || state.filter === "dosi") && r.group !== state.filter) return;
+        n += 1;
+        var b = h("button", "qz-opt" + (state.route === id ? " sel" : ""));
+        b.type = "button";
+        b.innerHTML = '<img src="' + pic(r.img, 700) + '" alt=""><span class="key-hint"><span>' + n + '</span></span><span class="lbl"><b>' + esc(T.routes[id][0]) + "</b><small>" + esc(T.routes[id][1]) + "</small></span>";
+        b.addEventListener("click", function () {
+          choose(b, function () {
+            if (state.route !== id) state.answers = {};
+            state.route = id; state.step = 1;
+            if (state.preset) state.answers.dir = { k: state.preset, t: T.steps.dir[3].filter(function (o) { return o[0] === state.preset; })[0][1] };
           });
-          grid.appendChild(b);
         });
-        wrap.appendChild(grid);
+        grid.appendChild(b);
       });
-      var og = h("div", "qz-grid routes");
-      og.appendChild(otherOpt(n + 1, state.route === "other", function (e) {
-        choose(e.currentTarget, function () { state.route = "other"; state.answers = {}; state.step = 1; });
-      }));
-      wrap.appendChild(og);
+      var ob = otherOpt(n + 1, state.route === "other", function () {
+        choose(ob, function () { state.route = "other"; state.answers = {}; state.step = 1; });
+      });
+      ob.classList.add("full");
+      grid.appendChild(ob);
+      wrap.appendChild(grid);
     }
 
     function renderStep(wrap, s) {
@@ -705,7 +697,7 @@
       var sum = summary();
       var box = h("div", "qz-result");
       box.innerHTML =
-        '<div class="pic"><img src="' + pic(r.img, 1000) + '" alt=""><span class="stamp"><i>✓</i>' + esc(T.done) + "</span>" + (bonus ? '<span class="stamp gift">🎁 ' + esc(T.bonus) + "</span>" : "") + "</div>" +
+        '<div class="pic"><img src="' + pic(r.img, 1000) + '" alt=""><span class="stamp"><i>✓</i>' + esc(T.done) + "</span>" + (bonus ? '<span class="stamp gift">' + esc(T.bonus) + "</span>" : "") + "</div>" +
         '<div><p class="qz-count">' + esc(T.rec) + "</p><h2>" + esc(title) + "</h2>" +
         '<ul class="qz-points">' + points.map(function (t) { return "<li>" + ICON_CHECK + "<span>" + esc(t) + "</span></li>"; }).join("") + "</ul>" +
         '<div class="qz-answers">' + sum.map(function (t) { return "<span>" + esc(t) + "</span>"; }).join("") + "</div>" +

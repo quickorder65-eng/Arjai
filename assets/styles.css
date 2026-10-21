@@ -1140,3 +1140,9 @@ h1 { font-weight: 500; }
 @media (max-width: 480px) { .header-cta { display: none; } .lang-switch { margin-left: auto; } }
 @media (max-width: 1340px) { .brand-cap { display: none !important; } }
 @media (max-width: 560px) { .bill .cost { white-space: normal; max-width: 52%; } }
+/* анкета: старый вид первого шага — фото-карточки; «Другое» во всю ширину */
+.qz-grid.photos .qz-opt.other.full { grid-column: 1 / -1; aspect-ratio: auto; min-height: 76px; flex-direction: row; align-items: center; justify-content: flex-start; gap: 12px; }
+.qz-grid.photos .qz-opt.other.full small { margin: 0; }
+.route-card { padding: 0 0 22px; overflow: hidden; }
+.route-card > b, .route-card > span:last-child { padding: 0 22px; }
+.rc-pic { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; background: var(--soft-2); margin-bottom: 12px; }

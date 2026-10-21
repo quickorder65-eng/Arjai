@@ -17,7 +17,7 @@ from html.parser import HTMLParser
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-PAGES = ["index.html", "repetitor.html", "shkolam.html"]
+PAGES = ["index.html", "zanyatiya.html", "dosi.html", "repetitor.html", "shkolam.html", "masterskaya.html", "zvukozapis.html"]
 DICT_PATH = ROOT / "tools" / "kk.json"
 BASE = "https://quickorder65-eng.github.io/Arjai/"
 CYR = re.compile(r"[А-Яа-яЁё]")

@@ -271,6 +271,13 @@
         size: ["Педагогов", "Сколько педагогов в школе?", "От этого зависит формат внедрения.", [["s1", "до 5", "педагогов"], ["s2", "5–15", "педагогов"], ["s3", "15+", "педагогов"]]],
         needOwner: ["Задача", "Какая задача главная?", "Выберите пункт или опишите своими словами.", [["std", "Педагоги работают каждый по-своему — нет единого стандарта качества", ""], ["parents", "Родители не всегда видят результат", ""], ["churn", "Высокая текучесть учеников", ""], ["qa", "Сложно контролировать качество обучения педагогов", ""]]],
         fmtSchool: ["Формат", "Где удобнее обучать педагогов?", "", [["on", "Онлайн", "Вся команда из любой точки"], ["off", "Очно в Алматы", "Выезд или в студии"], ["mix", "Смешанный формат", "Часть онлайн, часть очно"]]],
+        exp2: ["Опыт", "Сколько лет вы работаете в музыкальном образовании?", "", [["e1", "до 1", "года"], ["e2", "1–3", "года"], ["e3", "3–5", "лет"], ["e4", "5–10", "лет"], ["e5", "10+", "лет"]]],
+        spec: ["Специальность", "Что вы в основном преподаёте?", "", [["vocal", "Вокал", ""], ["piano", "Фортепиано", ""], ["synth", "Синтезатор", ""], ["guitar", "Гитара", ""], ["ukulele", "Укулеле", ""], ["theory", "Теория музыки / сольфеджио", ""]]],
+        studentsN: ["Учеников", "Сколько у вас учеников сейчас?", "", [["n1", "1–10", "учеников"], ["n2", "11–20", "учеников"], ["n3", "21–50", "учеников"], ["n4", "51–100", "учеников"], ["n5", "100+", "учеников"]]],
+        rules: ["Единые требования", "Есть ли у вас единые требования к работе педагогов?", "", [["yes", "Да", ""], ["part", "Частично", ""], ["no", "Нет", ""]]],
+        painsDosi: ["Проблемы", "Что сегодня самая большая проблема?", "Можно выбрать несколько вариантов.", [["nosys", "Нет единой системы обучения", ""], ["eachown", "Каждый педагог работает по-своему", ""], ["level", "Сложно определить уровень ученика на старте", ""], ["measure", "Сложно измерить результат обучения", ""], ["quit", "Ученики теряют интерес / прекращают обучение", ""], ["parents", "Родители не всегда видят результат", ""], ["control", "Сложно обучать и контролировать педагогов", ""], ["materials", "Не хватает готовых методических материалов", ""], ["route", "Сложно выстроить индивидуальный маршрут ученика", ""], ["scale", "Сложно масштабировать деятельность / студию", ""], ["tools", "Нужны новые инструменты для педагога", ""]]],
+        dosiUse: ["Что полезно", "Что из ДоСи было бы для вас полезнее всего?", "Можно выбрать несколько вариантов.", [["diag", "Диагностика и запуск учеников", ""], ["system", "Готовая пошаговая система обучения учеников", ""], ["materials", "Методические материалы", ""], ["training", "Обучение педагогов", ""], ["cert", "Аттестация и сертификация педагогов", ""], ["routes", "Индивидуальные маршруты учеников", ""], ["criteria", "Критерии оценки результата", ""], ["quality", "Контроль качества обучения", ""], ["digital", "Цифровые инструменты / личный кабинет", ""], ["monitor", "Мониторинг динамики учеников", ""], ["grow", "Повышение профессионального уровня", ""], ["studio", "Помощь в систематизации работы студии", ""]]],
+        nextStep: ["Следующий шаг", "Какой следующий шаг вам ближе?", "", [["info", "Получить информацию о ДоСи", ""], ["consult", "Пройти консультацию", ""], ["terms", "Обсудить условия сотрудничества", ""], ["contract", "Рассмотреть договор о сотрудничестве", ""], ["pilot", "Принять участие в пилотировании", ""], ["look", "Пока только ознакомиться", ""]]],
         otherOnly: ["Сообщение", "Расскажите, что вас интересует", "Напишите своими словами — ответим в WhatsApp.", []]
       },
       learn: {
@@ -305,7 +312,7 @@
       school: {
         title: "Внедрение ДоСи в вашу школу",
         path: "Путь: диагностика школы → обучение педагогов → внедрение → контроль → оценка результата.",
-        goal: function (g) { return "Ваша главная задача — «" + g + "». С неё и начнём."; },
+        goal: function (g) { return "Начнём с того, что для вас важнее всего: " + g + "."; },
         size: function (n) { return "Формат и стоимость рассчитаем на консультации под размер школы (" + n + ")."; },
         cta: "Получить консультацию", msg: "Я владелец школы или студии, хочу консультацию по внедрению ДоСи.",
         more: "Подробнее для владельцев"
@@ -374,6 +381,13 @@
         size: ["Педагогтер", "Мектепте неше педагог бар?", "Енгізу форматы осыған байланысты.", [["s1", "5-ке дейін", "педагог"], ["s2", "5–15", "педагог"], ["s3", "15+", "педагог"]]],
         needOwner: ["Міндет", "Басты міндет қандай?", "Бір тармақты таңдаңыз немесе өз сөзіңізбен жазыңыз.", [["std", "Педагогтер әрқайсысы өзінше жұмыс істейді — бірыңғай сапа стандарты жоқ", ""], ["parents", "Ата-аналар нәтижені әрдайым көре бермейді", ""], ["churn", "Оқушылардың тұрақсыздығы жоғары", ""], ["qa", "Педагогтердің оқыту сапасын бақылау қиын", ""]]],
         fmtSchool: ["Формат", "Педагогтерді қалай оқытқан ыңғайлы?", "", [["on", "Онлайн", "Бүкіл команда кез келген жерден"], ["off", "Алматыда, бетпе-бет", "Мектепке барып немесе студияда"], ["mix", "Аралас формат", "Бір бөлігі онлайн, бір бөлігі бетпе-бет"]]],
+        exp2: ["Тәжірибе", "Музыкалық білім беру саласында неше жыл жұмыс істейсіз?", "", [["e1", "1-ге дейін", "жыл"], ["e2", "1–3", "жыл"], ["e3", "3–5", "жыл"], ["e4", "5–10", "жыл"], ["e5", "10+", "жыл"]]],
+        spec: ["Мамандық", "Негізінен нені оқытасыз?", "", [["vocal", "Вокал", ""], ["piano", "Фортепиано", ""], ["synth", "Синтезатор", ""], ["guitar", "Гитара", ""], ["ukulele", "Укулеле", ""], ["theory", "Музыка теориясы / сольфеджио", ""]]],
+        studentsN: ["Оқушылар", "Қазір қанша оқушыңыз бар?", "", [["n1", "1–10", "оқушы"], ["n2", "11–20", "оқушы"], ["n3", "21–50", "оқушы"], ["n4", "51–100", "оқушы"], ["n5", "100+", "оқушы"]]],
+        rules: ["Бірыңғай талаптар", "Педагогтер жұмысына бірыңғай талаптарыңыз бар ма?", "", [["yes", "Иә", ""], ["part", "Ішінара", ""], ["no", "Жоқ", ""]]],
+        painsDosi: ["Мәселелер", "Бүгін ең үлкен мәселе не?", "Бірнеше нұсқаны таңдауға болады.", [["nosys", "Бірыңғай оқыту жүйесі жоқ", ""], ["eachown", "Әр педагог өзінше жұмыс істейді", ""], ["level", "Оқушының бастапқы деңгейін анықтау қиын", ""], ["measure", "Оқыту нәтижесін өлшеу қиын", ""], ["quit", "Оқушылар қызығушылығын жоғалтады / оқуды тастайды", ""], ["parents", "Ата-аналар нәтижені әрдайым көре бермейді", ""], ["control", "Педагогтерді оқыту және бақылау қиын", ""], ["materials", "Дайын әдістемелік материалдар жетіспейді", ""], ["route", "Оқушының жеке бағытын құру қиын", ""], ["scale", "Қызметті / студияны кеңейту қиын", ""], ["tools", "Педагогке жаңа құралдар керек", ""]]],
+        dosiUse: ["Пайдалысы", "ДоСи-дің қай мүмкіндігі сізге ең пайдалы?", "Бірнеше нұсқаны таңдауға болады.", [["diag", "Оқушыларды диагностикалау және бастау", ""], ["system", "Оқушыларды оқытудың дайын қадамдық жүйесі", ""], ["materials", "Әдістемелік материалдар", ""], ["training", "Педагогтерді оқыту", ""], ["cert", "Педагогтерді аттестаттау және сертификаттау", ""], ["routes", "Оқушылардың жеке бағыттары", ""], ["criteria", "Нәтижені бағалау критерийлері", ""], ["quality", "Оқыту сапасын бақылау", ""], ["digital", "Цифрлық құралдар / жеке кабинет", ""], ["monitor", "Оқушылар динамикасын бақылау", ""], ["grow", "Кәсіби деңгейді арттыру", ""], ["studio", "Студия жұмысын жүйелеуге көмек", ""]]],
+        nextStep: ["Келесі қадам", "Қай келесі қадам сізге жақын?", "", [["info", "ДоСи туралы ақпарат алу", ""], ["consult", "Кеңес алу", ""], ["terms", "Ынтымақтастық шарттарын талқылау", ""], ["contract", "Ынтымақтастық шартын қарастыру", ""], ["pilot", "Пилоттық жобаға қатысу", ""], ["look", "Әзірге тек танысу", ""]]],
         otherOnly: ["Хабарлама", "Сізді не қызықтыратынын жазыңыз", "Өз сөзіңізбен жазыңыз — WhatsApp-та жауап береміз.", []]
       },
       learn: {
@@ -408,7 +422,7 @@
       school: {
         title: "ДоСи-ді мектебіңізге енгізу",
         path: "Жол: мектеп диагностикасы → педагогтерді оқыту → енгізу → бақылау → нәтижені бағалау.",
-        goal: function (g) { return "Сіздің басты міндетіңіз — «" + g + "». Осыдан бастаймыз."; },
+        goal: function (g) { return "Сіз үшін ең маңыздысынан бастаймыз: " + g + "."; },
         size: function (n) { return "Формат пен бағаны кеңес кезінде мектеп көлеміне қарай есептейміз (" + n + ")."; },
         cta: "Кеңес алу", msg: "Мен мектептің немесе студияның иесімін, ДоСи-ді енгізу бойынша кеңес алғым келеді.",
         more: "Иелерге толығырақ"
@@ -446,20 +460,21 @@
   }[LANG];
 
   var ROUTES = {
-    kids: { group: "arjai", path: "learn", img: "photo-1758525865228-7ead2d650b60", steps: ["dir", "ageKid", "needKid", "format"] },
-    adult: { group: "arjai", path: "learn", img: "photo-1595422656857-ced3a4a0ce25", steps: ["dir", "level", "needAdult", "format"] },
-    stage: { group: "arjai", path: "learn", img: "photo-1770871821282-6a732ab87664", steps: ["dir", "event", "age", "format"] },
+    kids: { group: "arjai", path: "learn", img: "img/deti-vokal-sm.jpg", steps: ["dir", "ageKid", "needKid", "format"] },
+    adult: { group: "arjai", path: "learn", img: "img/vokal-vzroslaya-sm.jpg", steps: ["dir", "level", "needAdult", "format"] },
+    stage: { group: "arjai", path: "learn", img: "img/konkurs-medal-sm.jpg", steps: ["dir", "event", "age", "format"] },
     workshop: { group: "arjai", path: "workshop", img: "img/masterskaya-foto.jpg", steps: ["instrument", "repair"] },
     recording: { group: "arjai", path: "recording", img: "photo-1531651008558-ed1740375b39", steps: ["recWhat", "recStudent"] },
-    staff: { group: "dosi", path: "teach", img: "photo-1612016410921-264f6afed556", steps: ["exp", "whom", "needTeacher", "fmtTeach"] },
-    teacher: { group: "dosi", path: "teach", img: "photo-1696522732406-065ef560da8c", steps: ["exp", "whom", "needTeacher", "fmtTeach"] },
-    owner: { group: "dosi", path: "school", img: "photo-1684784176798-aae206e325e7", steps: ["size", "whom", "needOwner", "fmtSchool"] },
+    staff: { group: "dosi", path: "teach", img: "img/konkurs-pianistov-sm.jpg", steps: ["exp2", "spec", "studentsN", "painsDosi", "dosiUse", "nextStep"] },
+    teacher: { group: "dosi", path: "teach", img: "img/duet-sm.jpg", steps: ["exp2", "spec", "studentsN", "painsDosi", "dosiUse", "nextStep"] },
+    owner: { group: "dosi", path: "school", img: "img/otchetnyj-koncert-sm.jpg", steps: ["size", "rules", "painsDosi", "dosiUse", "nextStep"] },
     other: { group: "other", path: "other", img: "img/uchenitsa-vokal-sm.jpg", steps: ["otherOnly"] }
   };
   var ROUTE_ORDER = ["kids", "adult", "stage", "workshop", "recording", "staff", "teacher", "owner"];
-  var DIR_IMG = { vocal: "photo-1595422656857-ced3a4a0ce25", piano: "photo-1452724931113-5ab6340ce080", guitar: "photo-1536594527669-2f555de54e95", theory: "photo-1717699841805-e80424b1be43", conduct: "photo-1568057609581-8556cf900d3c", help: "photo-1770871821282-6a732ab87664" };
+  var DIR_IMG = { vocal: "img/vokal-paren-sm.jpg", piano: "img/fortepiano-devochka-sm.jpg", guitar: "img/kairat-gitara.jpg", theory: "photo-1717699841805-e80424b1be43", conduct: "photo-1568057609581-8556cf900d3c", help: "img/vokal-devushka-sm.jpg" };
   var SUBJECTS = ["vocal", "piano", "guitar", "theory", "conduct"];
-  var CHIP_STEPS = ["ageKid", "age", "size"];
+  var CHIP_STEPS = ["ageKid", "age", "size", "exp2", "studentsN"];
+  var MULTI_STEPS = ["painsDosi", "dosiUse"];
 
   function pic(id, w) {
     if (id.indexOf("img/") === 0) return SCRIPT_URL ? new URL(id, SCRIPT_URL).href : "assets/" + id;
@@ -467,7 +482,7 @@
   }
   function stepDef(key) {
     var d = T.steps[key];
-    return { key: key, name: d[0], title: d[1], sub: d[2], type: key === "dir" ? "photos" : CHIP_STEPS.indexOf(key) >= 0 ? "chips" : "cards",
+    return { key: key, name: d[0], title: d[1], sub: d[2], type: key === "dir" ? "photos" : CHIP_STEPS.indexOf(key) >= 0 ? "chips" : MULTI_STEPS.indexOf(key) >= 0 ? "cards multi" : "cards", multi: MULTI_STEPS.indexOf(key) >= 0,
       options: d[3].map(function (o) { return { k: o[0], t: o[1], s: o[2] }; }) };
   }
 
@@ -587,6 +602,7 @@
       var cur = state.answers[s.key];
       function done(text) { state.answers[s.key] = { k: "other", t: T.other + (text ? ": " + text : ""), raw: text }; state.step += 1; render(); }
       if (!s.options.length) { wrap.appendChild(otherBox(done, cur && cur.raw, true)); return; }
+      if (s.multi) { renderMulti(wrap, s, cur); return; }
       var g = h("div", "qz-grid " + s.type);
       s.options.forEach(function (o, i) {
         var b = h("button", "qz-opt" + (cur && cur.k === o.k ? " sel" : ""));
@@ -612,6 +628,51 @@
       wrap.appendChild(g);
       wrap.appendChild(slot);
       if (cur && cur.k === "other") slot.appendChild(otherBox(done, cur.raw));
+    }
+
+    function renderMulti(wrap, s, cur) {
+      var picked = cur && cur.list ? cur.list.slice() : [];
+      var g = h("div", "qz-grid " + s.type);
+      var otherText = cur && cur.raw ? cur.raw : "";
+      var nextBtn = h("button", "btn btn-red qz-next", esc(T.next) + " " + ICON_ARROW);
+      nextBtn.type = "button";
+      function sync() { nextBtn.disabled = !picked.length && !(slot.querySelector("textarea") && slot.querySelector("textarea").value.trim()); }
+      s.options.forEach(function (o, i) {
+        var b = h("button", "qz-opt" + (picked.indexOf(o.k) >= 0 ? " sel" : ""));
+        b.type = "button";
+        b.innerHTML = '<span class="key-hint"><span>' + (i + 1) + "</span></span><b>" + esc(o.t) + "</b>";
+        b.addEventListener("click", function () {
+          var at = picked.indexOf(o.k);
+          if (at >= 0) picked.splice(at, 1); else picked.push(o.k);
+          b.classList.toggle("sel", at < 0);
+          sync();
+        });
+        g.appendChild(b);
+      });
+      var slot = h("div", "qz-other-slot");
+      var ob = otherOpt(s.options.length + 1, !!otherText, function () {
+        if (slot.firstChild) { slot.innerHTML = ""; ob.classList.remove("sel"); sync(); return; }
+        ob.classList.add("sel");
+        var box = h("div", "qz-other");
+        box.innerHTML = '<textarea rows="3" placeholder="' + esc(T.otherPh) + '"></textarea>';
+        slot.appendChild(box);
+        var ta = box.querySelector("textarea"); ta.value = otherText; ta.addEventListener("input", sync); ta.focus();
+        sync();
+      });
+      g.appendChild(ob);
+      wrap.appendChild(g);
+      wrap.appendChild(slot);
+      if (otherText) { ob.classList.remove("sel"); ob.click(); }
+      var foot = h("div", "qz-multi-foot"); foot.appendChild(nextBtn); wrap.appendChild(foot);
+      nextBtn.addEventListener("click", function () {
+        var ta = slot.querySelector("textarea"), text = ta ? ta.value.trim() : "";
+        var labels = s.options.filter(function (o) { return picked.indexOf(o.k) >= 0; }).map(function (o) { return o.t; });
+        if (text) labels.push(T.other + ": " + text);
+        if (!labels.length) return;
+        state.answers[s.key] = { k: "multi", list: picked.slice(), raw: text, t: labels.join("; ") };
+        state.step += 1; render();
+      });
+      sync();
     }
 
     function render() {
@@ -658,21 +719,22 @@
         cta = X.cta; ctaMsg = X.msg; alt = { text: X.alt, msg: X.altMsg };
       } else if (p === "teach") {
         X = T.teach; bonus = true;
-        var biz = A("needTeacher") === "biz";
+        var pains = state.answers.painsDosi && state.answers.painsDosi.list || [];
+        var biz = pains.indexOf("scale") >= 0;
         title = state.route === "teacher" ? X.titleBiz : X.title;
         points.push(X.diag);
         points.push(X.modules);
         points.push(X.materials);
-        points.push(state.route === "staff" ? X.staff : A("exp") === "new" ? X.newbie : X.pro);
+        points.push(state.route === "staff" ? X.staff : A("exp2") === "e1" ? X.newbie : X.pro);
         if (biz) points.push(X.biz);
-        points.push(X.fmt[A("fmtTeach")] || X.fmt.unk);
+        points.push(X.fmt.unk);
         cta = X.cta; ctaMsg = X.msg;
         alt = state.route === "teacher" ? { text: X.more, href: "repetitor.html" } : { text: X.moreDosi, href: "dosi.html" };
       } else if (p === "school") {
         X = T.school;
         title = X.title;
         points.push(X.path);
-        if (state.answers.needOwner) points.push(X.goal(state.answers.needOwner.raw || state.answers.needOwner.t));
+        if (state.answers.painsDosi) points.push(X.goal(state.answers.painsDosi.t));
         if (state.answers.size) points.push(X.size(state.answers.size.t));
         cta = X.cta; ctaMsg = X.msg; alt = { text: X.more, href: "shkolam.html" };
       } else if (p === "workshop") {

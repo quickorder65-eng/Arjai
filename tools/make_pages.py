@@ -17,7 +17,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 SRC = ROOT / "tools" / "pages"
 BASE = "https://quickorder65-eng.github.io/Arjai/"
-VER = "20261022c"
+VER = "20261024b"
 
 ICON_ARROW = '<svg viewBox="0 0 24 24" fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>'
 
@@ -32,6 +32,7 @@ ORG = {
     "image": [BASE + "assets/og-image.png", BASE + "assets/img/semya-arjai.jpg"],
     "foundingDate": "2014",
     "telephone": "+77076536250",
+    "email": "d.sulya@mail.ru",
     "priceRange": "500–64 000 ₸",
     "address": {"@type": "PostalAddress", "addressLocality": "Алматы", "addressCountry": "KZ"},
     "areaServed": [{"@type": "City", "name": "Алматы"}, {"@type": "Country", "name": "Казахстан"}],
@@ -200,10 +201,10 @@ def contacts():
       <p class="lead" style="margin:18px 0 26px">Пройдите анкету — ответы сразу придут нам в WhatsApp, и мы пригласим вас на бесплатную диагностику.</p>
       <button class="quiz-cta" type="button" data-quiz><span class="qc-text">Пройти анкету<small>около минуты · диагностика бесплатно</small></span><span class="arrow">{ICON_ARROW}</span></button>
       <div class="phones">
-        <a href="tel:+77076536250">+7 707 653 62 50</a><small>Телефон и WhatsApp <span class="draft-note">какой номер основной для WhatsApp</span></small>
+        <a href="tel:+77076536250">+7 707 653 62 50</a><small>Телефон и WhatsApp</small>
         <a href="tel:+77000283648">+7 700 028 36 48</a><small>Телефон</small>
       </div>
-      <p class="muted" style="margin-bottom:20px">Алматы — очно, весь мир — онлайн. <span class="draft-note">адрес студии, 2ГИС и e-mail</span></p>
+      <p class="muted" style="margin-bottom:20px"><a class="text-link" href="mailto:d.sulya@mail.ru">d.sulya@mail.ru</a><br>Алматы — очно, весь мир — онлайн. <span class="draft-note">адрес студии и 2ГИС</span></p>
       <div class="socials" aria-label="Соцсети">
         <a href="https://t.me/DoSiok" target="_blank" rel="noopener">Telegram</a>
         <a href="https://www.instagram.com/zhailausaule" target="_blank" rel="noopener">Instagram</a>

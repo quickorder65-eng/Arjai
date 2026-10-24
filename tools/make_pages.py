@@ -17,7 +17,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 SRC = ROOT / "tools" / "pages"
 BASE = "https://quickorder65-eng.github.io/Arjai/"
-VER = "20261024f"
+VER = "20261024g"
 
 ICON_ARROW = '<svg viewBox="0 0 24 24" fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>'
 
@@ -38,8 +38,7 @@ ORG = {
     "areaServed": [{"@type": "City", "name": "Алматы"}, {"@type": "Country", "name": "Казахстан"}],
     "founder": [{"@id": BASE + "#saule"}, {"@type": "Person", "name": "Кайрат Архаров"}],
     "contactPoint": [
-        {"@type": "ContactPoint", "telephone": "+77076536250", "contactType": "customer service", "availableLanguage": ["ru", "kk"]},
-        {"@type": "ContactPoint", "telephone": "+77000283648", "contactType": "customer service", "availableLanguage": ["ru", "kk"]},
+        {"@type": "ContactPoint", "telephone": "+77076536250", "contactType": "customer service", "availableLanguage": ["ru", "kk"]}
     ],
     "knowsAbout": ["вокал", "фортепиано", "синтезатор", "гитара", "бас-гитара", "укулеле", "сольфеджио", "гармония", "композиция", "теория музыки", "дирижирование", "методика преподавания музыки", "ремонт гитар", "настройка фортепиано", "звукозапись"],
     "hasOfferCatalog": {"@type": "OfferCatalog", "name": "Уроки музыки и услуги студии", "itemListElement": [
@@ -118,6 +117,14 @@ def ld(page, body):
     return '<script type="application/ld+json">\n' + json.dumps({"@context": "https://schema.org", "@graph": graph}, ensure_ascii=False, indent=1) + "\n</script>\n"
 
 
+SPLASH = """<div class="splash" id="splash" aria-hidden="true"><div class="splash-in">
+  <div class="splash-logos"><img src="assets/img/arjai-logo-lg.png" alt="" width="186" height="120"><span class="splash-x"></span><img src="assets/img/dosi-logo.png" alt="" width="107" height="120"></div>
+  <p class="splash-title">Добро пожаловать в ArJai</p>
+  <p class="splash-sub">Раскрываем музыкальность. Приводим к результату.</p>
+</div></div>
+"""
+
+
 def head(page, body):
     m = PAGES[page]
     slug = "" if page == "index.html" else page
@@ -160,7 +167,7 @@ def head(page, body):
 <body class="notranslate" translate="no">
 <a class="skip" href="#main">Перейти к содержанию</a>
 <div class="draft-bar" role="note">Режим согласования: жёлтым отмечены данные, которые нужно уточнить у заказчика.</div>
-"""
+""" + (SPLASH if page == "index.html" else "")
 
 
 def header(page):
@@ -202,7 +209,6 @@ def contacts():
       <button class="quiz-cta" type="button" data-quiz><span class="qc-text">Пройти анкету<small>около минуты · диагностика бесплатно</small></span><span class="arrow">{ICON_ARROW}</span></button>
       <div class="phones">
         <a href="tel:+77076536250">+7 707 653 62 50</a><small>Телефон и WhatsApp</small>
-        <a href="tel:+77000283648">+7 700 028 36 48</a><small>Телефон</small>
       </div>
       <p class="muted" style="margin-bottom:20px"><a class="text-link" href="mailto:d.sulya@mail.ru">d.sulya@mail.ru</a><br>Алматы — очно, весь мир — онлайн. <span class="draft-note">адрес студии и 2ГИС</span></p>
       <div class="socials" aria-label="Соцсети">
@@ -248,6 +254,12 @@ def footer(page):
     <div class="footer-brand">
       <img class="arjai-logo" src="assets/img/arjai-logo.png" alt="ArJai" width="74" height="48">
       <span>© 2014–2026, Алматы. Преподаём с 90-х.</span>
+    </div>
+    <div class="footer-social">
+      <a href="https://www.instagram.com/zhailausaule" target="_blank" rel="noopener">Instagram</a>
+      <a href="https://www.tiktok.com/@arjai640" target="_blank" rel="noopener">TikTok</a>
+      <a href="https://www.youtube.com/@arjai5068" target="_blank" rel="noopener">YouTube</a>
+      <a href="https://t.me/DoSiok" target="_blank" rel="noopener">Telegram</a>
     </div>
     <div class="footer-links">
       <a href="{home or '#top'}">Главная</a>

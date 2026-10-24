@@ -1364,3 +1364,5 @@ h1 { font-weight: 500; }
 .hero-photo { height: auto !important; aspect-ratio: 1 / 1; min-height: 0 !important; max-height: calc(100svh - 120px); }
 .hero-photo img { object-position: 50% 45%; }
 @media (max-width: 600px) { .hero-photo { aspect-ratio: 1 / 1; } }
+.s4-circle svg { width: 80px; height: 80px; } @media (max-width: 600px) { .s4-circle svg { width: 52px; height: 52px; } }
+#rezultaty-dosi .benefits li { background: var(--soft); }

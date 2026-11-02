@@ -1412,3 +1412,8 @@ button.text-link { background: none; border: 0; padding: 0; font: inherit; font-
   .dosi-full { height: 46px; }
 }
 @media (max-width: 400px) { .dosi-full { height: 42px; } }
+
+/* логотипы не сжимаются: всегда в своих пропорциях */
+img.arjai-logo, img.dosi-full { width: auto !important; object-fit: contain; }
+img.arjai-logo { aspect-ratio: 74 / 48; }
+img.dosi-full { aspect-ratio: 426 / 480; }

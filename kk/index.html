@@ -29,7 +29,7 @@
 <link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
 <link rel="preload" href="../assets/fonts/onest-cyrillic-500-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="../assets/fonts/onest-cyrillic-400-normal.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="../assets/styles.css?v=20261024h">
+<link rel="stylesheet" href="../assets/styles.css?v=20261102a">
 <script type="application/ld+json">
 {
  "@context": "https://schema.org",
@@ -207,7 +207,7 @@
      "name": "Вокал мен фортепиано сабақтары қанша тұрады?",
      "acceptedAnswer": {
       "@type": "Answer",
-      "text": "60 минуттық жеке сабақ: Алматыда бетпе-бет — 8 000 ₸-ден, онлайн — 6 000 ₸-ден. Аптасына 2 және одан көп рет оқығанда абонемент: бетпе-бет айына 64 000 ₸, онлайн 48 000 ₸."
+      "text": "Жеке сабақ 60 минут. Алматыда бетпе-бет: аптасына бір рет 10 000 ₸, аптасына екі рет 8 000 ₸ немесе айлық абонемент 64 000 ₸. Онлайн: 8 000 ₸, 6 000 ₸ немесе айлық абонемент 48 000 ₸."
      }
     },
     {
@@ -294,14 +294,14 @@
 <div class="splash" id="splash" aria-hidden="true"><div class="splash-in">
   <div class="splash-logos"><img src="../assets/img/arjai-logo-lg.png" alt="" width="186" height="120"><span class="splash-x"></span><img src="../assets/img/dosi-logo.png" alt="" width="107" height="120"></div>
   <p class="splash-title">ArJai-ға қош келдіңіз</p>
-  <p class="splash-sub">Біз музыканы үйретіп қана қоймаймыз — біз нәтижеге жеткіземіз.</p>
+  <p class="splash-sub">Біз жай ғана үйретпейміз — біз нәтижеге жеткіземіз.</p>
 </div></div>
 
 <header class="site-header">
   <div class="wrap header-inner">
     <a class="brand" href="#top" aria-label="ArJai және ДоСи — басты бетке">
       <span class="brand-item"><img class="arjai-logo" src="../assets/img/arjai-logo.png" alt="ArJai" width="74" height="48"><span class="brand-cap">оқитын студия</span></span>
-      <span class="brand-item brand-dosi"><img class="dosi-mark" src="../assets/img/dosi-znak.png" alt="" width="40" height="40"><img class="dosi-word" src="../assets/img/dosi-slovo.png" alt="ДоСи" width="73" height="22"><span class="brand-cap">оқыту жүйесі</span></span>
+      <span class="brand-item brand-dosi"><img class="dosi-full" src="../assets/img/dosi-logo.png" alt="ДоСи" width="46" height="52"><span class="brand-cap">оқыту жүйесі</span></span>
     </a>
     <nav class="nav" id="nav" aria-label="Негізгі мәзір">
       <a href="#arjai">ArJai</a>
@@ -325,23 +325,26 @@
   <div class="wrap hero-grid">
     <div class="hero-text">
       <p class="hero-kicker reveal">Отбасылық музыка студиясы <b>ArJai</b> және авторлық оқыту жүйесі <b>ДоСи</b></p>
-      <h1 class="reveal">Біз музыканы үйретіп қана қоймаймыз — <span class="red">біз нәтижеге жеткіземіз.</span></h1>
+      <h1 class="reveal">Біз жай ғана үйретпейміз — <span class="red">біз нәтижеге жеткіземіз.</span></h1>
       <p class="formula reveal"><span>Тәжірибе</span><span>Шеберлік</span><span>Жүйе</span><i aria-hidden="true">→</i><b>Нәтиже</b></p>
-      <div class="hero-choice reveal">
-        <button class="choice-card" type="button" data-quiz="arjai">
-          <span class="cc-top"><img class="arjai-logo" src="../assets/img/arjai-logo.png" alt="ArJai" width="74" height="48"><span class="cc-cap">оқитын студия</span></span>
-          <b>ArJai-да оқығым келеді</b>
-          <span class="cc-sub">Вокал, фортепиано, гитара, теория — балалар мен ересектерге</span>
-          <span class="go-round"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
-        </button>
-        <button class="choice-card dosi" type="button" data-quiz="dosi">
-          <span class="cc-top"><img src="../assets/img/dosi-znak.png" alt="" width="34" height="34"><img src="../assets/img/dosi-slovo.png" alt="ДоСи" width="60" height="18"><span class="cc-cap">оқыту жүйесі</span></span>
-          <b>ДоСи жүйесін үйренгім келеді</b>
-          <span class="cc-sub">Педагогтерге, репетиторларға және мектеп иелеріне</span>
-          <span class="go-round"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
-        </button>
+      <div class="hero-guide reveal" id="putevoditel">
+        <p class="guide-title">Жол сілтеме — неден бастау керек</p>
+        <div class="guide">
+        <div class="guide-col">
+          <p class="guide-head"><img class="arjai-logo" src="../assets/img/arjai-logo.png" alt="ArJai" width="74" height="48"><span>оқитын студия</span></p>
+          <a href="zanyatiya.html"><span><b>Оқығым келеді</b><small>вокал, фортепиано, гитара, теория</small></span><i><svg viewBox="0 0 24 24" fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></i></a>
+          <a href="zvukozapis.html"><span><b>Дыбыс жазу</b><small>студияда вокал мен аспаптар</small></span><i><svg viewBox="0 0 24 24" fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></i></a>
+          <a href="masterskaya.html"><span><b>Аспаптарды жөндеу</b><small>гитара, фортепиано, синтезатор</small></span><i><svg viewBox="0 0 24 24" fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></i></a>
+        </div>
+        <div class="guide-col dosi">
+          <p class="guide-head"><img class="dosi-full" src="../assets/img/dosi-logo.png" alt="ДоСи" width="46" height="52"><span>оқыту жүйесі</span></p>
+          <a href="dosi.html#pedagogam"><span><b>Мектеп немесе студия педагогімін</b><small>ДоСи әдістемесі мен құралдары</small></span><i><svg viewBox="0 0 24 24" fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></i></a>
+          <a href="repetitor.html"><span><b>Мен репетитормын</b><small>«Табысты репетитор ДоСи» курсы</small></span><i><svg viewBox="0 0 24 24" fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></i></a>
+          <a href="shkolam.html"><span><b>Мен мектеп иесімін</b><small>педагогтерге бірыңғай стандарт</small></span><i><svg viewBox="0 0 24 24" fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></i></a>
+        </div>
+        </div>
       </div>
-      <p class="hero-bonus reveal"><span class="ok" aria-hidden="true">✓</span>Анкетадан бір минутта өтіңіз — <b>диагностика тегін</b></p>
+      <p class="hero-bonus reveal"><span class="ok" aria-hidden="true">✓</span><button class="text-link" type="button" data-quiz>Анкетаны бір минутта толтырыңыз</button> — <b>диагностика тегін</b></p>
       <ul class="hero-facts reveal">
         <li><b>35+</b> жыл тәжірибе</li>
         <li><b>5000+</b> оқушы</li>
@@ -392,7 +395,7 @@
     </div>
 
     <div class="prod-group dosi">
-      <p class="pg-head"><img src="../assets/img/dosi-znak.png" alt="" width="34" height="34"><img src="../assets/img/dosi-slovo.png" alt="ДоСи" width="60" height="18"><span>оқушылар мен мұғалімдерді оқыту жүйесі</span></p>
+      <p class="pg-head"><img class="dosi-full" src="../assets/img/dosi-logo.png" alt="ДоСи" width="46" height="52"><span>оқушылар мен мұғалімдерді оқыту жүйесі</span></p>
       <div class="prod-grid two">
         <a class="prod" href="dosi.html#pedagogam">
           <span class="prod-pic"><img loading="lazy" src="../assets/img/duet-sm.jpg" alt="Педагог пен оқушы дуэтпен ән айтып тұр" style="object-position:50% 25%"></span>
@@ -838,17 +841,20 @@
         <p class="lead" style="margin-top:16px">Жеке сабақ 60 минутқа созылады. Алғашқы қадам — диагностика, анкета үшін ол тегін.</p>
       </div>
       <div class="price-cards">
-        <div class="price-card"><span class="k">Алматыда бетпе-бет</span><b class="v">8 000 ₸-ден</b><span class="s">бір реттік сабақ</span></div>
-        <div class="price-card hl"><span class="k">Бетпе-бет, абонемент</span><b class="v">64 000 ₸</b><span class="s">айына, аптасына 2 сабақтан бастап</span></div>
-        <div class="price-card"><span class="k">Онлайн</span><b class="v">6 000 ₸-ден</b><span class="s">бір реттік сабақ</span></div>
-        <div class="price-card hl"><span class="k">Онлайн, абонемент</span><b class="v">48 000 ₸</b><span class="s">айына, аптасына 2 сабақтан бастап</span></div>
-        <p class="price-note">Топтық сабақтар — сұрау бойынша. <span class="draft-note">топтар мен бағыттар бойынша бағалар</span></p>
+        <div class="price-card"><span class="k">Бетпе-бет · аптасына 1 рет</span><b class="v">10 000 ₸</b><span class="s">60 минуттық сабақ үшін</span></div>
+        <div class="price-card"><span class="k">Онлайн · аптасына 1 рет</span><b class="v">8 000 ₸</b><span class="s">60 минуттық сабақ үшін</span></div>
+        <div class="price-card"><span class="k">Бетпе-бет · аптасына 2 рет</span><b class="v">8 000 ₸</b><span class="s">60 минуттық сабақ үшін</span></div>
+        <div class="price-card"><span class="k">Онлайн · аптасына 2 рет</span><b class="v">6 000 ₸</b><span class="s">60 минуттық сабақ үшін</span></div>
+        <div class="price-card hl"><span class="k">Бетпе-бет, абонемент</span><b class="v">64 000 ₸</b><span class="s">айына, аптасына 2 рет</span></div>
+        <div class="price-card hl"><span class="k">Онлайн, абонемент</span><b class="v">48 000 ₸</b><span class="s">айына, аптасына 2 рет</span></div>
+        <p class="price-note">Вокал, фортепиано мен синтезатор, гитараның барлық түрлері, сольфеджио және музыка теориясы. Барлық материалдар, бағдарлама мен репертуар бағаға кіреді.</p>
       </div>
     </div>
     <div class="price-links">
-      <a href="masterskaya.html"><span>Шеберхана</span><b>500 ₸-ден</b><small>ішек ауыстыру, баптау, жөндеу</small></a>
+      <a href="zanyatiya.html#scena"><span>Іс-шараларға дайындық</span><b>15 000 ₸</b><small>60 минут · емтихандар, байқаулар, кастингтер</small></a>
+      <a href="masterskaya.html"><span>Шеберхана</span><b>20 000–25 000 ₸</b><small>фортепиано баптау · гитара жөндеу және ішектер</small></a>
       <a href="zvukozapis.html"><span>Дыбыс жазу</span><b>10 000 ₸-ден</b><small>сағатына</small></a>
-      <a href="dosi.html#ceny-dosi"><span>ДоСи бойынша оқу</span><b>форматқа қарай</b><small>онлайн және бетпе-бет, педагогтер мен мектептерге</small></a>
+      <a href="dosi.html#ceny-dosi"><span>ДоСи мұғалімдерді оқыту</span><b>25 000 ₸-ден</b><small>шеберлік сыныптары · толық курс 50 000 ₸</small></a>
     </div>
   </div>
 </section>
@@ -864,7 +870,7 @@
     <div class="faq-list">
       <details><summary>Тегін диагностиканы қалай алуға болады?</summary><p>Сайттағы анкетадан өтіңіз — жауаптар бізге WhatsApp-қа келеді, ал біз сізді тегін диагностикаға шақырамыз.</p></details>
       <details><summary>Диагностика қалай өтеді?</summary><p>Бұл кіріспе кездесу: ырғақты, есту қабілетін және интонацияны тексереміз, мақсаттар мен күтулерді білеміз, содан кейін оқыту бағдарламасын ұсынамыз.</p></details>
-      <details><summary>Вокал мен фортепиано сабақтары қанша тұрады?</summary><p>60 минуттық жеке сабақ: Алматыда бетпе-бет — 8 000 ₸-ден, онлайн — 6 000 ₸-ден. Аптасына 2 және одан көп рет оқығанда абонемент: бетпе-бет айына 64 000 ₸, онлайн 48 000 ₸.</p></details>
+      <details><summary>Вокал мен фортепиано сабақтары қанша тұрады?</summary><p>Жеке сабақ 60 минут. Алматыда бетпе-бет: аптасына бір рет 10 000 ₸, аптасына екі рет 8 000 ₸ немесе айлық абонемент 64 000 ₸. Онлайн: 8 000 ₸, 6 000 ₸ немесе айлық абонемент 48 000 ₸.</p></details>
       <details><summary>Нөлден бастауға бола ма?</summary><p>Иә. Бұрын музыкамен айналыспаған болсаңыз да — бастау нүктесін анықтап, мақсатыңызға сай бағдарлама таңдаймыз.</p></details>
       <details><summary>Ересектерге сабақ бар ма?</summary><p>Иә. 3 пен 73 жас аралығында оқытамыз — сайттағы бейнепікірлерде 40, 45 және 52 жастағы оқушылар айтып береді.</p></details>
       <details><summary>Байқаулар мен оқуға түсуге дайындайсыздар ма?</summary><p>Иә: байқауларға, емтихандарға және музыка мектебіне немесе колледжге түсуге, кастингтер мен концерттерге.</p></details>
@@ -967,6 +973,6 @@
   </div>
 </dialog>
 
-<script src="../assets/script.js?v=20261024h"></script>
+<script src="../assets/script.js?v=20261102a"></script>
 </body>
 </html>

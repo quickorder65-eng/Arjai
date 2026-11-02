@@ -17,7 +17,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 SRC = ROOT / "tools" / "pages"
 BASE = "https://quickorder65-eng.github.io/Arjai/"
-VER = "20261024h"
+VER = "20261102a"
 
 ICON_ARROW = '<svg viewBox="0 0 24 24" fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>'
 
@@ -87,7 +87,7 @@ PAGES = {
         crumbs=[("Главная", ""), ("ДоСи", "dosi.html"), ("Для владельцев", "shkolam.html")]),
     "masterskaya.html": dict(
         title="Мастерская ArJai — ремонт и настройка гитар, фортепиано и синтезаторов в Алматы",
-        desc="Мастерская ArJai в Алматы: ремонт, настройка и обслуживание гитар, настройка и регулировка фортепиано, диагностика и ремонт синтезаторов. Цены: смена струн от 500 ₸, настройка фортепиано 35 000 ₸.",
+        desc="Мастерская ArJai в Алматы: ремонт, настройка и обслуживание гитар, настройка и регулировка фортепиано, диагностика и ремонт синтезаторов. Цены: смена струн от 500 ₸, настройка фортепиано 20 000 ₸, гитара под ключ 25 000 ₸.",
         og="Мастерская ArJai: инструменты звучат — вы вдохновляете",
         crumbs=[("Главная", ""), ("Мастерская", "masterskaya.html")]),
     "zvukozapis.html": dict(
@@ -120,7 +120,7 @@ def ld(page, body):
 SPLASH = """<div class="splash" id="splash" aria-hidden="true"><div class="splash-in">
   <div class="splash-logos"><img src="assets/img/arjai-logo-lg.png" alt="" width="186" height="120"><span class="splash-x"></span><img src="assets/img/dosi-logo.png" alt="" width="107" height="120"></div>
   <p class="splash-title">Добро пожаловать в ArJai</p>
-  <p class="splash-sub">Мы не просто учим музыке — мы приводим к результату.</p>
+  <p class="splash-sub">Мы не просто учим — мы приводим к результату.</p>
 </div></div>
 """
 
@@ -178,7 +178,7 @@ def header(page):
   <div class="wrap header-inner">
     <a class="brand" href="{home or '#top'}" aria-label="ArJai и ДоСи — на главную">
       <span class="brand-item"><img class="arjai-logo" src="assets/img/arjai-logo.png" alt="ArJai" width="74" height="48"><span class="brand-cap">студия, где учатся</span></span>
-      <span class="brand-item brand-dosi"><img class="dosi-mark" src="assets/img/dosi-znak.png" alt="" width="40" height="40"><img class="dosi-word" src="assets/img/dosi-slovo.png" alt="ДоСи" width="73" height="22"><span class="brand-cap">система обучения</span></span>
+      <span class="brand-item brand-dosi"><img class="dosi-full" src="assets/img/dosi-logo.png" alt="ДоСи" width="46" height="52"><span class="brand-cap">система обучения</span></span>
     </a>
     <nav class="nav" id="nav" aria-label="Основное меню">
       <a href="{home}#arjai">ArJai</a>
@@ -241,6 +241,43 @@ def contacts():
       <p class="error" role="alert"></p>
       <p class="fine">Сайт ничего не хранит — сообщение уходит напрямую в WhatsApp.</p>
     </form>
+  </div>
+</section>
+"""
+
+
+DOSI_LOGO = '<img class="dosi-full" src="assets/img/dosi-logo.png" alt="ДоСи" width="46" height="52">'
+ARJAI_LOGO = '<img class="arjai-logo" src="assets/img/arjai-logo.png" alt="ArJai" width="74" height="48">'
+
+
+def guide_cols():
+    a = ICON_ARROW
+    def item(href, t, s):
+        return f'<a href="{href}"><span><b>{t}</b><small>{s}</small></span><i>{a}</i></a>'
+    return f"""<div class="guide-col">
+          <p class="guide-head">{ARJAI_LOGO}<span>студия, где учатся</span></p>
+          {item("zanyatiya.html", "Хочу учиться", "вокал, фортепиано, гитара, теория")}
+          {item("zvukozapis.html", "Записать звук", "вокал и инструменты в студии")}
+          {item("masterskaya.html", "Ремонт инструментов", "гитара, фортепиано, синтезатор")}
+        </div>
+        <div class="guide-col dosi">
+          <p class="guide-head">{DOSI_LOGO}<span>система обучения</span></p>
+          {item("dosi.html#pedagogam", "Я педагог школы или студии", "методика и пособия ДоСи")}
+          {item("repetitor.html", "Я репетитор", "курс «Успешный репетитор ДоСи»")}
+          {item("shkolam.html", "Я владелец школы", "единый стандарт для педагогов")}
+        </div>"""
+
+
+def guide_section():
+    return f"""
+<!-- ===== Путеводитель ===== -->
+<section class="section soft guide-sec" id="putevoditel">
+  <div class="wrap">
+    <span class="tag">Путеводитель</span>
+    <h2>Куда дальше?</h2>
+    <div class="guide">
+        {guide_cols()}
+    </div>
   </div>
 </section>
 """
@@ -313,7 +350,9 @@ def crumbs_html(page):
 def build():
     for page in PAGES:
         body = (SRC / page).read_text(encoding="utf-8")
-        body = body.replace("{{CRUMBS}}", crumbs_html(page)).replace("{{ARROW}}", ICON_ARROW)
+        body = body.replace("{{GUIDE}}", guide_cols()).replace("{{CRUMBS}}", crumbs_html(page)).replace("{{ARROW}}", ICON_ARROW)
+        if page != "index.html":
+            body = body.rstrip() + "\n" + guide_section()
         out = head(page, body) + header(page) + '\n<main id="main">\n' + body.rstrip() + "\n" + contacts() + "\n</main>\n" + footer(page)
         (ROOT / page).write_text(out, encoding="utf-8")
         print("собрано:", page)

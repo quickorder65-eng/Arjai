@@ -253,7 +253,8 @@
     ru: {
       count: function (n, t) { return "Вопрос " + n + " из " + t; },
       other: "Другое", otherNote: "опишу своими словами", otherPh: "Опишите своими словами", next: "Далее",
-      start: { title: "Что вас интересует?", sub: "Выберите — дальше несколько коротких вопросов. За анкету — бесплатная диагностика.", arjai: "ArJai — студия, где учатся", dosi: "ДоСи — система обучения" },
+      start: { title: "Что вас интересует?", sub: "Выберите — дальше несколько коротких вопросов. За анкету — бесплатная диагностика.", arjai: "ArJai — студия, где учатся", dosi: "ДоСи — система обучения", arjaiCap: "студия, где учатся", dosiCap: "система обучения", learnTitle: "Кто будет учиться?", learnSub: "Выберите вариант — дальше несколько коротких вопросов.",
+        guide: { learn: ["Хочу учиться", "вокал, фортепиано, гитара, теория"], recording: ["Записать звук", "вокал и инструменты в студии"], workshop: ["Ремонт инструментов", "гитара, фортепиано, синтезатор"], staff: ["Я педагог школы или студии", "методика и пособия ДоСи"], teacher: ["Я репетитор", "курс «Успешный репетитор ДоСи»"], owner: ["Я владелец школы", "единый стандарт для педагогов"] } },
       route: "Запрос", done: "Анкета пройдена", rec: "Ваша рекомендация", bonus: "За анкету — бесплатная диагностика",
       nameLabel: "Как к вам обращаться? (можно не заполнять)", namePh: "Например, Айгерим",
       sendSuffix: " в WhatsApp", again: "Пройти заново", sent: "Прошёл(ла) анкету на сайте:",
@@ -368,7 +369,8 @@
     kk: {
       count: function (n, t) { return "Сұрақ " + n + " / " + t; },
       other: "Басқа", otherNote: "өз сөзіммен жазамын", otherPh: "Өз сөзіңізбен жазыңыз", next: "Әрі қарай",
-      start: { title: "Сізді не қызықтырады?", sub: "Таңдаңыз — одан кейін бірнеше қысқа сұрақ. Анкета үшін — тегін диагностика.", arjai: "ArJai — оқитын студия", dosi: "ДоСи — оқыту жүйесі" },
+      start: { title: "Сізді не қызықтырады?", sub: "Таңдаңыз — одан кейін бірнеше қысқа сұрақ. Анкета үшін — тегін диагностика.", arjai: "ArJai — оқитын студия", dosi: "ДоСи — оқыту жүйесі", arjaiCap: "оқитын студия", dosiCap: "оқыту жүйесі", learnTitle: "Кім оқиды?", learnSub: "Нұсқаны таңдаңыз — одан кейін бірнеше қысқа сұрақ.",
+        guide: { learn: ["Оқығым келеді", "вокал, фортепиано, гитара, теория"], recording: ["Дыбыс жазу", "студияда вокал мен аспаптар"], workshop: ["Аспаптарды жөндеу", "гитара, фортепиано, синтезатор"], staff: ["Мектеп немесе студия педагогімін", "ДоСи әдістемесі мен құралдары"], teacher: ["Мен репетитормын", "«Табысты репетитор ДоСи» курсы"], owner: ["Мен мектеп иесімін", "педагогтерге бірыңғай стандарт"] } },
       route: "Сұраныс", done: "Анкета толтырылды", rec: "Сізге ұсыныс", bonus: "Анкета үшін — тегін диагностика",
       nameLabel: "Сізге қалай жүгінейік? (міндетті емес)", namePh: "Мысалы, Айгерім",
       sendSuffix: " — WhatsApp", again: "Қайта өту", sent: "Сайттағы анкетаны толтырдым:",
@@ -520,12 +522,13 @@
     var hint = dlg.querySelector(".kbd");
     var state, busy = false;
 
-    function reset(filter, preset) { state = { step: 0, route: null, filter: filter || null, preset: preset || null, answers: {}, startAt: 0, thanks: false }; }
+    function reset(filter, preset) { state = { step: 0, route: null, filter: filter || null, entry: filter || null, parent: null, preset: preset || null, answers: {}, startAt: 0, thanks: false }; }
     reset();
 
     function h(tag, cls, html) { var n = document.createElement(tag); if (cls) n.className = cls; if (html != null) n.innerHTML = html; return n; }
     function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
 
+    function canUp() { return state.filter === "learn" && !state.preset && state.entry !== "learn"; }
     function flow() {
       if (!state.route) return [];
       var d = state.answers.dir ? state.answers.dir.k : state.preset;
@@ -547,6 +550,7 @@
     dlg.querySelector(".qz-close").addEventListener("click", function () { dlg.close(); });
     backBtn.addEventListener("click", function () {
       if (state.thanks) { state.thanks = false; render(); return; }
+      if (state.step === 0 && canUp()) { state.filter = state.parent || null; state.parent = null; render(); return; }
       if (state.step > state.startAt) { state.step -= 1; if (state.step === 0) state.route = null; render(); }
     });
     document.addEventListener("click", function (e) {
@@ -587,10 +591,47 @@
       return b;
     }
 
-    function renderStart(wrap) {
+    /* Путеводитель: ArJai (учиться · звук · ремонт) и ДоСи (педагог · репетитор · владелец) */
+    var GUIDE = { arjai: ["learn", "recording", "workshop"], dosi: ["staff", "teacher", "owner"] };
+    function renderGuide(wrap) {
       wrap.appendChild(h("p", "qz-count", T.count(1, total())));
       wrap.appendChild(h("h2", null, esc(T.start.title)));
       wrap.appendChild(h("p", "qz-sub", esc(T.start.sub)));
+      var g = h("div", "qz-guide" + (state.filter ? " one" : ""));
+      ["arjai", "dosi"].forEach(function (grp) {
+        if (state.filter && state.filter !== grp) return;
+        var col = h("div", "guide-col" + (grp === "dosi" ? " dosi" : ""));
+        col.appendChild(h("p", "guide-head", grp === "arjai"
+          ? '<img class="arjai-logo" src="' + pic("img/arjai-logo.png") + '" alt="ArJai"><span>' + esc(T.start.arjaiCap) + "</span>"
+          : '<img class="dosi-full" src="' + pic("img/dosi-logo.png") + '" alt="ДоСи"><span>' + esc(T.start.dosiCap) + "</span>"));
+        GUIDE[grp].forEach(function (id) {
+          var b = h("button", "qz-row" + (state.route === id ? " sel" : ""));
+          b.type = "button";
+          b.innerHTML = "<span><b>" + esc(T.start.guide[id][0]) + "</b><small>" + esc(T.start.guide[id][1]) + "</small></span><i>" + ICON_ARROW + "</i>";
+          b.addEventListener("click", function () {
+            choose(b, function () {
+              if (id === "learn") { state.parent = state.filter; state.filter = "learn"; return; }
+              if (state.route !== id) state.answers = {};
+              state.route = id; state.step = 1;
+            });
+          });
+          col.appendChild(b);
+        });
+        g.appendChild(col);
+      });
+      wrap.appendChild(g);
+      var ob = otherOpt(state.filter ? 4 : 7, state.route === "other", function () {
+        choose(ob, function () { state.route = "other"; state.answers = {}; state.step = 1; });
+      });
+      ob.classList.add("full", "qz-guide-other");
+      wrap.appendChild(ob);
+    }
+
+    function renderStart(wrap) {
+      if (state.filter !== "learn") { renderGuide(wrap); return; }
+      wrap.appendChild(h("p", "qz-count", T.count(1, total())));
+      wrap.appendChild(h("h2", null, esc(state.preset ? T.start.title : T.start.learnTitle)));
+      wrap.appendChild(h("p", "qz-sub", esc(state.preset ? T.start.sub : T.start.learnSub)));
       var grid = h("div", "qz-grid photos"), n = 0;
       ROUTE_ORDER.forEach(function (id) {
         var r = ROUTES[id];
@@ -701,7 +742,7 @@
 
     function render() {
       progress();
-      backBtn.hidden = !state.thanks && state.step <= state.startAt;
+      backBtn.hidden = !state.thanks && state.step <= state.startAt && !(state.step === 0 && canUp());
       body.innerHTML = "";
       var wrap = h("div", "qz-step");
       var f = flow();
@@ -711,7 +752,7 @@
       else { wrap.appendChild(result()); if (hint) hint.hidden = true; }
       body.appendChild(wrap);
       bodyScroll.scrollTop = 0;
-      var first = wrap.querySelector(".qz-opt, .qz-other.alone textarea");
+      var first = wrap.querySelector(".qz-row, .qz-opt, .qz-other.alone textarea");
       if (first && window.matchMedia("(hover: hover)").matches) first.focus({ preventScroll: true });
     }
 
@@ -828,7 +869,7 @@
       if (e.target.tagName === "INPUT" || e.target.tagName === "TEXTAREA") return;
       var n = parseInt(e.key, 10);
       if (n >= 1 && n <= 9) {
-        var opts = body.querySelectorAll(".qz-opt");
+        var opts = body.querySelectorAll(".qz-row, .qz-opt");
         if (opts[n - 1]) { e.preventDefault(); opts[n - 1].click(); }
       }
       if (e.key === "Backspace" && !backBtn.hidden) { e.preventDefault(); backBtn.click(); }

@@ -1376,31 +1376,39 @@ h1 { font-weight: 500; }
 @media (max-width: 760px) { .price-links { grid-template-columns: 1fr; } }
 button.text-link { background: none; border: 0; padding: 0; font: inherit; font-weight: 600; color: var(--ink); cursor: pointer; }
 
-.hero-guide { max-width: 700px; }
-.guide-title { margin: 0 0 10px; font-size: 13px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--red); }
-.guide { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-.guide-col { background: #fff; border: 1.5px solid var(--line); border-radius: var(--r-lg); padding: 14px; display: grid; gap: 6px; align-content: start; }
+.choice-card .cc-top .dosi-full { width: auto; height: 44px; margin: -6px 0; }
+
+/* путеводитель на первом шаге анкеты */
+.qz-guide { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.qz-guide.one { grid-template-columns: minmax(0, 560px); }
+.guide-col { background: #fff; border: 1.5px solid var(--line); border-radius: var(--r-lg); padding: 16px; display: grid; gap: 8px; align-content: start; }
 .guide-col:first-child { border-color: var(--red); box-shadow: 0 18px 40px -26px rgba(215,26,47,.55); }
-.guide-head { display: flex; align-items: center; gap: 8px; margin: 0 0 4px; min-height: 52px; font-size: 13px; color: var(--muted); }
-.guide-head .arjai-logo { height: 42px; width: auto; }
-.guide-head .dosi-full { height: 50px; }
-.guide-col a { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 10px 12px; border-radius: 12px; background: var(--soft); color: var(--ink); text-decoration: none; transition: background .2s, transform .2s var(--ease); }
-.guide-col a span { display: grid; gap: 1px; min-width: 0; }
-.guide-col a b { font-size: 15.5px; font-weight: 600; line-height: 1.25; }
-.guide-col a small { font-size: 12.5px; color: var(--muted); line-height: 1.3; }
-.guide-col a i { flex: none; width: 30px; height: 30px; border-radius: 50%; background: #fff; display: grid; place-items: center; transition: background .2s; }
-.guide-col a i svg { width: 14px; height: 14px; stroke: var(--ink); }
-.guide-col:first-child a i { background: var(--red); }
-.guide-col:first-child a i svg { stroke: #fff; }
-@media (hover: hover) { .guide-col a:hover { background: var(--soft-2); transform: translateX(3px); } .guide-col a:hover i { background: var(--red); } .guide-col a:hover i svg { stroke: #fff; } }
-.guide-sec h2 { margin-bottom: 26px; }
-.guide-sec .guide { max-width: none; }
-.guide-sec .guide-col { padding: 18px; }
+.guide-col.dosi { border-color: var(--line); box-shadow: none; }
+.guide-head { display: flex; align-items: center; gap: 10px; margin: 0 0 4px; min-height: 54px; font-size: 14px; color: var(--muted); }
+.guide-head .arjai-logo { height: 46px; width: auto; }
+.guide-head .dosi-full { height: 54px; width: auto; }
+.qz-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; width: 100%; text-align: left; font: inherit; color: var(--ink); padding: 14px 16px; border: 1.5px solid transparent; border-radius: 14px; background: var(--soft); cursor: pointer; transition: background .2s, border-color .2s, transform .2s var(--ease); }
+.qz-row > span { display: grid; gap: 2px; min-width: 0; }
+.qz-row b { font-size: 18px; font-weight: 600; line-height: 1.25; }
+.qz-row small { font-size: 14px; color: var(--muted); line-height: 1.3; }
+.qz-row i { flex: none; width: 36px; height: 36px; border-radius: 50%; background: #fff; display: grid; place-items: center; transition: background .2s; }
+.qz-row i svg { width: 16px; height: 16px; stroke: var(--ink); }
+.guide-col:first-child .qz-row i { background: var(--red); }
+.guide-col:first-child .qz-row i svg { stroke: #fff; }
+.qz-row:focus-visible { outline: 2px solid var(--red); outline-offset: 2px; }
+.qz-row.sel { border-color: var(--red); background: #fff; }
+@media (hover: hover) { .qz-row:hover { background: var(--soft-2); transform: translateX(3px); } .qz-row:hover i { background: var(--red); } .qz-row:hover i svg { stroke: #fff; } }
+.qz-guide-other { margin-top: 14px; width: 100%; }
 @media (max-width: 760px) {
-  .guide { grid-template-columns: 1fr; }
+  .qz-guide { grid-template-columns: 1fr; gap: 10px; }
+  .guide-col { padding: 12px; gap: 6px; }
   .guide-head { min-height: 0; }
-  .guide-head .dosi-full { height: 44px; }
+  .guide-head .arjai-logo { height: 40px; }
+  .guide-head .dosi-full { height: 46px; }
+  .qz-row { padding: 11px 12px; }
+  .qz-row b { font-size: 16px; }
+  .qz-row small { font-size: 12.5px; }
+  .qz-row i { width: 30px; height: 30px; }
   .dosi-full { height: 46px; }
 }
 @media (max-width: 400px) { .dosi-full { height: 42px; } }
-@media (max-width: 600px) { .hero-guide .guide-col a small { display: none; } .hero-guide .guide-col a { padding: 9px 12px; } .hero-guide .guide-head { margin: 0; } }

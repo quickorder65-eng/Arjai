@@ -17,7 +17,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 SRC = ROOT / "tools" / "pages"
 BASE = "https://quickorder65-eng.github.io/Arjai/"
-VER = "20261102a"
+VER = "20261102b"
 
 ICON_ARROW = '<svg viewBox="0 0 24 24" fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>'
 
@@ -246,43 +246,6 @@ def contacts():
 """
 
 
-DOSI_LOGO = '<img class="dosi-full" src="assets/img/dosi-logo.png" alt="ДоСи" width="46" height="52">'
-ARJAI_LOGO = '<img class="arjai-logo" src="assets/img/arjai-logo.png" alt="ArJai" width="74" height="48">'
-
-
-def guide_cols():
-    a = ICON_ARROW
-    def item(href, t, s):
-        return f'<a href="{href}"><span><b>{t}</b><small>{s}</small></span><i>{a}</i></a>'
-    return f"""<div class="guide-col">
-          <p class="guide-head">{ARJAI_LOGO}<span>студия, где учатся</span></p>
-          {item("zanyatiya.html", "Хочу учиться", "вокал, фортепиано, гитара, теория")}
-          {item("zvukozapis.html", "Записать звук", "вокал и инструменты в студии")}
-          {item("masterskaya.html", "Ремонт инструментов", "гитара, фортепиано, синтезатор")}
-        </div>
-        <div class="guide-col dosi">
-          <p class="guide-head">{DOSI_LOGO}<span>система обучения</span></p>
-          {item("dosi.html#pedagogam", "Я педагог школы или студии", "методика и пособия ДоСи")}
-          {item("repetitor.html", "Я репетитор", "курс «Успешный репетитор ДоСи»")}
-          {item("shkolam.html", "Я владелец школы", "единый стандарт для педагогов")}
-        </div>"""
-
-
-def guide_section():
-    return f"""
-<!-- ===== Путеводитель ===== -->
-<section class="section soft guide-sec" id="putevoditel">
-  <div class="wrap">
-    <span class="tag">Путеводитель</span>
-    <h2>Куда дальше?</h2>
-    <div class="guide">
-        {guide_cols()}
-    </div>
-  </div>
-</section>
-"""
-
-
 def footer(page):
     home = "" if page == "index.html" else "index.html"
     return f"""
@@ -350,9 +313,7 @@ def crumbs_html(page):
 def build():
     for page in PAGES:
         body = (SRC / page).read_text(encoding="utf-8")
-        body = body.replace("{{GUIDE}}", guide_cols()).replace("{{CRUMBS}}", crumbs_html(page)).replace("{{ARROW}}", ICON_ARROW)
-        if page != "index.html":
-            body = body.rstrip() + "\n" + guide_section()
+        body = body.replace("{{CRUMBS}}", crumbs_html(page)).replace("{{ARROW}}", ICON_ARROW)
         out = head(page, body) + header(page) + '\n<main id="main">\n' + body.rstrip() + "\n" + contacts() + "\n</main>\n" + footer(page)
         (ROOT / page).write_text(out, encoding="utf-8")
         print("собрано:", page)

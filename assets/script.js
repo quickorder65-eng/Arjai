@@ -597,17 +597,17 @@
       wrap.appendChild(h("p", "qz-count", T.count(1, total())));
       wrap.appendChild(h("h2", null, esc(T.start.title)));
       wrap.appendChild(h("p", "qz-sub", esc(T.start.sub)));
-      var g = h("div", "qz-guide" + (state.filter ? " one" : ""));
+      var n = 0;
       ["arjai", "dosi"].forEach(function (grp) {
         if (state.filter && state.filter !== grp) return;
-        var col = h("div", "guide-col" + (grp === "dosi" ? " dosi" : ""));
-        col.appendChild(h("p", "guide-head", grp === "arjai"
-          ? '<img class="arjai-logo" src="' + pic("img/arjai-logo.png") + '" alt="ArJai"><span>' + esc(T.start.arjaiCap) + "</span>"
-          : '<img class="dosi-full" src="' + pic("img/dosi-logo.png") + '" alt="ДоСи"><span>' + esc(T.start.dosiCap) + "</span>"));
+        if (!state.filter) wrap.appendChild(h("p", "qz-group", esc(T.start[grp])));
+        var grid = h("div", "qz-grid photos g3");
         GUIDE[grp].forEach(function (id) {
-          var b = h("button", "qz-row" + (state.route === id ? " sel" : ""));
+          n += 1;
+          var img = id === "learn" ? "img/vokal-devushka-sm.jpg" : ROUTES[id].img;
+          var b = h("button", "qz-opt" + (state.route === id ? " sel" : ""));
           b.type = "button";
-          b.innerHTML = "<span><b>" + esc(T.start.guide[id][0]) + "</b><small>" + esc(T.start.guide[id][1]) + "</small></span><i>" + ICON_ARROW + "</i>";
+          b.innerHTML = '<img src="' + pic(img, 700) + '" alt=""><span class="key-hint"><span>' + n + '</span></span><span class="lbl"><b>' + esc(T.start.guide[id][0]) + "</b><small>" + esc(T.start.guide[id][1]) + "</small></span>";
           b.addEventListener("click", function () {
             choose(b, function () {
               if (id === "learn") { state.parent = state.filter; state.filter = "learn"; return; }
@@ -615,16 +615,17 @@
               state.route = id; state.step = 1;
             });
           });
-          col.appendChild(b);
+          grid.appendChild(b);
         });
-        g.appendChild(col);
+        wrap.appendChild(grid);
       });
-      wrap.appendChild(g);
-      var ob = otherOpt(state.filter ? 4 : 7, state.route === "other", function () {
+      var last = h("div", "qz-grid photos g3 qz-guide-other");
+      var ob = otherOpt(n + 1, state.route === "other", function () {
         choose(ob, function () { state.route = "other"; state.answers = {}; state.step = 1; });
       });
-      ob.classList.add("full", "qz-guide-other");
-      wrap.appendChild(ob);
+      ob.classList.add("full");
+      last.appendChild(ob);
+      wrap.appendChild(last);
     }
 
     function renderStart(wrap) {
@@ -752,7 +753,7 @@
       else { wrap.appendChild(result()); if (hint) hint.hidden = true; }
       body.appendChild(wrap);
       bodyScroll.scrollTop = 0;
-      var first = wrap.querySelector(".qz-row, .qz-opt, .qz-other.alone textarea");
+      var first = wrap.querySelector(".qz-opt, .qz-other.alone textarea");
       if (first && window.matchMedia("(hover: hover)").matches) first.focus({ preventScroll: true });
     }
 
@@ -869,7 +870,7 @@
       if (e.target.tagName === "INPUT" || e.target.tagName === "TEXTAREA") return;
       var n = parseInt(e.key, 10);
       if (n >= 1 && n <= 9) {
-        var opts = body.querySelectorAll(".qz-row, .qz-opt");
+        var opts = body.querySelectorAll(".qz-opt");
         if (opts[n - 1]) { e.preventDefault(); opts[n - 1].click(); }
       }
       if (e.key === "Backspace" && !backBtn.hidden) { e.preventDefault(); backBtn.click(); }

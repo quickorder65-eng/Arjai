@@ -1417,3 +1417,16 @@ button.text-link { background: none; border: 0; padding: 0; font: inherit; font-
 img.arjai-logo, img.dosi-full { width: auto !important; object-fit: contain; }
 img.arjai-logo { aspect-ratio: 74 / 48; }
 img.dosi-full { aspect-ratio: 426 / 480; }
+
+/* первый шаг анкеты: ArJai и ДоСи по три карточки с фото */
+.qz-grid.photos.g3 { grid-template-columns: repeat(3, 1fr); }
+.qz-grid.photos.g3 .qz-opt { aspect-ratio: 4 / 3; }
+.qz-grid.photos.g3.qz-guide-other { grid-template-columns: 1fr; margin-top: 12px; }
+.qz-grid.photos.g3.qz-guide-other .qz-opt { aspect-ratio: auto; }
+@media (max-width: 600px) {
+  .qz-grid.photos.g3 { grid-template-columns: 1fr 1fr; gap: 10px; }
+  .qz-grid.photos.g3 .qz-opt { aspect-ratio: 1 / 1; }
+  .qz-grid.photos.g3 .qz-opt:nth-child(3):last-child { grid-column: 1 / -1; aspect-ratio: 2 / 1; }
+  .qz-grid.photos.g3 .qz-opt b { font-size: 17px; }
+  .qz-grid.photos.g3 .qz-opt .lbl { padding: 12px; }
+}

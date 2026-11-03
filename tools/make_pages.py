@@ -17,7 +17,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 SRC = ROOT / "tools" / "pages"
 BASE = "https://quickorder65-eng.github.io/Arjai/"
-VER = "20261102d"
+VER = "20261103a"
 
 ICON_ARROW = '<svg viewBox="0 0 24 24" fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>'
 
@@ -177,7 +177,7 @@ def header(page):
 <header class="site-header">
   <div class="wrap header-inner">
     <a class="brand" href="{home or '#top'}" aria-label="ArJai и ДоСи — на главную">
-      <span class="brand-item"><img class="arjai-logo" src="assets/img/arjai-logo.png" alt="ArJai" width="74" height="48"><span class="brand-cap">студия, где учатся</span></span>
+      <span class="brand-item"><img class="arjai-logo" src="assets/img/arjai-logo.png" alt="ArJai" width="75" height="48"><span class="brand-cap">студия, где учатся</span></span>
       <span class="brand-item brand-dosi"><img class="dosi-full" src="assets/img/dosi-logo.png" alt="ДоСи" width="46" height="52"><span class="brand-cap">система обучения</span></span>
     </a>
     <nav class="nav" id="nav" aria-label="Основное меню">
@@ -252,7 +252,7 @@ def footer(page):
 <footer class="site-footer">
   <div class="wrap footer-inner">
     <div class="footer-brand">
-      <img class="arjai-logo" src="assets/img/arjai-logo.png" alt="ArJai" width="74" height="48">
+      <img class="arjai-logo" src="assets/img/arjai-logo.png" alt="ArJai" width="75" height="48">
       <span>© 2014–2026, Алматы. Преподаём с 90-х.</span>
     </div>
     <div class="footer-social">
@@ -279,7 +279,7 @@ def footer(page):
 <dialog class="quiz-dlg" id="quiz" aria-label="Анкета">
   <div class="qz">
     <div class="qz-top">
-      <img class="arjai-logo" src="assets/img/arjai-logo.png" alt="ArJai" width="74" height="48">
+      <img class="arjai-logo" src="assets/img/arjai-logo.png" alt="ArJai" width="75" height="48">
       <div class="qz-progress" aria-hidden="true"></div>
       <button class="close-btn qz-close" type="button" aria-label="Закрыть анкету">×</button>
     </div>

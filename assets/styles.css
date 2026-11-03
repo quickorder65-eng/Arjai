@@ -1415,7 +1415,7 @@ button.text-link { background: none; border: 0; padding: 0; font: inherit; font-
 
 /* логотипы не сжимаются: всегда в своих пропорциях */
 img.arjai-logo, img.dosi-full { width: auto !important; object-fit: contain; }
-img.arjai-logo { aspect-ratio: 74 / 48; }
+img.arjai-logo { aspect-ratio: 149 / 96; }
 img.dosi-full { aspect-ratio: 426 / 480; }
 
 /* первый шаг анкеты: ArJai и ДоСи по три карточки с фото */

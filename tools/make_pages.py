@@ -17,7 +17,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 SRC = ROOT / "tools" / "pages"
 BASE = "https://quickorder65-eng.github.io/Arjai/"
-VER = "20261105a"
+VER = "20261105b"
 
 ICON_ARROW = '<svg viewBox="0 0 24 24" fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>'
 
@@ -62,7 +62,7 @@ SAULE = {
 PAGES = {
     "index.html": dict(
         title="ArJai и ДоСи — уроки вокала, фортепиано и гитары в Алматы и онлайн",
-        desc="Музыкальная семейная студия ArJai в Алматы и авторская система обучения ДоСи. Вокал, фортепиано, гитара, теория для детей и взрослых от 3 до 73 лет, очно и онлайн. Мастерская, звукозапись, обучение педагогов. Анкета — и диагностика бесплатно.",
+        desc="Музыкальная семейная студия ArJai в Алматы и авторская система обучения ДоСи. Вокал, фортепиано, гитара, дирижирование и теория музыки для детей и взрослых от 3 до 73 лет, очно и онлайн. Мастерская, звукозапись, обучение педагогов. Анкета — и диагностика бесплатно.",
         og="ArJai и ДоСи — музыкальная студия и система обучения",
         crumbs=None),
     "zanyatiya.html": dict(
@@ -72,7 +72,7 @@ PAGES = {
         crumbs=[("Главная", ""), ("Занятия", "zanyatiya.html")]),
     "dosi.html": dict(
         title="ДоСи — авторская система обучения учеников и учителей Сауле Джайлауовой",
-        desc="Система ДоСи: авторская программа, методика, структура и результат. Обучение педагогов музыкальных школ и студий, самозанятых репетиторов и внедрение для владельцев школ. Все пособия входят в обучение.",
+        desc="Система ДоСи: авторская программа, методика, структура и результат. Обучение педагогов музыкальных центров и студий, самозанятых репетиторов и внедрение для руководителей музыкальных центров. Все пособия входят в обучение.",
         og="ДоСи — система обучения учеников и учителей",
         crumbs=[("Главная", ""), ("ДоСи", "dosi.html")]),
     "repetitor.html": dict(
@@ -81,10 +81,10 @@ PAGES = {
         og="Успешный репетитор ДоСи — курс для педагогов",
         crumbs=[("Главная", ""), ("ДоСи", "dosi.html"), ("Успешный репетитор ДоСи", "repetitor.html")]),
     "shkolam.html": dict(
-        title="ДоСи для владельцев музыкальных школ и студий — единый стандарт обучения",
-        desc="Внедрение системы ДоСи в музыкальную школу или студию: единый стандарт качества для педагогов, видимый результат для родителей, контроль качества уроков. Алматы и онлайн.",
-        og="ДоСи для владельцев школ и студий",
-        crumbs=[("Главная", ""), ("ДоСи", "dosi.html"), ("Для владельцев", "shkolam.html")]),
+        title="ДоСи для руководителей музыкальных центров и студий — единый стандарт обучения",
+        desc="Внедрение системы ДоСи в музыкальный центр или студию: единый стандарт качества для педагогов, видимый результат для родителей, контроль качества уроков. Алматы и онлайн.",
+        og="ДоСи для руководителей музыкальных центров и студий",
+        crumbs=[("Главная", ""), ("ДоСи", "dosi.html"), ("Для руководителей", "shkolam.html")]),
     "masterskaya.html": dict(
         title="Мастерская ArJai — ремонт и настройка гитар, фортепиано и синтезаторов в Алматы",
         desc="Мастерская ArJai в Алматы: ремонт, настройка и обслуживание гитар, настройка и регулировка фортепиано, диагностика и ремонт синтезаторов. Цены: смена струн от 500 ₸, настройка фортепиано 20 000 ₸, гитара под ключ 25 000 ₸.",
@@ -177,7 +177,7 @@ def header(page):
 <header class="site-header">
   <div class="wrap header-inner">
     <a class="brand" href="{home or '#top'}" aria-label="ArJai и ДоСи — на главную">
-      <span class="brand-item"><img class="arjai-logo" src="assets/img/arjai-logo.png" alt="ArJai" width="75" height="48"><span class="brand-cap">студия, где учатся</span></span>
+      <span class="brand-item"><img class="arjai-logo" src="assets/img/arjai-logo.png" alt="ArJai" width="75" height="48"><span class="brand-cap">музыкальные занятия</span></span>
       <span class="brand-item brand-dosi"><img class="dosi-full" src="assets/img/dosi-logo.png" alt="ДоСи" width="46" height="52"><span class="brand-cap">система обучения</span></span>
     </a>
     <nav class="nav" id="nav" aria-label="Основное меню">
@@ -230,7 +230,7 @@ def contacts():
           <option>Пройти бесплатную диагностику</option>
           <option>Подготовка к конкурсу или поступлению</option>
           <option>Получить программу ДоСи</option>
-          <option>ДоСи для школы или студии</option>
+          <option>ДоСи для музыкального центра или студии</option>
           <option>Мастерская: ремонт инструмента</option>
           <option>Студия звукозаписи</option>
           <option>Другое</option>
@@ -253,7 +253,7 @@ def footer(page):
   <div class="wrap footer-inner">
     <div class="footer-brand">
       <img class="arjai-logo" src="assets/img/arjai-logo.png" alt="ArJai" width="75" height="48">
-      <span>© 2014–2026, Алматы. Преподаём с 90-х.</span>
+      <span>© 2014–2026, Алматы. Преподаём с 1990-х годов.</span>
     </div>
     <div class="footer-social">
       <a href="https://www.instagram.com/zhailausaule" target="_blank" rel="noopener">Instagram</a>
@@ -266,7 +266,7 @@ def footer(page):
       <a href="zanyatiya.html">Занятия</a>
       <a href="dosi.html">Система ДоСи</a>
       <a href="repetitor.html">Успешный репетитор ДоСи</a>
-      <a href="shkolam.html">ДоСи для владельцев</a>
+      <a href="shkolam.html">ДоСи для руководителей</a>
       <a href="masterskaya.html">Мастерская</a>
       <a href="zvukozapis.html">Звукозапись</a>
     </div>

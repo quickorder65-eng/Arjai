@@ -1456,3 +1456,17 @@ img.dosi-full { aspect-ratio: 426 / 480; }
 .prog-result b { display: block; color: var(--red); font-size: 14px; letter-spacing: .04em; text-transform: uppercase; margin-bottom: 6px; }
 .prog-card .btn { justify-self: start; margin-top: 6px; }
 @media (max-width: 900px) { .progs { grid-template-columns: 1fr; } .prog-card { padding: 24px 20px; } }
+
+/* 05.11: первый экран — текст о студии и ДоСи, призыв над карточками, программы в «Что мы даём» */
+.hero-kicker span { display: block; }
+.hero-kicker span + span { margin-top: 6px; }
+.choice-title { margin: 0 0 12px; font-size: 13px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--red); }
+.cc-note { display: block; margin-top: 4px; font-size: 12.5px; line-height: 1.35; color: #ffd9dd; }
+.prog-strip { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 22px; margin-top: 12px; padding: 18px 22px; border-radius: var(--r-lg); background: var(--dark); color: #fff; text-decoration: none; transition: transform .2s var(--ease); }
+.prog-strip:hover { transform: translateY(-2px); }
+.ps-label { font-size: 13px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: #ff9aa5; }
+.ps-item { font-size: 15px; color: #ddd5cd; }
+.ps-item b { color: #fff; font-weight: 600; }
+.ps-go { margin-left: auto; display: inline-flex; align-items: center; gap: 8px; font-weight: 600; color: #fff; }
+.ps-go svg { width: 16px; height: 16px; stroke: #fff; }
+@media (max-width: 760px) { .prog-strip { flex-direction: column; align-items: flex-start; gap: 6px; padding: 16px; } .ps-go { margin-left: 0; margin-top: 4px; } }

@@ -17,7 +17,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 SRC = ROOT / "tools" / "pages"
 BASE = "https://quickorder65-eng.github.io/Arjai/"
-VER = "20261105p"
+VER = "20261105q"
 
 ICON_ARROW = '<svg viewBox="0 0 24 24" fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>'
 
@@ -315,6 +315,9 @@ def build():
         body = (SRC / page).read_text(encoding="utf-8")
         body = body.replace("{{CRUMBS}}", crumbs_html(page)).replace("{{ARROW}}", ICON_ARROW)
         out = head(page, body) + header(page) + '\n<main id="main">\n' + body.rstrip() + "\n" + contacts() + "\n</main>\n" + footer(page)
+        # логотипы и иконки с версией, чтобы браузер не показывал старые из кэша
+        for f in ("arjai-logo.png", "arjai-logo-lg.png", "dosi-logo.png", "dosi-logo-full.png", "favicon-32.png", "favicon-192.png", "apple-touch-icon.png"):
+            out = out.replace(f + '"', f + "?v=" + VER + '"')
         (ROOT / page).write_text(out, encoding="utf-8")
         print("собрано:", page)
 

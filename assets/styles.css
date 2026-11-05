@@ -1430,3 +1430,29 @@ img.dosi-full { aspect-ratio: 426 / 480; }
   .qz-grid.photos.g3 .qz-opt b { font-size: 17px; }
   .qz-grid.photos.g3 .qz-opt .lbl { padding: 12px; }
 }
+
+/* программы обучения «Тәй-тәй» и «Самға» (страница «Занятия») */
+.progs { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; align-items: start; }
+.prog-card { background: var(--soft); border-radius: var(--r-xl); padding: 36px; display: grid; gap: 14px; align-content: start; }
+.prog-card.dark { background: var(--dark); color: #fff; }
+.prog-tag { justify-self: start; font-size: 13px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: #fff; background: var(--red); border-radius: 999px; padding: 6px 12px; }
+.prog-card h3 { font-size: clamp(26px, 2.6vw, 34px); font-weight: 600; letter-spacing: -0.02em; margin: 4px 0 0; }
+.prog-card h3 small { font-size: .55em; font-weight: 500; color: var(--muted); }
+.prog-card.dark h3 small { color: #bdb3aa; }
+.prog-meta { display: flex; flex-wrap: wrap; gap: 8px; margin: 0; }
+.prog-meta span { font-size: 14px; font-weight: 600; background: #fff; color: var(--ink); border-radius: 999px; padding: 6px 12px; }
+.prog-card.dark .prog-meta span { background: rgba(255,255,255,.1); color: #fff; }
+.prog-card > p { margin: 0; font-size: 16px; line-height: 1.6; color: var(--ink-2); }
+.prog-card.dark > p { color: #ddd5cd; }
+.prog-card h4 { margin: 8px 0 0; font-size: 17px; font-weight: 600; }
+.prog-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+.prog-list li { position: relative; padding-left: 26px; font-size: 15.5px; line-height: 1.55; color: var(--ink-2); }
+.prog-list li::before { content: ""; position: absolute; left: 4px; top: .6em; width: 9px; height: 9px; border-radius: 50%; background: var(--red); }
+.prog-list b { color: var(--ink); font-weight: 600; }
+.prog-card.dark .prog-list li { color: #ddd5cd; }
+.prog-card.dark .prog-list b { color: #fff; }
+.prog-card .prog-result { background: #fff; border-radius: var(--r-md); padding: 18px 20px; color: var(--ink); }
+.prog-card.dark .prog-result { background: rgba(255,255,255,.08); color: #fff; }
+.prog-result b { display: block; color: var(--red); font-size: 14px; letter-spacing: .04em; text-transform: uppercase; margin-bottom: 6px; }
+.prog-card .btn { justify-self: start; margin-top: 6px; }
+@media (max-width: 900px) { .progs { grid-template-columns: 1fr; } .prog-card { padding: 24px 20px; } }

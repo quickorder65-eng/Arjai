@@ -1470,3 +1470,32 @@ img.dosi-full { aspect-ratio: 426 / 480; }
 .ps-go { margin-left: auto; display: inline-flex; align-items: center; gap: 8px; font-weight: 600; color: #fff; }
 .ps-go svg { width: 16px; height: 16px; stroke: #fff; }
 @media (max-width: 760px) { .prog-strip { flex-direction: column; align-items: flex-start; gap: 6px; padding: 16px; } .ps-go { margin-left: 0; margin-top: 4px; } }
+
+/* программы ArJai на главной: «Тәй-тәй» — белая с красным, «Самға» — фирменный красный */
+.pgm-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.pgm { display: grid; align-content: start; gap: 10px; padding: 34px; border-radius: var(--r-xl); background: #fff; border: 2px solid var(--red); }
+.pgm-tag { justify-self: start; font-size: 13px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--red); }
+.pgm h3 { margin: 0; font-size: clamp(30px, 3vw, 40px); font-weight: 600; letter-spacing: -0.02em; }
+.pgm-sub { margin: -4px 0 6px; font-size: 18px; color: var(--muted); }
+.pgm ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.pgm li { position: relative; padding-left: 24px; font-size: 16px; line-height: 1.45; }
+.pgm li::before { content: ""; position: absolute; left: 3px; top: .55em; width: 9px; height: 9px; border-radius: 50%; background: var(--red); }
+.pgm-meta { margin: 8px 0 6px; font-size: 15px; font-weight: 600; }
+.pgm .btn { justify-self: start; }
+.pgm.red { background: var(--red); border-color: var(--red); color: #fff; box-shadow: 0 24px 50px -28px rgba(215,26,47,.7); }
+.pgm.red .pgm-tag { color: #ffd9dd; }
+.pgm.red .pgm-sub { color: #ffe4e7; }
+.pgm.red li::before { background: #fff; }
+@media (max-width: 760px) { .pgm-grid { grid-template-columns: 1fr; } .pgm { padding: 24px 20px; } }
+/* «Самға» на странице «Занятия» тоже красная */
+.prog-card.red { background: var(--red); color: #fff; }
+.prog-card.red h3 small { color: #ffd9dd; }
+.prog-card.red .prog-tag { background: #fff; color: var(--red); }
+.prog-card.red .prog-meta span { background: rgba(255,255,255,.16); color: #fff; }
+.prog-card.red > p, .prog-card.red .prog-list li { color: #ffe9eb; }
+.prog-card.red .prog-list b { color: #fff; }
+.prog-card.red .prog-list li::before { background: #fff; }
+.prog-card.red .prog-result { background: rgba(255,255,255,.14); color: #fff; }
+.prog-card.red .prog-result b { color: #fff; }
+.prog-card.red .btn-red { background: #fff; color: var(--red); }
+.prog-card[id], #programmy-arjai { scroll-margin-top: 96px; }

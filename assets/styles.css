@@ -1568,3 +1568,13 @@ img.dosi-full { aspect-ratio: 426 / 480; }
   .mt-step b { font-size: 10.5px; letter-spacing: .02em; }
   .mt-arrow { margin-top: 25px; min-width: 6px; }
 }
+
+/* первый экран: слоган в 2 строки, фото на всю высоту левой колонки — свободнее и фото крупнее */
+@media (min-width: 981px) {
+  .hero-grid { grid-template-columns: 1.08fr .92fr; gap: 48px; align-items: stretch; }
+  .hero h1 { max-width: 22ch; font-size: clamp(34px, 3.3vw, 56px); margin-bottom: 18px; }
+  .hero-visual { display: flex; flex-direction: column; }
+  .hero-photo { flex: 1 1 auto; height: auto !important; aspect-ratio: auto !important; min-height: 520px !important; max-height: none !important; }
+  .mini-train { margin: 0 0 22px; }
+  .choice-title { margin-bottom: 10px; }
+}

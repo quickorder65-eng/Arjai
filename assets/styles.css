@@ -1523,3 +1523,14 @@ img.dosi-full { aspect-ratio: 426 / 480; }
 @media (max-width: 760px) { .pgm { padding: 26px 20px; } .pgm-sec .intro { text-align: left; margin-bottom: 24px; } .pgm-ic { width: 44px; height: 44px; } }
 .pgm-sec .intro h2 { max-width: none; }
 .pgm-ic svg { width: 30px !important; height: 30px !important; stroke-width: 2.8; }
+/* программы стоят между группами ArJai и ДоСи в «Что мы даём» */
+#produkty { padding-bottom: 32px; }
+.products-dosi { padding-top: 32px; }
+
+/* первый экран: две короткие строки «кто мы» вместо длинного абзаца */
+.hero-intro { display: grid; gap: 8px; max-width: 620px; margin: 0 0 22px; }
+.hero-intro p { display: grid; grid-template-columns: 64px 1fr; gap: 12px; align-items: baseline; margin: 0; font-size: 15px; line-height: 1.5; color: var(--muted); }
+.hero-intro b { color: var(--ink); font-weight: 600; }
+.hi-badge { justify-self: start; font-size: 12.5px; font-weight: 700; letter-spacing: .02em; padding: 3px 10px; border-radius: 999px; background: var(--red); color: #fff; }
+.hi-badge.dosi { background: var(--ink); }
+@media (max-width: 600px) { .hero-intro { margin-bottom: 16px; } .hero-intro p { grid-template-columns: 56px 1fr; gap: 10px; font-size: 14px; } }

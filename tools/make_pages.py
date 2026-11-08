@@ -17,7 +17,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 SRC = ROOT / "tools" / "pages"
 BASE = "https://quickorder65-eng.github.io/Arjai/"
-VER = "20261105q"
+VER = "20261108b"
 
 ICON_ARROW = '<svg viewBox="0 0 24 24" fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>'
 
@@ -184,6 +184,7 @@ def header(page):
       <a href="{home}#arjai">ArJai</a>
       <a href="zanyatiya.html">Занятия</a>
       <a href="dosi.html">ДоСи</a>
+      <a href="{home}#ceny">Цены</a>
       <a href="{home}#rezultaty">Результаты</a>
       <a href="{home}#saule">О Сауле</a>
       <a href="{home}#otzyvy">Отзывы</a>

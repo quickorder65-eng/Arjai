@@ -951,3 +951,12 @@
   }
 
 })();
+
+/* Подсказка «Что мы даём ↓» на первом экране: прячется, как только человек начал листать */
+(function () {
+  var hint = document.querySelector(".scroll-hint");
+  if (!hint) return;
+  function upd() { hint.classList.toggle("gone", window.scrollY > 140); }
+  window.addEventListener("scroll", upd, { passive: true });
+  upd();
+})();

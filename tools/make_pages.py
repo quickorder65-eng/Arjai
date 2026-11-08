@@ -17,7 +17,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 SRC = ROOT / "tools" / "pages"
 BASE = "https://quickorder65-eng.github.io/Arjai/"
-VER = "20261108b"
+VER = "20261108c"
 
 ICON_ARROW = '<svg viewBox="0 0 24 24" fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>'
 
@@ -95,6 +95,11 @@ PAGES = {
         desc="Студия звукозаписи ArJai в Алматы: запись вокала и инструментов для учеников студии и всех желающих. От 10 000 ₸ в час.",
         og="Студия звукозаписи ArJai",
         crumbs=[("Главная", ""), ("Звукозапись", "zvukozapis.html")]),
+    "foto.html": dict(
+        title="Фото студии ArJai — концерты, конкурсы и выпускные учеников",
+        desc="Фотографии студии ArJai в Алматы: отчётные концерты, конкурсы и выпускные учеников и педагогов с 2014 года.",
+        og="Фото студии ArJai",
+        crumbs=[("Главная", ""), ("Фото", "foto.html")]),
 }
 
 
@@ -178,7 +183,7 @@ def header(page):
   <div class="wrap header-inner">
     <a class="brand" href="{home or '#top'}" aria-label="ArJai и ДоСи — на главную">
       <span class="brand-item"><img class="arjai-logo" src="assets/img/arjai-logo.png" alt="ArJai" width="75" height="48"><span class="brand-cap">музыкальные занятия</span></span>
-      <span class="brand-item brand-dosi"><img class="dosi-full" src="assets/img/dosi-logo.png" alt="ДоСи" width="46" height="52"><span class="brand-cap">система обучения</span></span>
+      <span class="brand-item brand-dosi"><img class="dosi-full" src="assets/img/dosi-logo.png" alt="DoSi" width="42" height="52"><span class="brand-cap">система обучения</span></span>
     </a>
     <nav class="nav" id="nav" aria-label="Основное меню">
       <a href="{home}#arjai">ArJai</a>
@@ -270,6 +275,7 @@ def footer(page):
       <a href="shkolam.html">ДоСи для руководителей</a>
       <a href="masterskaya.html">Мастерская</a>
       <a href="zvukozapis.html">Звукозапись</a>
+      <a href="foto.html">Фото</a>
     </div>
     <p class="credits">ДоСи — авторская система обучения Сауле Джайлауовой. Часть фотографий инструментов — <a href="https://unsplash.com" target="_blank" rel="noopener">Unsplash</a>, видео — YouTube-канал студии. Звук рояля — Salamander Grand Piano (Alexander Holm, <a href="https://creativecommons.org/licenses/by/3.0/" target="_blank" rel="noopener">CC BY 3.0</a>).</p>
   </div>

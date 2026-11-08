@@ -960,3 +960,25 @@
   window.addEventListener("scroll", upd, { passive: true });
   upd();
 })();
+
+/* Страница «Фото»: открыть фото крупно, листать стрелками */
+(function () {
+  var items = Array.prototype.slice.call(document.querySelectorAll(".pg-item"));
+  if (!items.length) return;
+  var lb = document.createElement("div"), cur = 0;
+  lb.className = "lb";
+  lb.innerHTML = '<img alt=""><button class="lb-x" type="button" aria-label="Закрыть">×</button><button class="lb-prev" type="button" aria-label="Назад">‹</button><button class="lb-next" type="button" aria-label="Вперёд">›</button>';
+  document.body.appendChild(lb);
+  var img = lb.querySelector("img");
+  function show(i) { cur = (i + items.length) % items.length; img.src = items[cur].href; lb.classList.add("open"); }
+  function close() { lb.classList.remove("open"); img.removeAttribute("src"); }
+  items.forEach(function (a, i) { a.addEventListener("click", function (e) { e.preventDefault(); show(i); }); });
+  lb.querySelector(".lb-x").addEventListener("click", close);
+  lb.querySelector(".lb-prev").addEventListener("click", function () { show(cur - 1); });
+  lb.querySelector(".lb-next").addEventListener("click", function () { show(cur + 1); });
+  lb.addEventListener("click", function (e) { if (e.target === lb) close(); });
+  document.addEventListener("keydown", function (e) {
+    if (!lb.classList.contains("open")) return;
+    if (e.key === "Escape") close(); else if (e.key === "ArrowLeft") show(cur - 1); else if (e.key === "ArrowRight") show(cur + 1);
+  });
+})();

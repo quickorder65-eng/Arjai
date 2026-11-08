@@ -1416,7 +1416,7 @@ button.text-link { background: none; border: 0; padding: 0; font: inherit; font-
 /* логотипы не сжимаются: всегда в своих пропорциях */
 img.arjai-logo, img.dosi-full { width: auto !important; object-fit: contain; }
 img.arjai-logo { aspect-ratio: 149 / 96; }
-img.dosi-full { aspect-ratio: 158 / 180; }
+img.dosi-full { aspect-ratio: 144 / 180; }
 
 /* первый шаг анкеты: ArJai и ДоСи по три карточки с фото */
 .qz-grid.photos.g3 { grid-template-columns: repeat(3, 1fr); }
@@ -1624,3 +1624,24 @@ img.dosi-full { aspect-ratio: 158 / 180; }
 .scroll-hint { position: fixed; right: 28px; bottom: 28px; transition: opacity .3s, transform .2s var(--ease); }
 .scroll-hint.gone { opacity: 0; pointer-events: none; transform: translateY(10px); }
 .choice-card { align-content: start; }
+
+/* галерея на главной: широкие фото на 2 колонки */
+.gallery-grid figure.g-wide { grid-column: span 2; }
+@media (max-width: 560px) { .gallery-grid figure.g-wide { grid-column: span 2; } }
+
+/* страница «Фото»: плитка и просмотр крупно */
+.foto-page { padding-top: 36px; }
+.photo-grid { columns: 4 260px; column-gap: 12px; }
+.pg-item { display: block; margin: 0 0 12px; border-radius: var(--r-md); overflow: hidden; break-inside: avoid; background: var(--soft); }
+.pg-item img { display: block; width: 100%; height: auto; transition: transform .5s var(--ease); }
+@media (hover: hover) { .pg-item:hover img { transform: scale(1.03); } }
+@media (max-width: 600px) { .photo-grid { columns: 2 140px; column-gap: 8px; } .pg-item { margin-bottom: 8px; } }
+.lb { position: fixed; inset: 0; z-index: 200; display: none; align-items: center; justify-content: center; background: rgba(15,12,10,.92); }
+.lb.open { display: flex; }
+.lb img { max-width: 92vw; max-height: 86vh; border-radius: 10px; box-shadow: 0 30px 80px rgba(0,0,0,.5); }
+.lb button { position: absolute; width: 48px; height: 48px; border: 0; border-radius: 50%; background: rgba(255,255,255,.14); color: #fff; font-size: 26px; line-height: 1; cursor: pointer; }
+.lb button:hover { background: var(--red); }
+.lb .lb-x { top: 18px; right: 18px; }
+.lb .lb-prev { left: 18px; top: 50%; transform: translateY(-50%); }
+.lb .lb-next { right: 18px; top: 50%; transform: translateY(-50%); }
+@media (max-width: 600px) { .lb .lb-prev, .lb .lb-next { top: auto; bottom: 20px; transform: none; } }

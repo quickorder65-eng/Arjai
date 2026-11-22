@@ -109,7 +109,7 @@ def localize_paths(s, page):
     s = s.replace('<html lang="ru"', '<html lang="kk"', 1)
     # ресурсы — на уровень выше
     s = re.sub(r'(href|src)="assets/', r'\1="../assets/', s)
-    s = s.replace('srcset="assets/', 'srcset="../assets/')
+    s = re.sub(r'srcset="([^"]*)"', lambda m: 'srcset="%s"' % re.sub(r'(^|,\s*)assets/', r'\1../assets/', m.group(1)), s)
     s = s.replace('url("assets/', 'url("../assets/')
     # канонический адрес и Open Graph
     s = s.replace('<link rel="canonical" href="%s%s">' % (BASE, slug), '<link rel="canonical" href="%skk/%s">' % (BASE, slug))

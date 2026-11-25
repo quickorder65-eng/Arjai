@@ -978,6 +978,8 @@
      При каждом открытии любой страницы — окно на весь экран, после закрытия — карточка сбоку.
      ?afisha=1 в адресе показывает афишу, даже если в таблице стоит «нет». */
   var AFISHA_SHEET = "1p75j7y8mGLtqnqjfxaIbP9nrAKlp7_iSZ_NiuItohrQ";
+  /* Ссылка на веб-приложение Google Apps Script (Развернуть → Веб-приложение). Пока пусто — читаем таблицу напрямую. */
+  var AFISHA_API = "https://script.google.com/macros/s/AKfycbwB8ZJdHIuNXk5qFYsZPO2UkxU3fRlS_X5HpyecrMJOBE-Q_1Z-NJXejnzO7mcsIgo-/exec";
   (function afisha() {
     if (!AFISHA_SHEET || !window.fetch) return;
     var preview = /[?&]afisha=1\b/.test(location.search);
@@ -1015,12 +1017,29 @@
       return e;
     }
 
-    fetch(url).then(function (r) { return r.text(); }).then(function (txt) {
-      var json = JSON.parse(txt.slice(txt.indexOf("{"), txt.lastIndexOf("}") + 1));
-      var cols = (json.table.cols || []).map(function (c) { return (c.label || "").trim().toLowerCase(); });
-      var row = (json.table.rows || [])[0];
-      if (!row) return;
-      function get(name) { var i = cols.indexOf(name.toLowerCase()); return i < 0 ? "" : cellText(row.c[i]); }
+    /* 1) Google Apps Script (если подключён): читает таблицу и картинку из Документа или файла на Диске каждый раз заново —
+          новая картинка видна сразу, даже если заменили её в том же файле.
+       2) Запасной путь: таблица напрямую, картинка — превью Google (обновляется с задержкой). */
+    function viaGviz() {
+      return fetch(url).then(function (r) { return r.text(); }).then(function (txt) {
+        var json = JSON.parse(txt.slice(txt.indexOf("{"), txt.lastIndexOf("}") + 1));
+        var cols = (json.table.cols || []).map(function (c) { return (c.label || "").trim().toLowerCase(); });
+        var row = (json.table.rows || [])[0];
+        if (!row) return null;
+        return { get: function (name) { var i = cols.indexOf(name.toLowerCase()); return i < 0 ? "" : cellText(row.c[i]); }, image: "", qr: "" };
+      });
+    }
+    function viaScript() {
+      return fetch(AFISHA_API + (AFISHA_API.indexOf("?") < 0 ? "?" : "&") + "t=" + Date.now()).then(function (r) { return r.json(); }).then(function (o) {
+        if (!o || o.error) throw new Error("afisha api");
+        var low = {};
+        Object.keys(o).forEach(function (k) { low[k.trim().toLowerCase()] = o[k] == null ? "" : String(o[k]).trim(); });
+        return { get: function (name) { return low[name.toLowerCase()] || ""; }, image: o.__image || "", qr: o.__qr || "" };
+      });
+    }
+    (AFISHA_API ? viaScript().catch(viaGviz) : viaGviz()).then(function (src) {
+      if (!src) return;
+      var get = src.get;
       var on = /^(да|иә|yes|1|true)$/i.test(get("Показывать на сайте"));
       var until = parseDate(get("Убрать после"));
       if (until) until.setDate(until.getDate() + 1);
@@ -1031,10 +1050,10 @@
         when: get("Дата и время"),
         place: get("Место"),
         address: get("Адрес"),
-        qr: imgUrl(get("QR-код (ссылка на картинку)") || get("QR-код")),
+        qr: src.qr || imgUrl(get("QR-код (ссылка на картинку)") || get("QR-код")),
         qrText: (kk && get("Подпись к QR (каз)")) || get("Подпись к QR"),
         text: (kk && get("Описание (каз)")) || get("Описание"),
-        img: imgUrl(get("Картинка (ссылка)")),
+        img: src.image || imgUrl(get("Картинка (ссылка)")),
         btn: (kk && get("Текст кнопки (каз)")) || get("Текст кнопки") || T.btn,
         href: get("Ссылка кнопки")
       };

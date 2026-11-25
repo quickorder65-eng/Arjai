@@ -973,6 +973,171 @@
     upd();
   }
 
+  /* ===== Афиша из Google Таблицы =====
+     Сауле меняет таблицу «ArJai — афиша на сайте» (лист «Афиша»), сайт читает её при каждом входе.
+     При первом входе за день — окно на весь экран, после закрытия — карточка сбоку.
+     ?afisha=1 в адресе показывает афишу, даже если в таблице стоит «нет». */
+  var AFISHA_SHEET = "1p75j7y8mGLtqnqjfxaIbP9nrAKlp7_iSZ_NiuItohrQ";
+  (function afisha() {
+    if (!AFISHA_SHEET || !window.fetch) return;
+    var preview = /[?&]afisha=1\b/.test(location.search);
+    var url = "https://docs.google.com/spreadsheets/d/" + AFISHA_SHEET + "/gviz/tq?tqx=out:json&headers=1&sheet=" + encodeURIComponent("Афиша") + "&_=" + Math.floor(Date.now() / 60000);
+    var T = LANG === "kk"
+      ? { tag: "Афиша", close: "Жабу", open: "Афишаны ашу", msg: "Сәлеметсіз бе! Келгім келеді: ", btn: "Барғым келеді", map: "Картадан ашу", qr: "Телефон камерасымен сканерлеңіз" }
+      : { tag: "Афиша", close: "Закрыть", open: "Открыть афишу", msg: "Здравствуйте! Хочу прийти: ", btn: "Хочу прийти", map: "Открыть на карте", qr: "Наведите камеру телефона" };
+
+    function cellText(c) {
+      if (!c) return "";
+      var v = c.f != null ? c.f : c.v;
+      return v == null ? "" : String(v).trim();
+    }
+    function parseDate(s) {
+      var m = /Date\((\d+),(\d+),(\d+)/.exec(s);
+      if (m) return new Date(+m[1], +m[2], +m[3]);
+      m = /^(\d{1,2})[.\/-](\d{1,2})[.\/-](\d{2,4})$/.exec(s);
+      if (m) return new Date(m[3].length === 2 ? 2000 + +m[3] : +m[3], +m[2] - 1, +m[1]);
+      m = /^(\d{4})-(\d{1,2})-(\d{1,2})$/.exec(s);
+      if (m) return new Date(+m[1], +m[2] - 1, +m[3]);
+      return null;
+    }
+    function imgUrl(s) {
+      if (!s) return "";
+      var m = /\/d\/([\w-]{20,})/.exec(s) || /[?&]id=([\w-]{20,})/.exec(s);
+      if (m) return "https://drive.google.com/thumbnail?id=" + m[1] + "&sz=w1600";
+      if (/^https?:\/\//.test(s)) return s;
+      return SCRIPT_URL ? new URL("img/" + s.replace(/^.*\//, ""), SCRIPT_URL).href : "assets/img/" + s;
+    }
+    function el(tag, cls, text) {
+      var e = document.createElement(tag);
+      if (cls) e.className = cls;
+      if (text) e.textContent = text;
+      return e;
+    }
+
+    fetch(url).then(function (r) { return r.text(); }).then(function (txt) {
+      var json = JSON.parse(txt.slice(txt.indexOf("{"), txt.lastIndexOf("}") + 1));
+      var cols = (json.table.cols || []).map(function (c) { return (c.label || "").trim().toLowerCase(); });
+      var row = (json.table.rows || [])[0];
+      if (!row) return;
+      function get(name) { var i = cols.indexOf(name.toLowerCase()); return i < 0 ? "" : cellText(row.c[i]); }
+      var on = /^(да|иә|yes|1|true)$/i.test(get("Показывать на сайте"));
+      var until = parseDate(get("Убрать после"));
+      if (until) until.setDate(until.getDate() + 1);
+      if (!preview && (!on || (until && new Date() >= until))) return;
+      var kk = LANG === "kk";
+      var d = {
+        title: (kk && get("Заголовок (каз)")) || get("Заголовок"),
+        when: get("Дата и время"),
+        place: get("Место"),
+        address: get("Адрес"),
+        qr: imgUrl(get("QR-код (ссылка на картинку)") || get("QR-код")),
+        qrText: (kk && get("Подпись к QR (каз)")) || get("Подпись к QR"),
+        text: (kk && get("Описание (каз)")) || get("Описание"),
+        img: imgUrl(get("Картинка (ссылка)")),
+        btn: (kk && get("Текст кнопки (каз)")) || get("Текст кнопки") || T.btn,
+        href: get("Ссылка кнопки")
+      };
+      if (!d.title) return;
+      if (!d.href) d.href = waLink(T.msg + d.title + (d.when ? ", " + d.when : ""));
+      build(d);
+    }).catch(function () { /* нет таблицы или нет сети — сайт работает как обычно */ });
+
+    function build(d) {
+      var key = "arjai-afisha:" + d.title + "|" + d.when;
+      var today = new Date().toDateString();
+      var seenToday = false;
+      try { seenToday = localStorage.getItem(key) === today; } catch (e) { /* без памяти */ }
+
+      /* окно на весь экран */
+      var dlg = el("dialog", "afisha-dlg");
+      dlg.setAttribute("aria-label", d.title);
+      dlg.tabIndex = -1;
+      var card = el("div", "afisha-card" + (d.img ? "" : " no-img"));
+      var x = el("button", "afisha-x", "×");
+      x.type = "button"; x.setAttribute("aria-label", T.close);
+      if (d.img) {
+        var fig = el("div", "afisha-pic");
+        var im = el("img"); im.src = d.img; im.alt = d.title;
+        im.onerror = function () { fig.remove(); card.classList.add("no-img"); };
+        fig.appendChild(im); card.appendChild(fig);
+      }
+      var body = el("div", "afisha-body");
+      body.appendChild(el("span", "afisha-tag", T.tag));
+      body.appendChild(el("h2", "", d.title));
+      var meta = el("ul", "afisha-meta");
+      if (d.when) meta.appendChild(el("li", "when", d.when));
+      if (d.place) meta.appendChild(el("li", "place", d.place));
+      if (d.address) {
+        var li = el("li", "addr");
+        li.appendChild(el("span", "", d.address + " "));
+        var map = el("a", "afisha-map", T.map);
+        map.href = "https://2gis.kz/almaty/search/" + encodeURIComponent(d.address);
+        map.target = "_blank"; map.rel = "noopener";
+        li.appendChild(map);
+        meta.appendChild(li);
+      }
+      if (meta.children.length) body.appendChild(meta);
+      if (d.text) body.appendChild(el("p", "", d.text));
+      if (d.qr) {
+        var q = el("div", "afisha-qr");
+        var qi = el("img"); qi.src = d.qr; qi.alt = "QR"; qi.width = 112; qi.height = 112;
+        qi.onerror = function () { q.remove(); };
+        q.appendChild(qi);
+        q.appendChild(el("span", "", d.qrText || T.qr));
+        body.appendChild(q);
+      }
+      var go = el("a", "btn btn-red afisha-go", d.btn);
+      go.href = d.href;
+      if (/^https?:/.test(d.href)) { go.target = "_blank"; go.rel = "noopener"; }
+      body.appendChild(go);
+      card.appendChild(body);
+      dlg.appendChild(card);
+      dlg.appendChild(x);
+      document.body.appendChild(dlg);
+
+      /* карточка сбоку после закрытия */
+      var chip = el("div", "afisha-chip");
+      var chipBtn = el("button", "afisha-chip-open");
+      chipBtn.type = "button"; chipBtn.setAttribute("aria-label", T.open);
+      if (d.img) { var ci = el("img"); ci.src = d.img; ci.alt = ""; ci.onerror = function () { ci.remove(); }; chipBtn.appendChild(ci); }
+      var ct = el("span", "afisha-chip-text");
+      ct.appendChild(el("b", "", d.title));
+      if (d.when) ct.appendChild(el("small", "", d.when));
+      chipBtn.appendChild(ct);
+      var chipX = el("button", "afisha-chip-x", "×");
+      chipX.type = "button"; chipX.setAttribute("aria-label", T.close);
+      chip.appendChild(chipBtn); chip.appendChild(chipX);
+      document.body.appendChild(chip);
+
+      function showChip() { chip.classList.add("in"); }
+      function openDlg() {
+        chip.classList.remove("in");
+        if (typeof dlg.showModal === "function") dlg.showModal(); else dlg.setAttribute("open", "");
+        try { dlg.focus({ preventScroll: true }); } catch (e) { /* старые браузеры */ }
+      }
+      function closeDlg() {
+        if (dlg.open) { if (dlg.close) dlg.close(); else dlg.removeAttribute("open"); }
+        try { localStorage.setItem(key, today); } catch (e) { /* без памяти */ }
+        showChip();
+      }
+      x.addEventListener("click", closeDlg);
+      dlg.addEventListener("cancel", function (e) { e.preventDefault(); closeDlg(); });
+      dlg.addEventListener("click", function (e) { if (e.target === dlg) closeDlg(); });
+      go.addEventListener("click", function () { try { localStorage.setItem(key, today); } catch (e) { /* без памяти */ } });
+      chipBtn.addEventListener("click", openDlg);
+      chipX.addEventListener("click", function () { chip.classList.remove("in"); });
+
+      /* не мешаем заставке, выбору языка и анкете: ждём, пока они закроются */
+      var tries = 0;
+      (function wait() {
+        var busy = document.getElementById("splash") || document.querySelector("dialog[open]:not(.afisha-dlg)") || /^#quiz/.test(location.hash);
+        if (busy && tries++ < 120) { setTimeout(wait, 500); return; }
+        if (busy) { showChip(); return; }
+        if (seenToday && !preview) showChip(); else setTimeout(openDlg, 700);
+      })();
+    }
+  })();
+
 })();
 
 /* Подсказка «Что мы даём ↓» на первом экране: прячется, как только человек начал листать */

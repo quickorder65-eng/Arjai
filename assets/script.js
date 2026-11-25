@@ -975,7 +975,7 @@
 
   /* ===== Афиша из Google Таблицы =====
      Сауле меняет таблицу «ArJai — афиша на сайте» (лист «Афиша»), сайт читает её при каждом входе.
-     При первом входе за день — окно на весь экран, после закрытия — карточка сбоку.
+     При каждом открытии любой страницы — окно на весь экран, после закрытия — карточка сбоку.
      ?afisha=1 в адресе показывает афишу, даже если в таблице стоит «нет». */
   var AFISHA_SHEET = "1p75j7y8mGLtqnqjfxaIbP9nrAKlp7_iSZ_NiuItohrQ";
   (function afisha() {
@@ -1001,7 +1001,7 @@
       return null;
     }
     function imgUrl(s) {
-      if (!s) return "";
+      if (!s || /docs\.google\.com\/(document|presentation|spreadsheets)/.test(s)) return "";
       var m = /\/d\/([\w-]{20,})/.exec(s) || /[?&]id=([\w-]{20,})/.exec(s);
       if (m) return "https://drive.google.com/thumbnail?id=" + m[1] + "&sz=w1600";
       if (/^https?:\/\//.test(s)) return s;
@@ -1045,8 +1045,7 @@
     function build(d) {
       var key = "arjai-afisha:" + d.title + "|" + d.when;
       var today = new Date().toDateString();
-      var seenToday = false;
-      try { seenToday = localStorage.getItem(key) === today; } catch (e) { /* без памяти */ }
+      var seenToday = false; /* окно всплывает при каждом открытии любой страницы */
 
       /* окно на весь экран */
       var dlg = el("dialog", "afisha-dlg");
@@ -1117,13 +1116,13 @@
       }
       function closeDlg() {
         if (dlg.open) { if (dlg.close) dlg.close(); else dlg.removeAttribute("open"); }
-        try { localStorage.setItem(key, today); } catch (e) { /* без памяти */ }
+        try { sessionStorage.setItem(key, today); } catch (e) { /* без памяти */ }
         showChip();
       }
       x.addEventListener("click", closeDlg);
       dlg.addEventListener("cancel", function (e) { e.preventDefault(); closeDlg(); });
       dlg.addEventListener("click", function (e) { if (e.target === dlg) closeDlg(); });
-      go.addEventListener("click", function () { try { localStorage.setItem(key, today); } catch (e) { /* без памяти */ } });
+      go.addEventListener("click", function () { try { sessionStorage.setItem(key, today); } catch (e) { /* без памяти */ } });
       chipBtn.addEventListener("click", openDlg);
       chipX.addEventListener("click", function () { chip.classList.remove("in"); });
 

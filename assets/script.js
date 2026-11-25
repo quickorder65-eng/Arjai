@@ -1001,7 +1001,8 @@
       return null;
     }
     function imgUrl(s) {
-      if (!s || /docs\.google\.com\/(document|presentation|spreadsheets)/.test(s)) return "";
+      if (!s) return "";
+      /* ссылки на Диск и на Google Документ с картинкой — берём превью файла */
       var m = /\/d\/([\w-]{20,})/.exec(s) || /[?&]id=([\w-]{20,})/.exec(s);
       if (m) return "https://drive.google.com/thumbnail?id=" + m[1] + "&sz=w1600";
       if (/^https?:\/\//.test(s)) return s;

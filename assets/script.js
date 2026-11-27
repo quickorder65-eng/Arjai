@@ -8,6 +8,9 @@
      Основной номер — 8 707 653 62 50. Меняется только здесь. */
   var WA_PHONE = "77076536250";
 
+  /* Google Apps Script в таблице «ArJai — афиша на сайте»: отдаёт афишу и принимает статистику посещений. */
+  var ARJAI_API = "https://script.google.com/macros/s/AKfycbwB8ZJdHIuNXk5qFYsZPO2UkxU3fRlS_X5HpyecrMJOBE-Q_1Z-NJXejnzO7mcsIgo-/exec";
+
   /* Язык страницы: русская версия в корне, казахская — в папке kk/ */
   var LANG = (document.documentElement.lang || "ru").slice(0, 2) === "kk" ? "kk" : "ru";
 
@@ -47,6 +50,54 @@
   var ICON_BACK = '<svg viewBox="0 0 24 24" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"/></svg>';
 
   function waLink(text) { return "https://wa.me/" + WA_PHONE + "?text=" + encodeURIComponent(text); }
+
+  /* ===== Статистика посещений =====
+     Сколько людей зашло, сколько времени пробыли на сайте, как идут по анкете и за сколько оформляют заявку.
+     События уходят в Apps Script и пишутся на лист «Статистика» в таблице афиши, итоги — на листе «Сводка».
+     Без имён и телефонов: только случайные номера посетителя и визита.
+     ?nostat=1 в адресе — больше не считать этот браузер (для Амира и Сауле), ?nostat=0 — снова считать. */
+  var Stat = (function () {
+    var off = { ev: function () {}, quizStart: function () {}, quizSecs: function () { return ""; } };
+    var q = /[?&]nostat=([01])\b/.exec(location.search);
+    try { if (q) localStorage.setItem("arjai-nostat", q[1]); if (localStorage.getItem("arjai-nostat") === "1") return off; } catch (e) { /* без памяти */ }
+    if (!ARJAI_API || !navigator.sendBeacon || navigator.webdriver) return off;
+    function rid() { return Date.now().toString(36) + Math.random().toString(36).slice(2, 8); }
+    function store(k, v) { try { sessionStorage.setItem(k, v); } catch (e) { /* без памяти */ } }
+    function read(k) { try { return sessionStorage.getItem(k); } catch (e) { return null; } }
+    var vid, isNew = false;
+    try { vid = localStorage.getItem("arjai-vid"); if (!vid) { vid = rid(); localStorage.setItem("arjai-vid", vid); isNew = true; } } catch (e) { vid = "-"; }
+    var sid = read("arjai-sid"), first = !sid;
+    if (first) { sid = rid(); store("arjai-sid", sid); store("arjai-acc", "0"); }
+    /* время считаем только пока вкладка на экране */
+    var acc = +read("arjai-acc") || 0, since = document.visibilityState === "visible" ? Date.now() : 0;
+    function secs() { return Math.round((acc + (since ? Date.now() - since : 0)) / 1000); }
+    var ref = "";
+    try { ref = document.referrer ? new URL(document.referrer).host : ""; } catch (e) { /* без адреса */ }
+    if (ref === location.host) ref = "";
+    var utm = (/[?&]utm_source=([^&]+)/.exec(location.search) || [])[1] || "";
+    if (/instagram/i.test(ref + utm)) ref = ref || "instagram";
+    var dev = /Mobi|Android|iPhone/i.test(navigator.userAgent) ? "телефон" : (/iPad|Tablet/i.test(navigator.userAgent) ? "планшет" : "компьютер");
+    var page = location.pathname.replace(/^.*\//, "") || "index.html";
+    if (LANG === "kk") page = "kk/" + page;
+    function quizSecs() { var t = +read("arjai-qt") || 0; return t ? Math.round((Date.now() - t) / 1000) : ""; }
+    function ev(name, det) {
+      try {
+        var body = JSON.stringify({ vid: vid, sid: sid, ev: name, det: det || "", page: page, s: secs(), q: quizSecs(), dev: dev, ref: first ? (ref || "прямой заход") : "", utm: decodeURIComponent(utm), lang: LANG, isNew: isNew && first });
+        navigator.sendBeacon(ARJAI_API, new Blob([body], { type: "text/plain;charset=UTF-8" }));
+      } catch (e) { /* статистика не должна мешать сайту */ }
+    }
+    function pause() {
+      if (!since) return;
+      acc += Date.now() - since; since = 0; store("arjai-acc", String(acc));
+      ev("Время");
+    }
+    document.addEventListener("visibilitychange", function () {
+      if (document.visibilityState === "hidden") pause(); else if (!since) since = Date.now();
+    });
+    window.addEventListener("pagehide", function () { if (since) { acc += Date.now() - since; since = 0; store("arjai-acc", String(acc)); } });
+    setTimeout(function () { ev(first ? "Заход" : "Страница", first ? (isNew ? "новый посетитель" : "уже заходил раньше") : ""); }, 0);
+    return { ev: ev, quizSecs: quizSecs, quizStart: function () { store("arjai-qt", String(Date.now())); } };
+  })();
 
   /* Черновые пометки для согласования: только по адресу с ?draft=1 */
   try {
@@ -98,16 +149,80 @@
   })();
 
 
-  /* Заставка при входе на главную: один раз за визит, по клику — сразу закрывается */
+  /* Вступительный ролик на главной: быстрый монтаж настоящих фото студии (ритм, фортепиано, гитара, вокал, сцена),
+     потом логотип и «занавес» уходит вверх. Один раз за визит; по клику или «Пропустить» — сразу сайт.
+     ?intro=1 в адресе — показать ещё раз. */
   (function () {
     var sp = document.getElementById("splash");
     if (!sp) return;
+    var force = /[?&]intro=1\b/.test(location.search);
     var seen = false;
     try { seen = sessionStorage.getItem("arjai-splash") === "1"; sessionStorage.setItem("arjai-splash", "1"); } catch (e) { /* без памяти */ }
-    if (seen || navigator.webdriver || location.hash) { sp.remove(); return; }
-    var hide = function () { sp.classList.add("out"); setTimeout(function () { sp.remove(); }, 600); };
+    if (!force && (seen || navigator.webdriver || location.hash)) { sp.remove(); return; }
+    var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    var root = document.documentElement;
+    var done = false, timers = [];
+    root.classList.add("film-lock");
+    function hide() {
+      if (done) return;
+      done = true;
+      timers.forEach(clearTimeout);
+      sp.classList.add("out");
+      root.classList.remove("film-lock");
+      setTimeout(function () { sp.remove(); }, 900);
+    }
     sp.addEventListener("click", hide);
-    setTimeout(hide, window.matchMedia("(prefers-reduced-motion: reduce)").matches ? 900 : 2300);
+    document.addEventListener("keydown", function k(e) { if (e.key === "Escape" || e.key === "Enter" || e.key === " ") { hide(); document.removeEventListener("keydown", k); } });
+
+    var v = (window.innerWidth < 760 || window.matchMedia("(orientation: portrait)").matches) ? "m" : "d";
+    function src(n) { return SCRIPT_URL ? new URL("img/intro/" + n + "-" + v + ".jpg", SCRIPT_URL).href : "assets/img/intro/" + n + "-" + v + ".jpg"; }
+    var shots = [].slice.call(sp.querySelectorAll(".film-shot"));
+    var end = sp.querySelector(".film-end");
+    var loaded = {};
+    [1, 2, 3, 4, 5, 6].forEach(function (n) {
+      var im = new Image();
+      im.decoding = "async";
+      im.onload = function () { loaded[n] = true; };
+      im.src = src(n);
+      im.alt = "";
+      if (n === 6) { im.className = "film-bg"; end.insertBefore(im, end.firstChild); }
+      else shots[n - 1].insertBefore(im, shots[n - 1].firstChild);
+    });
+
+    var SHOT = 620, END = 1500;
+    function flash() {
+      sp.classList.remove("flash");
+      void sp.offsetWidth;
+      sp.classList.add("flash");
+    }
+    function play(fast) {
+      sp.classList.add("play");
+      var t = 0;
+      if (!fast) {
+        shots.forEach(function (el, i) {
+          timers.push(setTimeout(function () {
+            if (i) shots[i - 1].classList.remove("on");
+            if (loaded[i + 1] !== false) { el.classList.add("on"); flash(); }
+          }, t));
+          t += SHOT;
+        });
+      }
+      timers.push(setTimeout(function () {
+        shots.forEach(function (el) { el.classList.remove("on"); });
+        end.classList.add("on");
+        if (!fast) flash();
+      }, t));
+      sp.style.setProperty("--intro-total", (t + END) + "ms");
+      timers.push(setTimeout(hide, t + END));
+    }
+    if (reduce) { play(true); return; }
+    /* ждём первые кадры не дольше 1,2 с; на медленном интернете — сразу короткий финал с логотипом */
+    var waited = 0;
+    (function wait() {
+      if (loaded[1] && loaded[2]) return play(false);
+      if ((waited += 100) >= 1200) return play(true);
+      timers.push(setTimeout(wait, 100));
+    })();
   })();
 
   /* Ссылки data-wa ведут в WhatsApp с готовым текстом */
@@ -115,6 +230,7 @@
     a.setAttribute("href", waLink(MESSAGES[a.getAttribute("data-wa")] || MESSAGES.question));
     a.setAttribute("target", "_blank");
     a.setAttribute("rel", "noopener");
+    a.addEventListener("click", function () { Stat.ev("Нажал WhatsApp", a.getAttribute("data-wa")); });
   });
 
   /* Мобильное меню */
@@ -241,6 +357,7 @@
       if (!name) { err.textContent = UI.nameErr; form.elements.name.focus(); return; }
       err.textContent = "";
       var phone = form.elements.phone.value.trim(), msg = form.elements.message.value.trim();
+      Stat.ev("Отправил заявку", "форма записи: " + form.elements.topic.value);
       window.open(waLink(UI.hello + " " + UI.myName + name + ".\n" + UI.topic + form.elements.topic.value + "." + (phone ? "\n" + UI.phone + phone + "." : "") + (msg ? "\n" + msg : "")), "_blank", "noopener");
     });
   }
@@ -603,6 +720,8 @@
       else if (v === "arjai" || v === "dosi" || v === "learn") reset(v);
       else if (SUBJECTS.indexOf(v) >= 0) reset("learn", v);
       else reset();
+      Stat.quizStart();
+      Stat.ev("Открыл анкету", v || "общая");
       render();
       if (typeof dlg.showModal === "function") { if (!dlg.open) dlg.showModal(); } else dlg.setAttribute("open", "");
       document.documentElement.style.overflow = "hidden";
@@ -802,7 +921,19 @@
       sync();
     }
 
+    var lastStat = "";
+    function statStep() {
+      var f = flow(), name, det;
+      if (state.thanks) return;
+      if (state.step === 0) { name = "Шаг анкеты"; det = "выбор: " + (state.filter || "начало"); }
+      else if (state.step <= f.length) { name = "Шаг анкеты"; det = state.route + " · " + f[state.step - 1] + " (" + qNum() + " из " + total() + ")"; }
+      else { name = "Дошёл до результата"; det = state.route; }
+      if (det === lastStat) return;
+      lastStat = det;
+      Stat.ev(name, det);
+    }
     function render() {
+      statStep();
       progress();
       backBtn.hidden = !state.thanks && state.step <= state.startAt && !(state.step === 0 && canUp());
       body.innerHTML = "";
@@ -912,7 +1043,7 @@
         var name = input.value.trim();
         return UI.hello + (name ? " " + UI.myName + name + "." : "") + (msg ? " " + msg : "") + "\n" + T.sent + "\n" + sum.join("\n");
       }
-      function send(msg) { lastLink = waLink(compose(msg)); window.open(lastLink, "_blank", "noopener"); state.thanks = true; render(); }
+      function send(msg) { Stat.ev("Отправил заявку", state.route); lastLink = waLink(compose(msg)); window.open(lastLink, "_blank", "noopener"); state.thanks = true; render(); }
       box.querySelector(".qz-send").addEventListener("click", function () { send(ctaMsg); });
       var altBox = box.querySelector(".qz-alt");
       if (alt) {
@@ -979,14 +1110,16 @@
      ?afisha=1 в адресе показывает афишу, даже если в таблице стоит «нет». */
   var AFISHA_SHEET = "1p75j7y8mGLtqnqjfxaIbP9nrAKlp7_iSZ_NiuItohrQ";
   /* Ссылка на веб-приложение Google Apps Script (Развернуть → Веб-приложение). Пока пусто — читаем таблицу напрямую. */
-  var AFISHA_API = "https://script.google.com/macros/s/AKfycbwB8ZJdHIuNXk5qFYsZPO2UkxU3fRlS_X5HpyecrMJOBE-Q_1Z-NJXejnzO7mcsIgo-/exec";
+  var AFISHA_API = ARJAI_API;
   (function afisha() {
     if (!AFISHA_SHEET || !window.fetch) return;
     var preview = /[?&]afisha=1\b/.test(location.search);
     var url = "https://docs.google.com/spreadsheets/d/" + AFISHA_SHEET + "/gviz/tq?tqx=out:json&headers=1&sheet=" + encodeURIComponent("Афиша") + "&_=" + Math.floor(Date.now() / 60000);
     var T = LANG === "kk"
-      ? { tag: "Афиша", close: "Жабу", open: "Афишаны ашу", msg: "Сәлеметсіз бе! Келгім келеді: ", btn: "Барғым келеді", map: "Картадан ашу", qr: "Телефон камерасымен сканерлеңіз" }
-      : { tag: "Афиша", close: "Закрыть", open: "Открыть афишу", msg: "Здравствуйте! Хочу прийти: ", btn: "Хочу прийти", map: "Открыть на карте", qr: "Наведите камеру телефона" };
+      ? { tag: "Афиша", close: "Жабу", open: "Афишаны ашу", msg: "Сәлеметсіз бе! Келгім келеді: ", btn: "Барғым келеді", map: "Картадан ашу", qr: "Телефон камерасымен сканерлеңіз",
+          rText: "Қатысушы нөміріңізді алыңыз. Концертте сыйлықтар ұтысқа тігіледі!", rGet: "Ұтысқа қатысу", rYours: "Сіздің қатысушы нөміріңіз", rKeep: "Скриншот жасап алыңыз да, нөмірді концертте көрсетіңіз", rChip: "Нөмір" }
+      : { tag: "Афиша", close: "Закрыть", open: "Открыть афишу", msg: "Здравствуйте! Хочу прийти: ", btn: "Хочу прийти", map: "Открыть на карте", qr: "Наведите камеру телефона",
+          rText: "Получите свой номер участника. На концерте разыграем подарки!", rGet: "Участвовать в розыгрыше", rYours: "Ваш номер участника", rKeep: "Сделайте скриншот и покажите номер на концерте", rChip: "Номер" };
 
     function cellText(c) {
       if (!c) return "";
@@ -1017,68 +1150,164 @@
       return e;
     }
 
-    /* 1) Google Apps Script (если подключён): читает таблицу и картинку из Документа или файла на Диске каждый раз заново —
-          новая картинка видна сразу, даже если заменили её в том же файле.
-       2) Запасной путь: таблица напрямую, картинка — превью Google (обновляется с задержкой). */
+    /* Откуда берём афишу:
+       1) Google Apps Script (если подключён) — сначала только текст (быстро), потом картинка из Документа или файла.
+          Скрипт читает их каждый раз заново, поэтому замена картинки в том же файле видна сразу.
+       2) Запасной путь — таблица напрямую, картинка — превью Google (обновляется с задержкой).
+       Последняя афиша хранится в браузере, поэтому при повторном заходе окно появляется сразу, а свежие данные догружаются следом. */
+    var CACHE = "arjai-afisha-v2";
+    function apiUrl(part) { return AFISHA_API + (AFISHA_API.indexOf("?") < 0 ? "?" : "&") + "part=" + part + "&t=" + Date.now(); }
+    function lower(o) {
+      var low = {};
+      Object.keys(o || {}).forEach(function (k) { low[k.trim().toLowerCase()] = o[k] == null ? "" : String(o[k]).trim(); });
+      return low;
+    }
     function viaGviz() {
       return fetch(url).then(function (r) { return r.text(); }).then(function (txt) {
         var json = JSON.parse(txt.slice(txt.indexOf("{"), txt.lastIndexOf("}") + 1));
-        var cols = (json.table.cols || []).map(function (c) { return (c.label || "").trim().toLowerCase(); });
         var row = (json.table.rows || [])[0];
         if (!row) return null;
-        return { get: function (name) { var i = cols.indexOf(name.toLowerCase()); return i < 0 ? "" : cellText(row.c[i]); }, image: "", qr: "" };
+        var o = {};
+        (json.table.cols || []).forEach(function (c, i) { if (c.label) o[c.label] = cellText(row.c[i]); });
+        return { f: lower(o), api: false };
       });
     }
     function viaScript() {
-      return fetch(AFISHA_API + (AFISHA_API.indexOf("?") < 0 ? "?" : "&") + "t=" + Date.now()).then(function (r) { return r.json(); }).then(function (o) {
+      return fetch(apiUrl("data")).then(function (r) { return r.json(); }).then(function (o) {
         if (!o || o.error) throw new Error("afisha api");
-        var low = {};
-        Object.keys(o).forEach(function (k) { low[k.trim().toLowerCase()] = o[k] == null ? "" : String(o[k]).trim(); });
-        return { get: function (name) { return low[name.toLowerCase()] || ""; }, image: o.__image || "", qr: o.__qr || "" };
+        return { f: lower(o), api: true, image: o.__image || "", qr: o.__qr || "" };
       });
     }
-    (AFISHA_API ? viaScript().catch(viaGviz) : viaGviz()).then(function (src) {
-      if (!src) return;
-      var get = src.get;
+    function readCache() { try { return JSON.parse(localStorage.getItem(CACHE) || "null"); } catch (e) { return null; } }
+    function writeCache(st) {
+      try { localStorage.setItem(CACHE, JSON.stringify(st)); }
+      catch (e) { try { localStorage.setItem(CACHE, JSON.stringify({ f: st.f, api: st.api })); } catch (e2) { /* без памяти */ } }
+    }
+    function links(f) { return { img: f["картинка (ссылка)"] || "", qr: f["qr-код (ссылка на картинку)"] || f["qr-код"] || "" }; }
+
+    function toView(st) {
+      var f = st.f || {};
+      var get = function (name) { return f[name.toLowerCase()] || ""; };
       var on = /^(да|иә|yes|1|true)$/i.test(get("Показывать на сайте"));
       var until = parseDate(get("Убрать после"));
       if (until) until.setDate(until.getDate() + 1);
-      if (!preview && (!on || (until && new Date() >= until))) return;
+      if (!preview && (!on || (until && new Date() >= until))) return null;
       var kk = LANG === "kk";
+      var L = links(f);
       var d = {
         title: (kk && get("Заголовок (каз)")) || get("Заголовок"),
         when: get("Дата и время"),
         place: get("Место"),
         address: get("Адрес"),
-        qr: src.qr || imgUrl(get("QR-код (ссылка на картинку)") || get("QR-код")),
+        qr: st.qr || (st.api ? "" : imgUrl(L.qr)),
         qrText: (kk && get("Подпись к QR (каз)")) || get("Подпись к QR"),
         text: (kk && get("Описание (каз)")) || get("Описание"),
-        img: src.image || imgUrl(get("Картинка (ссылка)")),
+        img: st.image || (st.api ? "" : imgUrl(L.img)),
+        imgWait: st.api && !!L.img && !st.image,
         btn: (kk && get("Текст кнопки (каз)")) || get("Текст кнопки") || T.btn,
-        href: get("Ссылка кнопки")
+        href: get("Ссылка кнопки"),
+        raffle: st.api && /^(да|иә|yes|1|true)$/i.test(get("Розыгрыш (да/нет)")),
+        raffleText: (kk && get("Текст про розыгрыш (каз)")) || (!kk && get("Текст про розыгрыш")) || T.rText
       };
-      if (!d.title) return;
+      if (!d.title) return null;
       if (!d.href) d.href = waLink(T.msg + d.title + (d.when ? ", " + d.when : ""));
-      build(d);
-    }).catch(function () { /* нет таблицы или нет сети — сайт работает как обычно */ });
+      return d;
+    }
 
-    function build(d) {
-      var key = "arjai-afisha:" + d.title + "|" + d.when;
-      var today = new Date().toDateString();
-      var seenToday = false; /* окно всплывает при каждом открытии любой страницы */
+    var view = null;
+    var state = readCache();
+    if (state && state.f) view = show(toView(state), null);
 
-      /* окно на весь экран */
-      var dlg = el("dialog", "afisha-dlg");
-      dlg.setAttribute("aria-label", d.title);
+    (AFISHA_API ? viaScript().catch(viaGviz) : viaGviz()).then(function (fresh) {
+      if (!fresh) { view = show(null, view); return; }
+      var L = links(fresh.f), oldL = state ? links(state.f || {}) : {};
+      /* картинка та же ссылка — пока берём сохранённую, свежую догрузим следом */
+      if (fresh.api && !fresh.image && state && state.image && L.img === oldL.img) fresh.image = state.image;
+      if (fresh.api && !fresh.qr && state && state.qr && L.qr === oldL.qr) fresh.qr = state.qr;
+      state = fresh;
+      view = show(toView(state), view);
+      writeCache(state);
+      if (fresh.api && (L.img || L.qr)) {
+        fetch(apiUrl("img")).then(function (r) { return r.json(); }).then(function (o) {
+          if (!o || o.error) return;
+          state.image = L.img ? (o.__image || "") : "";
+          state.qr = L.qr ? (o.__qr || "") : "";
+          view = show(toView(state), view);
+          writeCache(state);
+        }).catch(function () { /* без картинки */ });
+      }
+    }).catch(function () { /* нет таблицы или нет сети — показываем сохранённую афишу, если была */ });
+
+    /* Показать или обновить афишу. Окно и карточка создаются один раз, при новых данных меняется только содержимое. */
+    function show(d, v) {
+      if (!d) { if (v) { if (v.dlg.open) v.dlg.close(); v.dlg.remove(); v.chip.remove(); } return null; }
+      var sig = JSON.stringify(d);
+      if (v && v.sig === sig) return v;
+      if (!v) v = create();
+      v.sig = sig;
+      fill(v, d);
+      return v;
+    }
+
+    function create() {
+      var v = {};
+      var dlg = v.dlg = el("dialog", "afisha-dlg");
       dlg.tabIndex = -1;
-      var card = el("div", "afisha-card" + (d.img ? "" : " no-img"));
+      v.card = el("div", "afisha-card");
       var x = el("button", "afisha-x", "×");
       x.type = "button"; x.setAttribute("aria-label", T.close);
-      if (d.img) {
-        var fig = el("div", "afisha-pic");
-        var im = el("img"); im.src = d.img; im.alt = d.title;
-        im.onerror = function () { fig.remove(); card.classList.add("no-img"); };
-        fig.appendChild(im); card.appendChild(fig);
+      dlg.appendChild(v.card);
+      dlg.appendChild(x);
+      document.body.appendChild(dlg);
+
+      var chip = v.chip = el("div", "afisha-chip");
+      v.chipBtn = el("button", "afisha-chip-open");
+      v.chipBtn.type = "button"; v.chipBtn.setAttribute("aria-label", T.open);
+      var chipX = el("button", "afisha-chip-x", "×");
+      chipX.type = "button"; chipX.setAttribute("aria-label", T.close);
+      chip.appendChild(v.chipBtn); chip.appendChild(chipX);
+      document.body.appendChild(chip);
+
+      function openDlg() {
+        chip.classList.remove("in");
+        if (typeof dlg.showModal === "function") dlg.showModal(); else dlg.setAttribute("open", "");
+        try { dlg.focus({ preventScroll: true }); } catch (e) { /* старые браузеры */ }
+      }
+      function closeDlg() {
+        if (dlg.open) { if (dlg.close) dlg.close(); else dlg.removeAttribute("open"); }
+        chip.classList.add("in");
+      }
+      x.addEventListener("click", closeDlg);
+      dlg.addEventListener("cancel", function (e) { e.preventDefault(); closeDlg(); });
+      dlg.addEventListener("click", function (e) { if (e.target === dlg) closeDlg(); });
+      v.chipBtn.addEventListener("click", openDlg);
+      chipX.addEventListener("click", function () { chip.classList.remove("in"); });
+
+      /* окно всплывает при каждом открытии страницы; ждём только заставку, выбор языка и анкету */
+      var tries = 0;
+      (function wait() {
+        if (!v.dlg.isConnected) return;
+        var busy = document.getElementById("splash") || document.querySelector("dialog[open]:not(.afisha-dlg)") || /^#quiz/.test(location.hash);
+        if (busy && tries++ < 240) { setTimeout(wait, 250); return; }
+        if (busy) { chip.classList.add("in"); return; }
+        setTimeout(openDlg, 150);
+      })();
+      return v;
+    }
+
+    function fill(v, d) {
+      var card = v.card;
+      card.textContent = "";
+      card.className = "afisha-card" + (d.img || d.imgWait ? "" : " no-img");
+      v.dlg.setAttribute("aria-label", d.title);
+      if (d.img || d.imgWait) {
+        var fig = el("div", "afisha-pic" + (d.img ? "" : " wait"));
+        if (d.img) {
+          var im = el("img"); im.src = d.img; im.alt = d.title;
+          im.onerror = function () { fig.remove(); card.classList.add("no-img"); };
+          fig.appendChild(im);
+        }
+        card.appendChild(fig);
       }
       var body = el("div", "afisha-body");
       body.appendChild(el("span", "afisha-tag", T.tag));
@@ -1105,55 +1334,51 @@
         q.appendChild(el("span", "", d.qrText || T.qr));
         body.appendChild(q);
       }
+      if (d.raffle) body.appendChild(raffleBox(v, d));
       var go = el("a", "btn btn-red afisha-go", d.btn);
       go.href = d.href;
       if (/^https?:/.test(d.href)) { go.target = "_blank"; go.rel = "noopener"; }
+      go.addEventListener("click", function () { Stat.ev("Нажал афишу", d.title); });
       body.appendChild(go);
       card.appendChild(body);
-      dlg.appendChild(card);
-      dlg.appendChild(x);
-      document.body.appendChild(dlg);
 
-      /* карточка сбоку после закрытия */
-      var chip = el("div", "afisha-chip");
-      var chipBtn = el("button", "afisha-chip-open");
-      chipBtn.type = "button"; chipBtn.setAttribute("aria-label", T.open);
-      if (d.img) { var ci = el("img"); ci.src = d.img; ci.alt = ""; ci.onerror = function () { ci.remove(); }; chipBtn.appendChild(ci); }
+      chipFill(v, d);
+    }
+
+    function chipFill(v, d) {
+      var cb = v.chipBtn;
+      cb.textContent = "";
+      if (d.img) { var ci = el("img"); ci.src = d.img; ci.alt = ""; ci.onerror = function () { ci.remove(); }; cb.appendChild(ci); }
       var ct = el("span", "afisha-chip-text");
       ct.appendChild(el("b", "", d.title));
-      if (d.when) ct.appendChild(el("small", "", d.when));
-      chipBtn.appendChild(ct);
-      var chipX = el("button", "afisha-chip-x", "×");
-      chipX.type = "button"; chipX.setAttribute("aria-label", T.close);
-      chip.appendChild(chipBtn); chip.appendChild(chipX);
-      document.body.appendChild(chip);
+      var tk = d.raffle && ticket(d);
+      if (d.when || tk) ct.appendChild(el("small", "", (d.when || "") + (tk ? (d.when ? " · " : "") + T.rChip + " " + tk : "")));
+      cb.appendChild(ct);
+    }
 
-      function showChip() { chip.classList.add("in"); }
-      function openDlg() {
-        chip.classList.remove("in");
-        if (typeof dlg.showModal === "function") dlg.showModal(); else dlg.setAttribute("open", "");
-        try { dlg.focus({ preventScroll: true }); } catch (e) { /* старые браузеры */ }
+    /* ===== Номер участника розыгрыша: каждый посетитель получает свой случайный номер =====
+       Номер выдаёт страница rozygrysh.html через Apps Script (не повторяется, один на браузер), записывается на лист «Номера розыгрыша». */
+    function ticketKey() { return "arjai-ticket"; }
+    function ticket(d) { try { return localStorage.getItem(ticketKey(d)) || ""; } catch (e) { return ""; } }
+    function raffleBox(v, d) {
+      var box = el("div", "afisha-raffle");
+      var tk = ticket(d);
+      if (tk) {
+        box.classList.add("got");
+        var info = el("div", "ar-info");
+        info.appendChild(el("small", "", T.rYours));
+        info.appendChild(el("span", "ar-note", T.rKeep));
+        box.appendChild(info);
+        box.appendChild(el("b", "ar-num", tk));
+        return box;
       }
-      function closeDlg() {
-        if (dlg.open) { if (dlg.close) dlg.close(); else dlg.removeAttribute("open"); }
-        try { sessionStorage.setItem(key, today); } catch (e) { /* без памяти */ }
-        showChip();
-      }
-      x.addEventListener("click", closeDlg);
-      dlg.addEventListener("cancel", function (e) { e.preventDefault(); closeDlg(); });
-      dlg.addEventListener("click", function (e) { if (e.target === dlg) closeDlg(); });
-      go.addEventListener("click", function () { try { sessionStorage.setItem(key, today); } catch (e) { /* без памяти */ } });
-      chipBtn.addEventListener("click", openDlg);
-      chipX.addEventListener("click", function () { chip.classList.remove("in"); });
-
-      /* не мешаем заставке, выбору языка и анкете: ждём, пока они закроются */
-      var tries = 0;
-      (function wait() {
-        var busy = document.getElementById("splash") || document.querySelector("dialog[open]:not(.afisha-dlg)") || /^#quiz/.test(location.hash);
-        if (busy && tries++ < 120) { setTimeout(wait, 500); return; }
-        if (busy) { showChip(); return; }
-        if (seenToday && !preview) showChip(); else setTimeout(openDlg, 700);
-      })();
+      box.appendChild(el("span", "ar-text", d.raffleText));
+      /* отдельная страница розыгрыша: там человек нажимает кнопку и у него «выпадает» свой номер */
+      var btn = el("a", "ar-get", T.rGet);
+      btn.href = SCRIPT_URL ? new URL("../rozygrysh.html" + (LANG === "kk" ? "?lang=kk" : ""), SCRIPT_URL).href : "rozygrysh.html";
+      btn.addEventListener("click", function () { Stat.ev("Открыл розыгрыш", "из афиши"); });
+      box.appendChild(btn);
+      return box;
     }
   })();
 

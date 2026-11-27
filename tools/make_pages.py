@@ -17,7 +17,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 SRC = ROOT / "tools" / "pages"
 BASE = "https://quickorder65-eng.github.io/Arjai/"
-VER = "20261125h"
+VER = "20261127e"
 
 ICON_ARROW = '<svg viewBox="0 0 24 24" fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>'
 
@@ -122,11 +122,23 @@ def ld(page, body):
     return '<script type="application/ld+json">\n' + json.dumps({"@context": "https://schema.org", "@graph": graph}, ensure_ascii=False, indent=1) + "\n</script>\n"
 
 
-SPLASH = """<div class="splash" id="splash" aria-hidden="true"><div class="splash-in">
-  <div class="splash-logos"><img src="assets/img/arjai-logo-lg.png" alt="" width="186" height="120"><span class="splash-x"></span><img src="assets/img/dosi-logo-full.png" alt="" width="137" height="120"></div>
-  <p class="splash-title">Добро пожаловать в ArJai</p>
-  <p class="splash-sub">Мы не просто учим — мы приводим к результату.</p>
-</div></div>
+SPLASH = """<div class="film" id="splash" aria-hidden="true">
+  <div class="film-shots">
+    <figure class="film-shot" data-n="1"><figcaption>Ритм</figcaption></figure>
+    <figure class="film-shot" data-n="2"><figcaption>Фортепиано</figcaption></figure>
+    <figure class="film-shot" data-n="3"><figcaption>Живая музыка</figcaption></figure>
+    <figure class="film-shot" data-n="4"><figcaption>Вокал</figcaption></figure>
+    <figure class="film-shot" data-n="5"><figcaption>Сцена</figcaption></figure>
+  </div>
+  <div class="film-end" data-n="6"><div class="film-brand">
+    <img src="assets/img/arjai-logo-lg.png" alt="" width="186" height="120">
+    <p class="film-title">Музыкальная семейная студия</p>
+    <p class="film-sub">Алматы · учим петь, играть и понимать музыку</p>
+  </div></div>
+  <span class="film-flash"></span><span class="film-grain"></span><span class="film-vig"></span>
+  <span class="film-bar"><i></i></span>
+  <button class="film-skip" type="button">Пропустить</button>
+</div>
 """
 
 

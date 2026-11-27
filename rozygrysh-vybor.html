@@ -1,0 +1,297 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Выбор победителя · ArJai</title>
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="preload" href="assets/fonts/onest-cyrillic-700-normal.woff2" as="font" type="font/woff2" crossorigin>
+<style>
+@font-face { font-family: "Onest"; font-weight: 400; font-display: swap; src: url("assets/fonts/onest-cyrillic-400-normal.woff2") format("woff2"); unicode-range: U+0400-045F, U+2116; }
+@font-face { font-family: "Onest"; font-weight: 400; font-display: swap; src: url("assets/fonts/onest-latin-400-normal.woff2") format("woff2"); unicode-range: U+0000-00FF, U+2000-206F; }
+@font-face { font-family: "Onest"; font-weight: 600; font-display: swap; src: url("assets/fonts/onest-cyrillic-600-normal.woff2") format("woff2"); unicode-range: U+0400-045F, U+2116; }
+@font-face { font-family: "Onest"; font-weight: 600; font-display: swap; src: url("assets/fonts/onest-latin-600-normal.woff2") format("woff2"); unicode-range: U+0000-00FF, U+2000-206F; }
+@font-face { font-family: "Onest"; font-weight: 700; font-display: swap; src: url("assets/fonts/onest-cyrillic-700-normal.woff2") format("woff2"); unicode-range: U+0400-045F, U+2116; }
+@font-face { font-family: "Onest"; font-weight: 700; font-display: swap; src: url("assets/fonts/onest-latin-700-normal.woff2") format("woff2"); unicode-range: U+0000-00FF, U+2000-206F; }
+:root {
+  --red: #d71a2f; --red-2: #ff3348; --gold: #f2c46d; --ink: #f6f1ec; --dim: rgba(246, 241, 236, .62);
+  --bg: #0d0908; --panel: rgba(255, 255, 255, .06); --line: rgba(255, 255, 255, .14);
+  --cell: clamp(96px, 19vw, 230px);
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; }
+body { min-height: 100dvh; background: var(--bg); color: var(--ink); font-family: "Onest", system-ui, sans-serif; -webkit-font-smoothing: antialiased; overflow-x: hidden; display: flex; flex-direction: column; }
+/* сцена: тёплый прожектор сверху и красный отсвет снизу */
+.stage { position: fixed; inset: 0; z-index: -1; background:
+  radial-gradient(ellipse 60% 55% at 50% -8%, rgba(255, 214, 170, .28), rgba(255, 214, 170, 0) 70%),
+  radial-gradient(ellipse 80% 45% at 50% 115%, rgba(215, 26, 47, .38), rgba(215, 26, 47, 0) 70%),
+  radial-gradient(ellipse at center, #1a1311 0%, #0d0908 70%); }
+.stage::before, .stage::after { content: ""; position: absolute; top: -10%; width: 34vw; height: 120%; background: linear-gradient(180deg, rgba(255, 230, 200, .14), rgba(255, 230, 200, 0) 75%); filter: blur(18px); transform-origin: top center; animation: beam 9s ease-in-out infinite alternate; }
+.stage::before { left: 8%; transform: rotate(16deg); }
+.stage::after { right: 8%; transform: rotate(-16deg); animation-delay: -4.5s; }
+@keyframes beam { from { opacity: .55; } to { opacity: 1; } }
+.stage.win::before, .stage.win::after { background: linear-gradient(180deg, rgba(255, 210, 120, .3), rgba(255, 210, 120, 0) 75%); }
+
+header { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: max(16px, env(safe-area-inset-top)) clamp(16px, 4vw, 40px) 0; }
+header img { height: clamp(40px, 6vw, 58px); width: auto; }
+.tools { display: flex; gap: 8px; }
+.ibtn { display: inline-flex; align-items: center; gap: 8px; min-height: 40px; padding: 0 14px; border: 1px solid var(--line); border-radius: 999px; background: var(--panel); color: var(--ink); font: inherit; font-size: 14px; font-weight: 600; cursor: pointer; }
+.ibtn:hover { border-color: rgba(255, 255, 255, .4); }
+.ibtn svg { width: 18px; height: 18px; }
+
+main { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: clamp(18px, 3.4vh, 34px); padding: 20px clamp(16px, 4vw, 40px) 28px; text-align: center; }
+.kicker { display: inline-flex; align-items: center; gap: 10px; padding: 8px 16px; border-radius: 999px; background: var(--red); font-size: 14px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
+.kicker::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: #fff; animation: pulse 1.6s infinite; }
+@keyframes pulse { 50% { opacity: .25; } }
+h1 { margin: 0; max-width: 18ch; font-size: clamp(28px, 4.6vw, 60px); font-weight: 700; line-height: 1.05; letter-spacing: -0.03em; outline: none; }
+h1:focus { box-shadow: 0 2px 0 var(--red); }
+
+/* барабаны с цифрами */
+.machine { position: relative; display: flex; gap: clamp(8px, 1.4vw, 16px); padding: clamp(12px, 2vw, 22px); border-radius: 28px; background: linear-gradient(180deg, rgba(255, 255, 255, .09), rgba(255, 255, 255, .03)); border: 1px solid var(--line); box-shadow: 0 40px 100px -40px rgba(0, 0, 0, .9), inset 0 1px 0 rgba(255, 255, 255, .12); }
+.machine::after { content: ""; position: absolute; left: 10px; right: 10px; top: 50%; height: 2px; margin-top: -1px; background: linear-gradient(90deg, transparent, rgba(215, 26, 47, .7), transparent); pointer-events: none; opacity: .6; }
+.reel { position: relative; width: calc(var(--cell) * .72); height: var(--cell); overflow: hidden; border-radius: 18px; background: linear-gradient(180deg, #050403, #1b1412 50%, #050403); box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .06), inset 0 18px 30px -10px #000, inset 0 -18px 30px -10px #000; }
+.reel .strip { position: absolute; left: 0; right: 0; top: 0; will-change: transform; }
+.reel .strip span { display: block; height: var(--cell); line-height: var(--cell); font-size: calc(var(--cell) * .74); font-weight: 700; letter-spacing: -0.04em; font-variant-numeric: tabular-nums; color: #fff; text-shadow: 0 6px 24px rgba(0, 0, 0, .6); }
+.reel.lead .strip span { color: rgba(255, 255, 255, .18); }
+.reel.spin .strip { filter: blur(1.2px); }
+.machine.win { animation: winPop .6s cubic-bezier(.2, 1.6, .4, 1); border-color: rgba(242, 196, 109, .6); box-shadow: 0 0 0 6px rgba(242, 196, 109, .12), 0 40px 120px -30px rgba(215, 26, 47, .7); }
+.machine.win .reel:not(.lead) .strip span { color: var(--gold); text-shadow: 0 0 30px rgba(242, 196, 109, .55); }
+@keyframes winPop { 40% { transform: scale(1.05); } }
+
+.result { min-height: 1.4em; margin: 0; font-size: clamp(18px, 2.2vw, 26px); font-weight: 600; color: var(--dim); }
+.result b { color: var(--gold); }
+.go { position: relative; min-height: 68px; padding: 0 clamp(36px, 5vw, 64px); border: 0; border-radius: 999px; background: linear-gradient(180deg, var(--red-2), var(--red)); color: #fff; font: inherit; font-size: clamp(19px, 2.2vw, 24px); font-weight: 700; letter-spacing: .01em; cursor: pointer; box-shadow: 0 18px 40px -12px rgba(215, 26, 47, .8), inset 0 1px 0 rgba(255, 255, 255, .3); transition: transform .15s, filter .15s; }
+.go:hover { filter: brightness(1.08); }
+.go:active { transform: scale(.97); }
+.go:disabled { filter: grayscale(.4) brightness(.8); cursor: default; }
+
+.settings { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 10px 14px; padding: 12px 16px; border-radius: 18px; background: var(--panel); border: 1px solid var(--line); font-size: 15px; color: var(--dim); }
+.settings label { display: inline-flex; align-items: center; gap: 8px; }
+.settings input[type=number] { width: 92px; min-height: 40px; padding: 0 10px; border: 1px solid var(--line); border-radius: 10px; background: rgba(0, 0, 0, .35); color: var(--ink); font: inherit; font-size: 17px; font-weight: 600; text-align: center; }
+.settings input[type=checkbox] { width: 20px; height: 20px; accent-color: var(--red); }
+.count { color: var(--ink); font-weight: 600; }
+.settings.list .rng { display: none; }
+.history { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; max-width: 760px; min-height: 34px; margin: 0; padding: 0; list-style: none; }
+.history li { padding: 6px 12px; border-radius: 999px; background: rgba(242, 196, 109, .12); border: 1px solid rgba(242, 196, 109, .3); color: var(--gold); font-weight: 600; font-variant-numeric: tabular-nums; }
+.history .label { background: none; border: 0; color: var(--dim); font-weight: 400; padding-left: 0; padding-right: 0; }
+.link { border: 0; background: none; color: var(--dim); font: inherit; font-size: 14px; text-decoration: underline; cursor: pointer; }
+canvas#confetti { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 10; }
+body.full header .tools .hide-full, body.full .settings { display: none; }
+@media (max-width: 560px) { .settings { font-size: 14px; } .settings input[type=number] { width: 76px; } }
+@media (prefers-reduced-motion: reduce) { .stage::before, .stage::after { animation: none; } }
+</style>
+</head>
+<body>
+<div class="stage" id="stage"></div>
+<header>
+  <img src="assets/img/arjai-logo-lg.png" alt="ArJai" width="186" height="120">
+  <div class="tools">
+    <button class="ibtn" type="button" id="sound" aria-pressed="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H3v6h3l5 4z"/><path id="wave" d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/></svg><span>Звук</span></button>
+    <button class="ibtn" type="button" id="full"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg><span class="hide-full">На весь экран</span></button>
+  </div>
+</header>
+<main>
+  <span class="kicker">Выбор победителя</span>
+  <h1 id="title" contenteditable="true" spellcheck="false">Розыгрыш на зимнем концерте ArJai</h1>
+  <div class="machine" id="machine" aria-live="polite"></div>
+  <p class="result" id="result">Нажмите «Разыграть», чтобы выбрать случайное число</p>
+  <button class="go" type="button" id="go">Разыграть</button>
+  <div class="settings">
+    <span class="count" id="count">Загружаем номера участников…</span>
+    <button class="link" type="button" id="refresh" hidden>Обновить список</button>
+    <label class="rng">от <input type="number" id="from" value="1" min="0" inputmode="numeric"></label>
+    <label class="rng">до <input type="number" id="to" value="100" min="1" inputmode="numeric"></label>
+    <label><input type="checkbox" id="norepeat" checked> без повторов</label>
+    <button class="link" type="button" id="reset">Очистить историю</button>
+  </div>
+  <ul class="history" id="history"></ul>
+</main>
+<canvas id="confetti"></canvas>
+<script>
+(function () {
+  "use strict";
+  var $ = function (id) { return document.getElementById(id); };
+  var q = new URLSearchParams(location.search);
+  /* Номера участников выдаёт сайт (кнопка «Получить номер» в окне афиши), список хранится в таблице. */
+  var API = "https://script.google.com/macros/s/AKfycbwB8ZJdHIuNXk5qFYsZPO2UkxU3fRlS_X5HpyecrMJOBE-Q_1Z-NJXejnzO7mcsIgo-/exec";
+  var pool = null;
+  var fromEl = $("from"), toEl = $("to"), title = $("title"), machine = $("machine"), go = $("go"), result = $("result"), hist = $("history"), norep = $("norepeat");
+  if (q.get("from")) fromEl.value = parseInt(q.get("from"), 10) || 1;
+  if (q.get("to")) toEl.value = parseInt(q.get("to"), 10) || 100;
+  if (q.get("title")) title.textContent = q.get("title");
+  document.title = title.textContent + " · ArJai";
+
+  /* история хранится в браузере: если страницу случайно закрыть или обновить на концерте, выпавшие номера не потеряются */
+  function key() { return "arjai-raffle:" + title.textContent.trim() + "|" + (pool ? "list" : fromEl.value + "-" + toEl.value); }
+  function load() { try { return JSON.parse(localStorage.getItem(key()) || "[]"); } catch (e) { return []; } }
+  function save(a) { try { localStorage.setItem(key(), JSON.stringify(a)); } catch (e) { /* без памяти */ } }
+  var drawn = load();
+
+  function range() {
+    var a = parseInt(fromEl.value, 10), b = parseInt(toEl.value, 10);
+    if (isNaN(a)) a = 1; if (isNaN(b)) b = 100;
+    return a <= b ? [a, b] : [b, a];
+  }
+  /* честный случайный номер: криптографический генератор браузера, без перекоса в пользу каких-то чисел */
+  function randInt(min, max) {
+    var span = max - min + 1, buf = new Uint32Array(1), lim = Math.floor(4294967296 / span) * span, x;
+    do { crypto.getRandomValues(buf); x = buf[0]; } while (x >= lim);
+    return min + (x % span);
+  }
+
+  var reels = [], REPEAT = 6;
+  function build() {
+    var r = range(), n = pool ? String(Math.max.apply(null, pool)).length : Math.max(String(Math.abs(r[1])).length, 1);
+    if (reels.length === n) return;
+    machine.textContent = ""; reels = [];
+    for (var i = 0; i < n; i++) {
+      var reel = document.createElement("div"); reel.className = "reel";
+      var strip = document.createElement("div"); strip.className = "strip";
+      for (var k = 0; k < REPEAT; k++) for (var d = 0; d < 10; d++) { var s = document.createElement("span"); s.textContent = d; strip.appendChild(s); }
+      reel.appendChild(strip); machine.appendChild(reel); reels.push({ el: reel, strip: strip, pos: 0 });
+    }
+    setNumber(null);
+  }
+  function cell() { return reels[0] ? reels[0].el.getBoundingClientRect().height : 100; }
+  function setNumber(num, animate) {
+    var digits = num == null ? [] : String(num).padStart(reels.length, "0").split("").map(Number);
+    var lead = true, h = cell();
+    reels.forEach(function (r, i) {
+      var d = num == null ? 0 : digits[i];
+      if (num != null && (d !== 0 || i === reels.length - 1)) lead = false;
+      r.el.classList.toggle("lead", num == null || lead);
+      var target = (animate ? (REPEAT - 1) * 10 : 0) + d;
+      if (animate) {
+        r.strip.style.transition = "none";
+        r.strip.style.transform = "translateY(" + (-(r.pos % 10) * h) + "px)";
+        void r.strip.offsetHeight;
+        var dur = 1.7 + i * 0.55;
+        r.el.classList.add("spin");
+        r.strip.style.transition = "transform " + dur + "s cubic-bezier(.12,.62,.08,1)";
+        setTimeout(function () { r.el.classList.remove("spin"); tick(true); }, dur * 1000 - 120);
+      } else r.strip.style.transition = "none";
+      r.strip.style.transform = "translateY(" + (-target * h) + "px)";
+      r.pos = target;
+    });
+    return 1.7 + (reels.length - 1) * 0.55;
+  }
+  function showHistory() {
+    hist.textContent = "";
+    if (!drawn.length) return;
+    var l = document.createElement("li"); l.className = "label"; l.textContent = "Уже выпали:"; hist.appendChild(l);
+    drawn.forEach(function (n) { var li = document.createElement("li"); li.textContent = n; hist.appendChild(li); });
+  }
+
+  /* звук: барабанная дробь и короткий аккорд на выпадении, синтезируется в браузере */
+  var ac = null, soundOn = true;
+  function ctx() { if (!ac) { try { ac = new (window.AudioContext || window.webkitAudioContext)(); } catch (e) { ac = null; } } return ac; }
+  function noiseHit(t, vol, len) {
+    var c = ctx(); if (!c) return;
+    var b = c.createBuffer(1, c.sampleRate * len, c.sampleRate), d = b.getChannelData(0);
+    for (var i = 0; i < d.length; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / d.length, 3);
+    var s = c.createBufferSource(); s.buffer = b;
+    var f = c.createBiquadFilter(); f.type = "bandpass"; f.frequency.value = 1800; f.Q.value = .8;
+    var g = c.createGain(); g.gain.value = vol;
+    s.connect(f); f.connect(g); g.connect(c.destination); s.start(t);
+  }
+  function drumroll(sec) {
+    if (!soundOn || !ctx()) return;
+    var c = ctx(), t0 = c.currentTime, t = 0;
+    while (t < sec) { noiseHit(t0 + t, .12 + .25 * (t / sec), .06); t += .045 + .02 * Math.random(); }
+  }
+  function tick() { if (soundOn && ctx()) noiseHit(ctx().currentTime, .5, .09); }
+  function chord() {
+    if (!soundOn || !ctx()) return;
+    var c = ctx(), t = c.currentTime;
+    [523.25, 659.25, 783.99, 1046.5].forEach(function (fr, i) {
+      var o = c.createOscillator(), g = c.createGain();
+      o.type = "triangle"; o.frequency.value = fr;
+      g.gain.setValueAtTime(0, t + i * .05); g.gain.linearRampToValueAtTime(.12, t + i * .05 + .02); g.gain.exponentialRampToValueAtTime(.0001, t + 1.8);
+      o.connect(g); g.connect(c.destination); o.start(t + i * .05); o.stop(t + 2);
+    });
+  }
+
+  /* конфетти в цветах студии */
+  var cv = $("confetti"), cx = cv.getContext("2d"), parts = [], raf = 0;
+  function confetti() {
+    var w = cv.width = innerWidth * devicePixelRatio, h = cv.height = innerHeight * devicePixelRatio;
+    var colors = ["#d71a2f", "#ff3348", "#f2c46d", "#ffffff", "#ffd99a"];
+    for (var i = 0; i < 220; i++) {
+      var left = i % 2 === 0;
+      parts.push({ x: left ? 0 : w, y: h * .7, vx: (left ? 1 : -1) * (6 + Math.random() * 12) * devicePixelRatio, vy: -(10 + Math.random() * 14) * devicePixelRatio,
+        r: (4 + Math.random() * 6) * devicePixelRatio, c: colors[i % colors.length], a: Math.random() * 6, va: (Math.random() - .5) * .3, life: 0 });
+    }
+    if (!raf) loop();
+  }
+  function loop() {
+    cx.clearRect(0, 0, cv.width, cv.height);
+    parts = parts.filter(function (p) { return p.life < 260 && p.y < cv.height + 40; });
+    parts.forEach(function (p) {
+      p.life++; p.vy += .35 * devicePixelRatio; p.vx *= .985; p.x += p.vx; p.y += p.vy; p.a += p.va;
+      cx.save(); cx.translate(p.x, p.y); cx.rotate(p.a); cx.fillStyle = p.c; cx.fillRect(-p.r / 2, -p.r / 4, p.r, p.r / 2); cx.restore();
+    });
+    raf = parts.length ? requestAnimationFrame(loop) : 0;
+  }
+
+  function draw() {
+    build();
+    var n;
+    if (pool) {
+      var left = norep.checked ? pool.filter(function (x) { return drawn.indexOf(x) < 0; }) : pool;
+      if (!left.length) { result.textContent = "Все номера участников уже выпали. Очистите историю."; return; }
+      n = left[randInt(0, left.length - 1)];
+    } else {
+      var r = range(), size = r[1] - r[0] + 1;
+      if (norep.checked && drawn.length >= size) { result.textContent = "Все номера от " + r[0] + " до " + r[1] + " уже выпали. Очистите историю."; return; }
+      do { n = randInt(r[0], r[1]); } while (norep.checked && drawn.indexOf(n) >= 0);
+    }
+    go.disabled = true;
+    machine.classList.remove("win"); $("stage").classList.remove("win");
+    result.textContent = "Крутим…";
+    var dur = setNumber(n, true);
+    drumroll(dur - .2);
+    setTimeout(function () {
+      machine.classList.add("win"); $("stage").classList.add("win");
+      result.innerHTML = "Выпал номер <b>" + n + "</b>";
+      drawn.push(n); save(drawn); showHistory(); confetti(); chord();
+      go.disabled = false; go.textContent = "Разыграть ещё";
+    }, dur * 1000 + 60);
+  }
+
+  go.addEventListener("click", draw);
+  document.addEventListener("keydown", function (e) { if ((e.key === " " || e.key === "Enter") && document.activeElement === document.body && !go.disabled) { e.preventDefault(); draw(); } });
+  [fromEl, toEl].forEach(function (el) { el.addEventListener("change", function () { reels = []; build(); drawn = load(); showHistory(); }); });
+  title.addEventListener("blur", function () { document.title = title.textContent + " · ArJai"; drawn = load(); showHistory(); });
+  $("reset").addEventListener("click", function () { drawn = []; save(drawn); showHistory(); result.textContent = "История очищена"; });
+  $("sound").addEventListener("click", function () { soundOn = !soundOn; this.setAttribute("aria-pressed", soundOn); this.style.opacity = soundOn ? 1 : .55; $("wave").style.display = soundOn ? "" : "none"; });
+  $("full").addEventListener("click", function () {
+    var d = document.documentElement;
+    if (!document.fullscreenElement && d.requestFullscreen) d.requestFullscreen().catch(function () {}); else if (document.exitFullscreen) document.exitFullscreen();
+  });
+  document.addEventListener("fullscreenchange", function () { document.body.classList.toggle("full", !!document.fullscreenElement); });
+  addEventListener("resize", function () { reels.forEach(function (r) { r.strip.style.transition = "none"; r.strip.style.transform = "translateY(" + (-r.pos * cell()) + "px)"; }); });
+  function plural(n) { var a = n % 10, b = n % 100; return a === 1 && b !== 11 ? "участник" : (a >= 2 && a <= 4 && (b < 10 || b >= 20) ? "участника" : "участников"); }
+  function loadPool() {
+    $("count").textContent = "Загружаем номера участников…";
+    fetch(API + "?part=tickets&t=" + Date.now()).then(function (r) { return r.json(); }).then(function (o) {
+      var list = (o && o.numbers || []).filter(function (x) { return x > 0; });
+      if (!list.length) throw new Error("empty");
+      pool = list;
+      document.querySelector(".settings").classList.add("list");
+      $("count").textContent = "Среди номеров участников: " + list.length + " " + plural(list.length);
+      $("refresh").hidden = false;
+    }).catch(function () {
+      pool = null;
+      document.querySelector(".settings").classList.remove("list");
+      $("count").textContent = "Номеров участников пока нет. Розыгрыш по диапазону:";
+      $("refresh").hidden = false;
+    }).then(function () { reels = []; build(); drawn = load(); showHistory(); });
+  }
+  $("refresh").addEventListener("click", loadPool);
+  if (q.get("from") || q.get("to")) { $("count").textContent = "Розыгрыш по диапазону:"; build(); showHistory(); }
+  else { build(); showHistory(); loadPool(); }
+})();
+</script>
+</body>
+</html>

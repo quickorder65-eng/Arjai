@@ -1,0 +1,249 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Участвовать в розыгрыше · ArJai</title>
+<meta name="description" content="Получите свой номер участника розыгрыша на концерте студии ArJai.">
+<meta property="og:title" content="Участвуйте в розыгрыше на концерте ArJai">
+<meta property="og:description" content="Нажмите кнопку и получите свой номер участника. На концерте разыграем подарки!">
+<meta property="og:image" content="https://quickorder65-eng.github.io/Arjai/assets/og-image.png">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="preload" href="assets/fonts/onest-cyrillic-700-normal.woff2" as="font" type="font/woff2" crossorigin>
+<style>
+@font-face { font-family: "Onest"; font-weight: 400; font-display: swap; src: url("assets/fonts/onest-cyrillic-400-normal.woff2") format("woff2"); unicode-range: U+0400-045F, U+2116; }
+@font-face { font-family: "Onest"; font-weight: 400; font-display: swap; src: url("assets/fonts/onest-cyrillic-ext-400-normal.woff2") format("woff2"); unicode-range: U+0460-052F; }
+@font-face { font-family: "Onest"; font-weight: 400; font-display: swap; src: url("assets/fonts/onest-latin-400-normal.woff2") format("woff2"); unicode-range: U+0000-00FF, U+2000-206F; }
+@font-face { font-family: "Onest"; font-weight: 600; font-display: swap; src: url("assets/fonts/onest-cyrillic-600-normal.woff2") format("woff2"); unicode-range: U+0400-045F, U+2116; }
+@font-face { font-family: "Onest"; font-weight: 600; font-display: swap; src: url("assets/fonts/onest-cyrillic-ext-600-normal.woff2") format("woff2"); unicode-range: U+0460-052F; }
+@font-face { font-family: "Onest"; font-weight: 600; font-display: swap; src: url("assets/fonts/onest-latin-600-normal.woff2") format("woff2"); unicode-range: U+0000-00FF, U+2000-206F; }
+@font-face { font-family: "Onest"; font-weight: 700; font-display: swap; src: url("assets/fonts/onest-cyrillic-700-normal.woff2") format("woff2"); unicode-range: U+0400-045F, U+2116; }
+@font-face { font-family: "Onest"; font-weight: 700; font-display: swap; src: url("assets/fonts/onest-cyrillic-ext-700-normal.woff2") format("woff2"); unicode-range: U+0460-052F; }
+@font-face { font-family: "Onest"; font-weight: 700; font-display: swap; src: url("assets/fonts/onest-latin-700-normal.woff2") format("woff2"); unicode-range: U+0000-00FF, U+2000-206F; }
+:root { --red: #d71a2f; --red-2: #ff3348; --gold: #f2c46d; --ink: #f6f1ec; --dim: rgba(246, 241, 236, .66); --bg: #0d0908; --line: rgba(255, 255, 255, .14); --cell: clamp(78px, 17vw, 150px); }
+* { box-sizing: border-box; }
+html, body { margin: 0; min-height: 100%; }
+body { min-height: 100dvh; background: var(--bg); color: var(--ink); font-family: "Onest", system-ui, sans-serif; -webkit-font-smoothing: antialiased; overflow-x: hidden; display: flex; flex-direction: column; }
+.stage { position: fixed; inset: 0; z-index: -1; background:
+  radial-gradient(ellipse 60% 50% at 50% -8%, rgba(255, 214, 170, .26), rgba(255, 214, 170, 0) 70%),
+  radial-gradient(ellipse 80% 45% at 50% 115%, rgba(215, 26, 47, .4), rgba(215, 26, 47, 0) 70%),
+  radial-gradient(ellipse at center, #1a1311 0%, #0d0908 70%); }
+.stage::before, .stage::after { content: ""; position: absolute; top: -10%; width: 40vw; height: 120%; background: linear-gradient(180deg, rgba(255, 230, 200, .13), rgba(255, 230, 200, 0) 75%); filter: blur(18px); transform-origin: top center; animation: beam 8s ease-in-out infinite alternate; }
+.stage::before { left: 2%; transform: rotate(14deg); }
+.stage::after { right: 2%; transform: rotate(-14deg); animation-delay: -4s; }
+@keyframes beam { from { opacity: .5; } to { opacity: 1; } }
+header { display: flex; align-items: center; justify-content: space-between; padding: max(14px, env(safe-area-inset-top)) clamp(16px, 4vw, 40px) 0; }
+header img { height: clamp(40px, 7vw, 56px); width: auto; }
+header a.site { color: var(--dim); font-size: 14px; font-weight: 600; text-decoration: none; padding: 9px 14px; border: 1px solid var(--line); border-radius: 999px; }
+main { flex: 1; width: 100%; max-width: 640px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: clamp(14px, 2.6vh, 24px); padding: 18px clamp(16px, 5vw, 32px) 32px; text-align: center; }
+.kicker { display: inline-flex; align-items: center; gap: 10px; padding: 7px 15px; border-radius: 999px; background: var(--red); font-size: 13px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
+.kicker::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: #fff; animation: pulse 1.6s infinite; }
+@keyframes pulse { 50% { opacity: .25; } }
+h1 { margin: 0; font-size: clamp(30px, 7vw, 52px); font-weight: 700; line-height: 1.04; letter-spacing: -0.03em; }
+.event { margin: -4px 0 0; font-size: clamp(16px, 3.6vw, 20px); font-weight: 600; color: var(--gold); }
+.lead { margin: 0; max-width: 34ch; font-size: clamp(16px, 3.6vw, 18px); line-height: 1.5; color: var(--dim); }
+.machine { display: flex; gap: clamp(6px, 1.6vw, 12px); padding: clamp(10px, 2.4vw, 16px); border-radius: 24px; background: linear-gradient(180deg, rgba(255, 255, 255, .09), rgba(255, 255, 255, .03)); border: 1px solid var(--line); box-shadow: 0 30px 80px -30px rgba(0, 0, 0, .9), inset 0 1px 0 rgba(255, 255, 255, .12); }
+.reel { position: relative; width: calc(var(--cell) * .72); height: var(--cell); overflow: hidden; border-radius: 14px; background: linear-gradient(180deg, #050403, #1b1412 50%, #050403); box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .06), inset 0 14px 24px -10px #000, inset 0 -14px 24px -10px #000; }
+.strip { position: absolute; left: 0; right: 0; top: 0; will-change: transform; }
+.strip span { display: block; height: var(--cell); line-height: var(--cell); font-size: calc(var(--cell) * .72); font-weight: 700; font-variant-numeric: tabular-nums; color: rgba(255, 255, 255, .2); }
+.machine.done .strip span { color: var(--gold); text-shadow: 0 0 26px rgba(242, 196, 109, .5); }
+.machine.done { border-color: rgba(242, 196, 109, .55); box-shadow: 0 0 0 6px rgba(242, 196, 109, .1), 0 30px 90px -30px rgba(215, 26, 47, .7); animation: pop .6s cubic-bezier(.2, 1.6, .4, 1); }
+.reel.spin .strip { filter: blur(1.2px); }
+.reel.spin .strip span { color: #fff; }
+@keyframes pop { 40% { transform: scale(1.05); } }
+.name { width: 100%; max-width: 360px; min-height: 52px; padding: 0 18px; border: 1px solid var(--line); border-radius: 14px; background: rgba(0, 0, 0, .35); color: var(--ink); font: inherit; font-size: 17px; text-align: center; }
+.name::placeholder { color: rgba(246, 241, 236, .42); }
+.go { min-height: 64px; width: 100%; max-width: 360px; padding: 0 28px; border: 0; border-radius: 999px; background: linear-gradient(180deg, var(--red-2), var(--red)); color: #fff; font: inherit; font-size: 20px; font-weight: 700; cursor: pointer; box-shadow: 0 18px 40px -12px rgba(215, 26, 47, .8), inset 0 1px 0 rgba(255, 255, 255, .3); }
+.go:disabled { filter: brightness(.8); cursor: default; }
+.msg { margin: 0; min-height: 1.4em; font-size: 17px; font-weight: 600; color: var(--dim); }
+.msg b { color: var(--gold); }
+.after { display: none; flex-direction: column; align-items: center; gap: 12px; width: 100%; }
+.after.on { display: flex; }
+.after .note { margin: 0; color: var(--dim); font-size: 15px; line-height: 1.45; max-width: 34ch; }
+.row { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
+.sec { display: inline-flex; align-items: center; gap: 8px; min-height: 48px; padding: 0 20px; border: 1px solid var(--line); border-radius: 999px; background: rgba(255, 255, 255, .06); color: var(--ink); font: inherit; font-size: 15px; font-weight: 600; text-decoration: none; cursor: pointer; }
+.sec.wa { background: #1faa59; border-color: #1faa59; color: #fff; }
+.hide { display: none !important; }
+canvas#confetti { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 10; }
+</style>
+</head>
+<body>
+<div class="stage"></div>
+<header>
+  <img src="assets/img/arjai-logo-lg.png" alt="ArJai" width="186" height="120">
+  <a class="site" href="./" id="siteLink">На сайт</a>
+</header>
+<main>
+  <span class="kicker" id="kicker">Розыгрыш</span>
+  <h1 id="h1">Участвуйте в розыгрыше</h1>
+  <p class="event" id="event"></p>
+  <p class="lead" id="lead">Нажмите кнопку и получите свой номер участника. На концерте разыграем подарки среди всех номеров!</p>
+  <div class="machine" id="machine" aria-live="polite"></div>
+  <input class="name" id="name" type="text" maxlength="60" autocomplete="name" placeholder="Ваше имя (необязательно)">
+  <button class="go" type="button" id="go">Участвовать в розыгрыше</button>
+  <p class="msg" id="msg"></p>
+  <div class="after" id="after">
+    <p class="note" id="note">Сделайте скриншот этого экрана. Номер сохранится и здесь: откройте эту ссылку снова, и вы его увидите.</p>
+    <div class="row">
+      <button class="sec" type="button" id="save">Сохранить картинку</button>
+      <a class="sec wa" id="wa" target="_blank" rel="noopener">Написать в WhatsApp</a>
+    </div>
+  </div>
+</main>
+<canvas id="confetti"></canvas>
+<script>
+(function () {
+  "use strict";
+  var API = "https://script.google.com/macros/s/AKfycbwB8ZJdHIuNXk5qFYsZPO2UkxU3fRlS_X5HpyecrMJOBE-Q_1Z-NJXejnzO7mcsIgo-/exec";
+  var WA = "77076536250";
+  var $ = function (id) { return document.getElementById(id); };
+  var kk = /[?&]lang=kk\b/.test(location.search) || (function () { try { return localStorage.getItem("arjai-lang") === "kk"; } catch (e) { return false; } })();
+  var T = kk ? {
+    kicker: "Ұтыс ойыны", h1: "Ұтыс ойынына қатысыңыз", lead: "Батырманы басып, қатысушы нөміріңізді алыңыз. Концертте барлық нөмірлер арасында сыйлықтар ойнатылады!",
+    name: "Атыңыз (міндетті емес)", go: "Ұтыс ойынына қатысу", wait: "Нөміріңіз шығып жатыр…", got: "Сіздің қатысушы нөміріңіз: ", already: "Сіз қатысып жатырсыз. Нөміріңіз: ",
+    note: "Осы экранның скриншотын жасаңыз. Нөмір осында да сақталады: сілтемені қайта ашсаңыз, оны көресіз.", save: "Суретті сақтау", wa: "WhatsApp-қа жазу",
+    err: "Болмады. Интернетті тексеріп, қайта көріңіз.", waMsg: "Сәлеметсіз бе! Мен ұтыс ойынына қатысамын, нөмірім ", site: "Сайтқа", ticket: "Қатысушы нөмірі"
+  } : {
+    kicker: "Розыгрыш", h1: "Участвуйте в розыгрыше", lead: "Нажмите кнопку и получите свой номер участника. На концерте разыграем подарки среди всех номеров!",
+    name: "Ваше имя (необязательно)", go: "Участвовать в розыгрыше", wait: "Выпадает ваш номер…", got: "Ваш номер участника: ", already: "Вы уже участвуете. Ваш номер: ",
+    note: "Сделайте скриншот этого экрана. Номер сохранится и здесь: откройте эту ссылку снова, и вы его увидите.", save: "Сохранить картинку", wa: "Написать в WhatsApp",
+    err: "Не получилось. Проверьте интернет и попробуйте ещё раз.", waMsg: "Здравствуйте! Я участвую в розыгрыше, мой номер ", site: "На сайт", ticket: "Номер участника"
+  };
+  if (kk) {
+    document.documentElement.lang = "kk";
+    $("kicker").textContent = T.kicker; $("h1").textContent = T.h1; $("lead").textContent = T.lead; $("name").placeholder = T.name;
+    $("go").textContent = T.go; $("note").textContent = T.note; $("save").textContent = T.save; $("wa").textContent = T.wa;
+    $("siteLink").textContent = T.site; $("siteLink").href = "kk/";
+  }
+
+  function vid() {
+    try {
+      var id = localStorage.getItem("arjai-vid");
+      if (!id) { id = Date.now().toString(36) + Math.random().toString(36).slice(2, 8); localStorage.setItem("arjai-vid", id); }
+      return id;
+    } catch (e) { return ""; }
+  }
+  var eventTitle = "";
+  var KEY = "arjai-ticket";
+  function saved() { try { return localStorage.getItem(KEY) || ""; } catch (e) { return ""; } }
+
+  /* название концерта и дата — из той же таблицы, что и афиша */
+  fetch(API + "?part=data&t=" + Date.now()).then(function (r) { return r.json(); }).then(function (o) {
+    if (!o || o.error) return;
+    eventTitle = (kk && o["Заголовок (каз)"]) || o["Заголовок"] || "";
+    var when = o["Дата и время"] || "";
+    if (eventTitle || when) $("event").textContent = [eventTitle, when].filter(Boolean).join(" · ");
+    var txt = (kk && o["Текст про розыгрыш (каз)"]) || (!kk && o["Текст про розыгрыш"]);
+    if (txt && !saved()) $("lead").textContent = txt;
+  }).catch(function () { /* без названия */ });
+
+  /* барабаны с цифрами: 4 цифры */
+  var N = 4, REPEAT = 6, reels = [];
+  for (var i = 0; i < N; i++) {
+    var reel = document.createElement("div"); reel.className = "reel";
+    var strip = document.createElement("div"); strip.className = "strip";
+    for (var k = 0; k < REPEAT; k++) for (var d = 0; d < 10; d++) { var s = document.createElement("span"); s.textContent = d; strip.appendChild(s); }
+    reel.appendChild(strip); $("machine").appendChild(reel); reels.push({ el: reel, strip: strip, pos: 0 });
+  }
+  function cell() { return reels[0].el.getBoundingClientRect().height; }
+  function setTo(num, animate) {
+    var digits = String(num).padStart(N, "0").split("").map(Number), h = cell(), longest = 0;
+    reels.forEach(function (r, i) {
+      var target = (animate ? (REPEAT - 1) * 10 : 0) + digits[i];
+      if (animate) {
+        r.strip.style.transition = "none"; r.strip.style.transform = "translateY(0)"; void r.strip.offsetHeight;
+        var dur = 1.5 + i * 0.45; longest = dur;
+        r.el.classList.add("spin");
+        r.strip.style.transition = "transform " + dur + "s cubic-bezier(.12,.62,.08,1)";
+        setTimeout(function () { r.el.classList.remove("spin"); }, dur * 1000 - 100);
+      } else r.strip.style.transition = "none";
+      r.strip.style.transform = "translateY(" + (-target * h) + "px)"; r.pos = target;
+    });
+    return longest;
+  }
+  /* пока ждём ответ — барабаны крутятся без остановки */
+  var idle = 0;
+  function spinIdle() {
+    reels.forEach(function (r) { r.el.classList.add("spin"); });
+    var t0 = performance.now(), h = cell();
+    (function f(t) {
+      reels.forEach(function (r, i) { r.strip.style.transition = "none"; r.strip.style.transform = "translateY(" + (-(((t - t0) * (0.9 + i * 0.15) / 40) % (h * 40))) + "px)"; });
+      idle = requestAnimationFrame(f);
+    })(t0);
+  }
+  function stopIdle() { cancelAnimationFrame(idle); idle = 0; }
+
+  function show(num, again, animate) {
+    $("go").classList.add("hide"); $("name").classList.add("hide"); $("lead").classList.add("hide");
+    var after = function () {
+      $("machine").classList.add("done");
+      $("msg").innerHTML = (again ? T.already : T.got) + "<b>" + num + "</b>";
+      $("after").classList.add("on");
+      $("wa").href = "https://wa.me/" + WA + "?text=" + encodeURIComponent(T.waMsg + num + (eventTitle ? " (" + eventTitle + ")" : "") + ".");
+      if (animate) confetti();
+    };
+    if (animate) { stopIdle(); setTimeout(after, setTo(num, true) * 1000 + 60); }
+    else { setTo(num, false); after(); }
+  }
+
+  $("go").addEventListener("click", function () {
+    var btn = this; btn.disabled = true; btn.textContent = T.wait; $("msg").textContent = "";
+    spinIdle();
+    var u = API + "?part=ticket&vid=" + encodeURIComponent(vid()) + "&name=" + encodeURIComponent($("name").value.trim()) + "&t=" + Date.now();
+    fetch(u).then(function (r) { return r.json(); }).then(function (o) {
+      if (!o || !o.number) throw new Error("ticket");
+      try { localStorage.setItem(KEY, String(o.number)); } catch (e) { /* без памяти */ }
+      show(o.number, !!o.again, true);
+    }).catch(function () {
+      stopIdle(); setTo(0, false); reels.forEach(function (r) { r.el.classList.remove("spin"); });
+      btn.disabled = false; btn.textContent = T.go; $("msg").textContent = T.err;
+    });
+  });
+
+  /* картинка-билет для галереи телефона */
+  $("save").addEventListener("click", function () {
+    var num = saved(); if (!num) return;
+    var c = document.createElement("canvas"), W = 1080, H = 1350; c.width = W; c.height = H;
+    var x = c.getContext("2d");
+    var g = x.createRadialGradient(W / 2, 0, 50, W / 2, H / 2, H); g.addColorStop(0, "#4a3226"); g.addColorStop(.55, "#140e0c"); g.addColorStop(1, "#2a0b10");
+    x.fillStyle = g; x.fillRect(0, 0, W, H);
+    x.textAlign = "center"; x.fillStyle = "#d71a2f"; x.font = "700 40px Onest, sans-serif"; x.fillText(T.kicker.toUpperCase(), W / 2, 260);
+    x.fillStyle = "#f6f1ec"; x.font = "700 64px Onest, sans-serif"; x.fillText(eventTitle || "ArJai", W / 2, 360);
+    x.fillStyle = "rgba(246,241,236,.7)"; x.font = "600 44px Onest, sans-serif"; x.fillText(T.ticket, W / 2, 560);
+    x.fillStyle = "#f2c46d"; x.font = "700 260px Onest, sans-serif"; x.shadowColor = "rgba(242,196,109,.5)"; x.shadowBlur = 40; x.fillText(num, W / 2, 820); x.shadowBlur = 0;
+    x.fillStyle = "rgba(246,241,236,.6)"; x.font = "400 36px Onest, sans-serif"; x.fillText($("event").textContent || "", W / 2, 960);
+    var logo = document.querySelector("header img"), draw = function () {
+      try { var lw = 280, lh = lw * logo.naturalHeight / logo.naturalWidth; x.drawImage(logo, (W - lw) / 2, 1080, lw, lh); } catch (e) { /* без логотипа */ }
+      var a = document.createElement("a"); a.download = "arjai-nomer-" + num + ".png"; a.href = c.toDataURL("image/png"); document.body.appendChild(a); a.click(); a.remove();
+    };
+    if (logo.complete) draw(); else logo.onload = draw;
+  });
+
+  var cv = $("confetti"), cx = cv.getContext("2d"), parts = [], raf = 0;
+  function confetti() {
+    cv.width = innerWidth * devicePixelRatio; cv.height = innerHeight * devicePixelRatio;
+    var colors = ["#d71a2f", "#ff3348", "#f2c46d", "#ffffff", "#ffd99a"];
+    for (var i = 0; i < 180; i++) {
+      var left = i % 2 === 0;
+      parts.push({ x: left ? 0 : cv.width, y: cv.height * .65, vx: (left ? 1 : -1) * (5 + Math.random() * 11) * devicePixelRatio, vy: -(10 + Math.random() * 13) * devicePixelRatio,
+        r: (4 + Math.random() * 6) * devicePixelRatio, c: colors[i % colors.length], a: Math.random() * 6, va: (Math.random() - .5) * .3, life: 0 });
+    }
+    if (!raf) loop();
+  }
+  function loop() {
+    cx.clearRect(0, 0, cv.width, cv.height);
+    parts = parts.filter(function (p) { return p.life < 240 && p.y < cv.height + 40; });
+    parts.forEach(function (p) {
+      p.life++; p.vy += .35 * devicePixelRatio; p.vx *= .985; p.x += p.vx; p.y += p.vy; p.a += p.va;
+      cx.save(); cx.translate(p.x, p.y); cx.rotate(p.a); cx.fillStyle = p.c; cx.fillRect(-p.r / 2, -p.r / 4, p.r, p.r / 2); cx.restore();
+    });
+    raf = parts.length ? requestAnimationFrame(loop) : 0;
+  }
+
+  setTo(0, false);
+  var had = saved();
+  if (had) show(had, true, false);
+})();
+</script>
+</body>
+</html>

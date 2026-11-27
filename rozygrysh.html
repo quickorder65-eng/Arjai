@@ -52,6 +52,10 @@ h1 { margin: 0; font-size: clamp(30px, 7vw, 52px); font-weight: 700; line-height
 .reel.spin .strip span { color: #fff; }
 @keyframes pop { 40% { transform: scale(1.05); } }
 .name { width: 100%; max-width: 360px; min-height: 52px; padding: 0 18px; border: 1px solid var(--line); border-radius: 14px; background: rgba(0, 0, 0, .35); color: var(--ink); font: inherit; font-size: 17px; text-align: center; }
+.fields { display: grid; gap: 10px; width: 100%; max-width: 360px; }
+.fields .name { max-width: none; }
+.name.bad { border-color: var(--red-2); box-shadow: 0 0 0 3px rgba(215, 26, 47, .25); }
+.hint { margin: 0; font-size: 13px; color: rgba(246, 241, 236, .5); }
 .name::placeholder { color: rgba(246, 241, 236, .42); }
 .go { min-height: 64px; width: 100%; max-width: 360px; padding: 0 28px; border: 0; border-radius: 999px; background: linear-gradient(180deg, var(--red-2), var(--red)); color: #fff; font: inherit; font-size: 20px; font-weight: 700; cursor: pointer; box-shadow: 0 18px 40px -12px rgba(215, 26, 47, .8), inset 0 1px 0 rgba(255, 255, 255, .3); }
 .go:disabled { filter: brightness(.8); cursor: default; }
@@ -79,7 +83,11 @@ canvas#confetti { position: fixed; inset: 0; width: 100%; height: 100%; pointer-
   <p class="event" id="event"></p>
   <p class="lead" id="lead">Нажмите кнопку и получите свой номер участника. На концерте разыграем подарки среди всех номеров!</p>
   <div class="machine" id="machine" aria-live="polite"></div>
-  <input class="name" id="name" type="text" maxlength="60" autocomplete="name" placeholder="Ваше имя (необязательно)">
+  <div class="fields" id="fields">
+    <input class="name" id="name" type="text" maxlength="60" autocomplete="name" placeholder="Ваше имя">
+    <input class="name" id="phone" type="tel" maxlength="20" autocomplete="tel" inputmode="tel" placeholder="Телефон, например 8 707 123 45 67">
+    <p class="hint" id="hint">По телефону мы свяжемся с победителем. Он виден только студии.</p>
+  </div>
   <button class="go" type="button" id="go">Участвовать в розыгрыше</button>
   <p class="msg" id="msg"></p>
   <div class="after" id="after">
@@ -100,18 +108,21 @@ canvas#confetti { position: fixed; inset: 0; width: 100%; height: 100%; pointer-
   var kk = /[?&]lang=kk\b/.test(location.search) || (function () { try { return localStorage.getItem("arjai-lang") === "kk"; } catch (e) { return false; } })();
   var T = kk ? {
     kicker: "Ұтыс ойыны", h1: "Ұтыс ойынына қатысыңыз", lead: "Батырманы басып, қатысушы нөміріңізді алыңыз. Концертте барлық нөмірлер арасында сыйлықтар ойнатылады!",
-    name: "Атыңыз (міндетті емес)", go: "Ұтыс ойынына қатысу", wait: "Нөміріңіз шығып жатыр…", got: "Сіздің қатысушы нөміріңіз: ", already: "Сіз қатысып жатырсыз. Нөміріңіз: ",
+    name: "Атыңыз", phone: "Телефон, мысалы 8 707 123 45 67", hint: "Жеңімпазбен телефон арқылы хабарласамыз. Оны тек студия көреді.",
+    needName: "Атыңызды жазыңыз", needPhone: "Телефон нөмірін толық жазыңыз", busy: "Қазір қатысушылар көп. Бір минуттан кейін қайта көріңіз.", limit: "Бұл құрылғыдан нөмірлер жеткілікті алынды.", go: "Ұтыс ойынына қатысу", wait: "Нөміріңіз шығып жатыр…", got: "Сіздің қатысушы нөміріңіз: ", already: "Сіз қатысып жатырсыз. Нөміріңіз: ",
     note: "Осы экранның скриншотын жасаңыз. Нөмір осында да сақталады: сілтемені қайта ашсаңыз, оны көресіз.", save: "Суретті сақтау", wa: "WhatsApp-қа жазу",
     err: "Болмады. Интернетті тексеріп, қайта көріңіз.", waMsg: "Сәлеметсіз бе! Мен ұтыс ойынына қатысамын, нөмірім ", site: "Сайтқа", ticket: "Қатысушы нөмірі"
   } : {
     kicker: "Розыгрыш", h1: "Участвуйте в розыгрыше", lead: "Нажмите кнопку и получите свой номер участника. На концерте разыграем подарки среди всех номеров!",
-    name: "Ваше имя (необязательно)", go: "Участвовать в розыгрыше", wait: "Выпадает ваш номер…", got: "Ваш номер участника: ", already: "Вы уже участвуете. Ваш номер: ",
+    name: "Ваше имя", phone: "Телефон, например 8 707 123 45 67", hint: "По телефону мы свяжемся с победителем. Он виден только студии.",
+    needName: "Напишите ваше имя", needPhone: "Напишите номер телефона полностью", busy: "Сейчас много участников. Попробуйте через минуту.", limit: "С этого устройства уже получено достаточно номеров.", go: "Участвовать в розыгрыше", wait: "Выпадает ваш номер…", got: "Ваш номер участника: ", already: "Вы уже участвуете. Ваш номер: ",
     note: "Сделайте скриншот этого экрана. Номер сохранится и здесь: откройте эту ссылку снова, и вы его увидите.", save: "Сохранить картинку", wa: "Написать в WhatsApp",
     err: "Не получилось. Проверьте интернет и попробуйте ещё раз.", waMsg: "Здравствуйте! Я участвую в розыгрыше, мой номер ", site: "На сайт", ticket: "Номер участника"
   };
   if (kk) {
     document.documentElement.lang = "kk";
     $("kicker").textContent = T.kicker; $("h1").textContent = T.h1; $("lead").textContent = T.lead; $("name").placeholder = T.name;
+    $("phone").placeholder = T.phone; $("hint").textContent = T.hint;
     $("go").textContent = T.go; $("note").textContent = T.note; $("save").textContent = T.save; $("wa").textContent = T.wa;
     $("siteLink").textContent = T.site; $("siteLink").href = "kk/";
   }
@@ -174,7 +185,7 @@ canvas#confetti { position: fixed; inset: 0; width: 100%; height: 100%; pointer-
   function stopIdle() { cancelAnimationFrame(idle); idle = 0; }
 
   function show(num, again, animate) {
-    $("go").classList.add("hide"); $("name").classList.add("hide"); $("lead").classList.add("hide");
+    $("go").classList.add("hide"); $("fields").classList.add("hide"); $("lead").classList.add("hide");
     var after = function () {
       $("machine").classList.add("done");
       $("msg").innerHTML = (again ? T.already : T.got) + "<b>" + num + "</b>";
@@ -186,17 +197,27 @@ canvas#confetti { position: fixed; inset: 0; width: 100%; height: 100%; pointer-
     else { setTo(num, false); after(); }
   }
 
+  function bad(el, text) { el.classList.add("bad"); el.focus(); $("msg").textContent = text; }
+  ["name", "phone"].forEach(function (id) { $(id).addEventListener("input", function () { this.classList.remove("bad"); }); });
   $("go").addEventListener("click", function () {
-    var btn = this; btn.disabled = true; btn.textContent = T.wait; $("msg").textContent = "";
+    var btn = this, name = $("name").value.trim(), phone = $("phone").value.replace(/\D/g, "");
+    if (name.length < 2) return bad($("name"), T.needName);
+    if (phone.length < 10) return bad($("phone"), T.needPhone);
+    btn.disabled = true; btn.textContent = T.wait; $("msg").textContent = "";
     spinIdle();
-    var u = API + "?part=ticket&vid=" + encodeURIComponent(vid()) + "&name=" + encodeURIComponent($("name").value.trim()) + "&t=" + Date.now();
+    var u = API + "?part=ticket&vid=" + encodeURIComponent(vid()) + "&name=" + encodeURIComponent(name) + "&phone=" + encodeURIComponent(phone) + "&t=" + Date.now();
+    var why = "";
     fetch(u).then(function (r) { return r.json(); }).then(function (o) {
+      if (o && o.error) why = o.error;
       if (!o || !o.number) throw new Error("ticket");
       try { localStorage.setItem(KEY, String(o.number)); } catch (e) { /* без памяти */ }
       show(o.number, !!o.again, true);
     }).catch(function () {
       stopIdle(); setTo(0, false); reels.forEach(function (r) { r.el.classList.remove("spin"); });
-      btn.disabled = false; btn.textContent = T.go; $("msg").textContent = T.err;
+      btn.disabled = false; btn.textContent = T.go;
+      if (why === "phone") bad($("phone"), T.needPhone);
+      else if (why === "name") bad($("name"), T.needName);
+      else $("msg").textContent = why === "busy" ? T.busy : why === "limit" ? T.limit : T.err;
     });
   });
 

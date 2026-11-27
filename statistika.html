@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Статистика сайта · ArJai</title>
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<style>
+@font-face { font-family: "Onest"; font-weight: 400; font-display: swap; src: url("assets/fonts/onest-cyrillic-400-normal.woff2") format("woff2"); unicode-range: U+0400-045F, U+2116; }
+@font-face { font-family: "Onest"; font-weight: 400; font-display: swap; src: url("assets/fonts/onest-latin-400-normal.woff2") format("woff2"); unicode-range: U+0000-00FF, U+2000-206F; }
+@font-face { font-family: "Onest"; font-weight: 600; font-display: swap; src: url("assets/fonts/onest-cyrillic-600-normal.woff2") format("woff2"); unicode-range: U+0400-045F, U+2116; }
+@font-face { font-family: "Onest"; font-weight: 600; font-display: swap; src: url("assets/fonts/onest-latin-600-normal.woff2") format("woff2"); unicode-range: U+0000-00FF, U+2000-206F; }
+@font-face { font-family: "Onest"; font-weight: 700; font-display: swap; src: url("assets/fonts/onest-cyrillic-700-normal.woff2") format("woff2"); unicode-range: U+0400-045F, U+2116; }
+@font-face { font-family: "Onest"; font-weight: 700; font-display: swap; src: url("assets/fonts/onest-latin-700-normal.woff2") format("woff2"); unicode-range: U+0000-00FF, U+2000-206F; }
+:root { --red: #d71a2f; --red-soft: #fdecee; --green: #1e9e57; --green-soft: #e6f6ed; --ink: #17120f; --ink-2: #5d534e; --line: #ece5df; --soft: #f7f3ef; --bg: #fbf9f7; }
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--ink); font-family: "Onest", system-ui, sans-serif; font-size: 18px; line-height: 1.45; -webkit-font-smoothing: antialiased; }
+.wrap { max-width: 980px; margin: 0 auto; padding: 20px 16px 48px; }
+header { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 18px; }
+header .brand { display: flex; align-items: center; gap: 12px; }
+header img { height: 48px; width: auto; }
+h1 { margin: 0; font-size: clamp(26px, 5vw, 36px); line-height: 1.1; letter-spacing: -0.02em; }
+.upd { margin: 4px 0 0; color: var(--ink-2); font-size: 15px; }
+.reload { min-height: 48px; padding: 0 18px; border: 1px solid var(--line); border-radius: 999px; background: #fff; font: inherit; font-size: 16px; font-weight: 600; cursor: pointer; }
+.tabs { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; padding: 6px; margin: 0 0 18px; border-radius: 18px; background: #fff; border: 1px solid var(--line); position: sticky; top: 8px; z-index: 5; box-shadow: 0 8px 24px -16px rgba(0,0,0,.25); }
+.tabs button { min-height: 52px; border: 0; border-radius: 13px; background: none; font: inherit; font-size: 17px; font-weight: 600; color: var(--ink-2); cursor: pointer; }
+.tabs button.on { background: var(--red); color: #fff; }
+.cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 14px; }
+.card { padding: 20px 20px 18px; border-radius: 22px; background: #fff; border: 1px solid var(--line); }
+.card .big { display: block; font-size: clamp(40px, 8vw, 58px); font-weight: 700; line-height: 1; letter-spacing: -0.03em; }
+.card .lbl { display: block; margin-top: 8px; font-size: 18px; font-weight: 600; }
+.card .sub { display: block; margin-top: 4px; font-size: 15px; color: var(--ink-2); }
+.card.good { background: var(--green-soft); border-color: #cdebd9; }
+.card.good .big { color: var(--green); }
+section { margin-top: 14px; padding: 22px 20px; border-radius: 22px; background: #fff; border: 1px solid var(--line); }
+h2 { margin: 0 0 6px; font-size: 22px; line-height: 1.2; }
+.say { margin: 0 0 16px; color: var(--ink-2); font-size: 17px; }
+.say b { color: var(--ink); }
+.funnel { display: grid; gap: 12px; }
+.step { display: grid; gap: 6px; }
+.step .row { display: flex; justify-content: space-between; gap: 12px; font-size: 17px; }
+.step .row b { font-size: 20px; }
+.bar { height: 22px; border-radius: 8px; background: var(--soft); overflow: hidden; }
+.bar i { display: block; height: 100%; min-width: 4px; border-radius: 8px; background: var(--red); transition: width .6s ease; }
+.step.last .bar i { background: var(--green); }
+.pct { color: var(--ink-2); font-size: 15px; font-weight: 400; }
+.two { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.two section { margin-top: 0; }
+.list { margin: 0; padding: 0; list-style: none; }
+.list li { display: flex; justify-content: space-between; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--line); font-size: 17px; }
+.list li:last-child { border-bottom: 0; }
+.list li b { white-space: nowrap; }
+.empty { color: var(--ink-2); font-size: 16px; }
+.chart { display: flex; align-items: flex-end; gap: 6px; height: 190px; padding-top: 10px; }
+.col { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; height: 100%; gap: 6px; min-width: 0; }
+.col .v { font-size: 13px; font-weight: 700; color: var(--ink-2); }
+.col .b { position: relative; width: 100%; max-width: 40px; border-radius: 8px 8px 3px 3px; background: #f3b9c0; min-height: 3px; }
+.col .b .s { position: absolute; left: 0; right: 0; bottom: 0; border-radius: 3px; background: var(--green); }
+.col .d { font-size: 12px; color: var(--ink-2); }
+.legend { display: flex; gap: 18px; margin-top: 12px; font-size: 15px; color: var(--ink-2); }
+.legend span::before { content: ""; display: inline-block; width: 12px; height: 12px; margin-right: 6px; border-radius: 3px; vertical-align: -1px; background: #f3b9c0; }
+.legend span.g::before { background: var(--green); }
+.small { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.mini { padding: 16px; border-radius: 16px; background: var(--soft); }
+.mini b { display: block; font-size: 32px; line-height: 1.1; }
+.mini span { font-size: 16px; color: var(--ink-2); }
+.me { margin-top: 18px; padding: 18px 20px; border-radius: 18px; background: var(--soft); font-size: 16px; color: var(--ink-2); }
+.me button { margin-top: 10px; min-height: 48px; padding: 0 18px; border: 0; border-radius: 999px; background: var(--ink); color: #fff; font: inherit; font-size: 16px; font-weight: 600; cursor: pointer; }
+.state { padding: 60px 10px; text-align: center; color: var(--ink-2); font-size: 18px; }
+@media (max-width: 760px) {
+  .cards { grid-template-columns: 1fr; }
+  .card { display: grid; grid-template-columns: auto 1fr; align-items: center; column-gap: 16px; padding: 16px 18px; }
+  .card .big { grid-row: span 2; min-width: 2.2ch; text-align: center; }
+  .card .lbl { margin: 0; }
+  .two { grid-template-columns: 1fr; }
+  .tabs button { font-size: 15px; min-height: 48px; }
+  .chart { gap: 3px; height: 160px; }
+  .col .d { font-size: 10px; }
+  .col .v { font-size: 11px; }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="brand">
+      <img src="assets/img/arjai-logo-lg.png" alt="ArJai" width="186" height="120">
+      <div><h1>Статистика сайта</h1><p class="upd" id="upd">Загружаем…</p></div>
+    </div>
+    <button class="reload" type="button" id="reload">Обновить</button>
+  </header>
+
+  <div class="tabs" role="tablist">
+    <button type="button" data-p="today">Сегодня</button>
+    <button type="button" data-p="week" class="on">7 дней</button>
+    <button type="button" data-p="month">30 дней</button>
+    <button type="button" data-p="all">Всё время</button>
+  </div>
+
+  <div id="out"><div class="state">Загружаем цифры…</div></div>
+
+  <div class="me">
+    Ваши собственные заходы на сайт лучше не считать, чтобы цифры были честными. Нажмите кнопку один раз на каждом своём телефоне и компьютере.
+    <br><button type="button" id="nostat">Не считать мои заходы с этого устройства</button>
+  </div>
+</div>
+<script>
+(function () {
+  "use strict";
+  var API = "https://script.google.com/macros/s/AKfycbwB8ZJdHIuNXk5qFYsZPO2UkxU3fRlS_X5HpyecrMJOBE-Q_1Z-NJXejnzO7mcsIgo-/exec";
+  var data = null, period = "week";
+  /* ключ доступа: приходит в ссылке ?k=… (ссылка есть в таблице на листе «Сводка») и запоминается на этом телефоне */
+  var KEY = (/[?&]k=([\w-]+)/.exec(location.search) || [])[1] || "";
+  try { if (KEY) localStorage.setItem("arjai-stats-key", KEY); else KEY = localStorage.getItem("arjai-stats-key") || ""; } catch (e) { /* без памяти */ }
+  if (/[?&]k=/.test(location.search) && history.replaceState) history.replaceState(null, "", location.pathname);
+  var NAMES = { today: "сегодня", week: "за последние 7 дней", month: "за последние 30 дней", all: "за всё время" };
+  var $ = function (id) { return document.getElementById(id); };
+  function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
+  function num(n) { return String(n).replace(".", ","); }
+  function word(n, one, few, many) { var a = n % 10, b = n % 100; return a === 1 && b !== 11 ? one : (a >= 2 && a <= 4 && (b < 10 || b >= 20) ? few : many); }
+  function pct(a, b) { return b ? Math.round(a / b * 100) : 0; }
+  function list(rows, unit) {
+    if (!rows || !rows.length) return '<p class="empty">Пока нет данных</p>';
+    return '<ul class="list">' + rows.map(function (r) { return "<li><span>" + esc(r[0]) + "</span><b>" + r[1] + " " + (unit ? word(r[1], unit[0], unit[1], unit[2]) : "") + "</b></li>"; }).join("") + "</ul>";
+  }
+
+  function render() {
+    var p = data.periods[period];
+    var html = "";
+    html += '<div class="cards">' +
+      '<div class="card"><span class="big">' + p.people + '</span><span class="lbl">' + word(p.people, "человек зашёл", "человека зашли", "человек зашли") + ' на сайт</span><span class="sub">' + NAMES[period] + ", визитов: " + p.visits + "</span></div>" +
+      '<div class="card"><span class="big">' + num(p.avgMin) + '</span><span class="lbl">' + word(Math.round(p.avgMin), "минута", "минуты", "минут") + ' в среднем</span><span class="sub">столько человек проводит на сайте</span></div>' +
+      '<div class="card good"><span class="big">' + p.sent + '</span><span class="lbl">' + word(p.sent, "заявка", "заявки", "заявок") + '</span><span class="sub">отправили в WhatsApp через сайт</span></div>' +
+      "</div>";
+
+    var steps = [["Зашли на сайт", p.visits], ["Открыли анкету", p.quiz], ["Дошли до результата анкеты", p.result], ["Отправили заявку", p.sent]];
+    var max = Math.max(p.visits, 1);
+    html += "<section><h2>Как люди доходят до заявки</h2>";
+    html += '<p class="say">' + (p.visits ? "Из <b>" + p.visits + "</b> " + word(p.visits, "визита", "визитов", "визитов") + " анкету открыли <b>" + p.quiz + "</b>, а заявку отправили <b>" + p.sent + "</b>. Это примерно <b>" + pct(p.sent, p.visits) + " из 100</b> посетителей." : "Пока никто не заходил " + NAMES[period] + ".") + "</p>";
+    html += '<div class="funnel">' + steps.map(function (s, i) {
+      return '<div class="step' + (i === steps.length - 1 ? " last" : "") + '"><div class="row"><span>' + s[0] + (i ? ' <span class="pct">· ' + pct(s[1], p.visits) + "%</span>" : "") + "</span><b>" + s[1] + '</b></div><div class="bar"><i style="width:' + (s[1] / max * 100) + '%"></i></div></div>';
+    }).join("") + "</div>";
+    if (p.sent) html += '<div class="small" style="margin-top:18px"><div class="mini"><b>' + num(p.sendMin) + ' мин</b><span>в среднем заполняют анкету до отправки</span></div><div class="mini"><b>' + num(p.siteBeforeSendMin) + ' мин</b><span>в среднем были на сайте до заявки</span></div></div>';
+    html += "</section>";
+
+    html += "<section><h2>Где бросают анкету</h2><p class=\"say\">Люди открыли анкету, но заявку не отправили. Здесь видно, на каком месте они остановились.</p>" + list(p.drop, ["человек", "человека", "человек"]) + "</section>";
+
+    var dmax = Math.max.apply(null, data.days.map(function (d) { return d.visits; }).concat([1]));
+    html += "<section><h2>По дням, последние 2 недели</h2><p class=\"say\">Высота столбика — сколько было визитов в этот день.</p><div class=\"chart\">" + data.days.map(function (d) {
+      return '<div class="col"><span class="v">' + (d.visits || "") + '</span><div class="b" style="height:' + (d.visits / dmax * 100) + '%"><div class="s" style="height:' + (d.visits ? d.sent / d.visits * 100 : 0) + '%"></div></div><span class="d">' + d.day + "</span></div>";
+    }).join("") + '</div><div class="legend"><span>визиты</span><span class="g">из них заявки</span></div></section>';
+
+    html += '<div class="two" style="margin-top:14px"><section><h2>Откуда приходят</h2>' + list(p.sources, ["визит", "визита", "визитов"]) + "</section>" +
+      "<section><h2>Какие страницы смотрят</h2>" + list(p.pages, ["раз", "раза", "раз"]) + "</section></div>";
+    html += '<div class="two" style="margin-top:14px"><section><h2>С чего заходят</h2>' + list(p.devices, ["визит", "визита", "визитов"]) + "</section>" +
+      '<section><h2>Афиша и розыгрыш</h2><div class="small"><div class="mini"><b>' + p.afisha + "</b><span>нажали кнопку в окне афиши</span></div><div class=\"mini\"><b>" + data.tickets + "</b><span>" + word(data.tickets, "номер выдан", "номера выдано", "номеров выдано") + " для розыгрыша</span></div></div></section></div>";
+    $("out").innerHTML = html;
+  }
+
+  function noAccess() {
+    $("upd").textContent = "";
+    $("out").innerHTML = '<div class="state">Нет доступа.<br>Откройте страницу по ссылке из таблицы, лист «Сводка». После этого она будет открываться на этом телефоне сама.</div>';
+  }
+  function load() {
+    $("upd").textContent = "Загружаем…";
+    if (!KEY) { noAccess(); return; }
+    fetch(API + "?part=stats&key=" + encodeURIComponent(KEY) + "&t=" + Date.now()).then(function (r) { return r.json(); }).then(function (o) {
+      if (o && o.error === "no access") { try { localStorage.removeItem("arjai-stats-key"); } catch (e) {} noAccess(); return; }
+      if (!o || !o.periods) throw new Error("stats");
+      data = o; $("upd").textContent = "Обновлено " + o.updated; render();
+    }).catch(function () {
+      $("upd").textContent = "";
+      $("out").innerHTML = '<div class="state">Не получилось загрузить цифры. Проверьте интернет и нажмите «Обновить».</div>';
+    });
+  }
+  document.querySelectorAll(".tabs button").forEach(function (b) {
+    b.addEventListener("click", function () {
+      period = b.getAttribute("data-p");
+      document.querySelectorAll(".tabs button").forEach(function (x) { x.classList.toggle("on", x === b); });
+      if (data) render();
+    });
+  });
+  $("reload").addEventListener("click", load);
+  function meState() { var off = false; try { off = localStorage.getItem("arjai-nostat") === "1"; } catch (e) {} $("nostat").textContent = off ? "✓ Ваши заходы с этого устройства не считаются" : "Не считать мои заходы с этого устройства"; }
+  $("nostat").addEventListener("click", function () { try { localStorage.setItem("arjai-nostat", "1"); } catch (e) {} meState(); });
+  meState();
+  load();
+})();
+</script>
+</body>
+</html>

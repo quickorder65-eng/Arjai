@@ -1108,24 +1108,17 @@
      Сауле меняет таблицу «ArJai — афиша на сайте» (лист «Афиша»), сайт читает её при каждом входе.
      При каждом открытии любой страницы — окно на весь экран, после закрытия — карточка сбоку.
      ?afisha=1 в адресе показывает афишу, даже если в таблице стоит «нет». */
-  var AFISHA_SHEET = "1p75j7y8mGLtqnqjfxaIbP9nrAKlp7_iSZ_NiuItohrQ";
-  /* Ссылка на веб-приложение Google Apps Script (Развернуть → Веб-приложение). Пока пусто — читаем таблицу напрямую. */
+  /* Афишу отдаёт Apps Script. Сама таблица закрыта: её адреса в коде сайта нет. */
   var AFISHA_API = ARJAI_API;
   (function afisha() {
-    if (!AFISHA_SHEET || !window.fetch) return;
+    if (!AFISHA_API || !window.fetch) return;
     var preview = /[?&]afisha=1\b/.test(location.search);
-    var url = "https://docs.google.com/spreadsheets/d/" + AFISHA_SHEET + "/gviz/tq?tqx=out:json&headers=1&sheet=" + encodeURIComponent("Афиша") + "&_=" + Math.floor(Date.now() / 60000);
     var T = LANG === "kk"
       ? { tag: "Афиша", close: "Жабу", open: "Афишаны ашу", msg: "Сәлеметсіз бе! Келгім келеді: ", btn: "Барғым келеді", map: "Картадан ашу", qr: "Телефон камерасымен сканерлеңіз",
           rText: "Қатысушы нөміріңізді алыңыз. Концертте сыйлықтар ұтысқа тігіледі!", rGet: "Ұтысқа қатысу", rYours: "Сіздің қатысушы нөміріңіз", rKeep: "Скриншот жасап алыңыз да, нөмірді концертте көрсетіңіз", rChip: "Нөмір" }
       : { tag: "Афиша", close: "Закрыть", open: "Открыть афишу", msg: "Здравствуйте! Хочу прийти: ", btn: "Хочу прийти", map: "Открыть на карте", qr: "Наведите камеру телефона",
           rText: "Получите свой номер участника. На концерте разыграем подарки!", rGet: "Участвовать в розыгрыше", rYours: "Ваш номер участника", rKeep: "Сделайте скриншот и покажите номер на концерте", rChip: "Номер" };
 
-    function cellText(c) {
-      if (!c) return "";
-      var v = c.f != null ? c.f : c.v;
-      return v == null ? "" : String(v).trim();
-    }
     function parseDate(s) {
       var m = /Date\((\d+),(\d+),(\d+)/.exec(s);
       if (m) return new Date(+m[1], +m[2], +m[3]);
@@ -1150,10 +1143,8 @@
       return e;
     }
 
-    /* Откуда берём афишу:
-       1) Google Apps Script (если подключён) — сначала только текст (быстро), потом картинка из Документа или файла.
-          Скрипт читает их каждый раз заново, поэтому замена картинки в том же файле видна сразу.
-       2) Запасной путь — таблица напрямую, картинка — превью Google (обновляется с задержкой).
+    /* Афишу отдаёт Google Apps Script: сначала только текст (быстро), потом картинка из Документа или файла.
+       Скрипт читает их каждый раз заново, поэтому замена картинки в том же файле видна сразу.
        Последняя афиша хранится в браузере, поэтому при повторном заходе окно появляется сразу, а свежие данные догружаются следом. */
     var CACHE = "arjai-afisha-v2";
     function apiUrl(part) { return AFISHA_API + (AFISHA_API.indexOf("?") < 0 ? "?" : "&") + "part=" + part + "&t=" + Date.now(); }
@@ -1161,16 +1152,6 @@
       var low = {};
       Object.keys(o || {}).forEach(function (k) { low[k.trim().toLowerCase()] = o[k] == null ? "" : String(o[k]).trim(); });
       return low;
-    }
-    function viaGviz() {
-      return fetch(url).then(function (r) { return r.text(); }).then(function (txt) {
-        var json = JSON.parse(txt.slice(txt.indexOf("{"), txt.lastIndexOf("}") + 1));
-        var row = (json.table.rows || [])[0];
-        if (!row) return null;
-        var o = {};
-        (json.table.cols || []).forEach(function (c, i) { if (c.label) o[c.label] = cellText(row.c[i]); });
-        return { f: lower(o), api: false };
-      });
     }
     function viaScript() {
       return fetch(apiUrl("data")).then(function (r) { return r.json(); }).then(function (o) {
@@ -1219,7 +1200,7 @@
     var state = readCache();
     if (state && state.f) view = show(toView(state), null);
 
-    (AFISHA_API ? viaScript().catch(viaGviz) : viaGviz()).then(function (fresh) {
+    viaScript().then(function (fresh) {
       if (!fresh) { view = show(null, view); return; }
       var L = links(fresh.f), oldL = state ? links(state.f || {}) : {};
       /* картинка та же ссылка — пока берём сохранённую, свежую догрузим следом */
